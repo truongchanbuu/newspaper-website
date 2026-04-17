@@ -12,7 +12,14 @@ import java.util.stream.Collectors;
 
 /**
  * Temporary mock — replace with the real JCR/Oak query implementation once available.
- * Applies basic in-memory text and category filtering over a fixed article list.
+ *
+ * <p>Simulates querying CQ Pages under
+ * {@code /content/newspaper/language-masters/<lang>/articles/<yyyy>/<mm>/<dd>/<name>}.
+ * Each {@link SearchResultItem} mirrors what the real service will read from
+ * {@code jcr:content} page properties: {@code jcr:title}, {@code jcr:description},
+ * {@code primaryTag}, {@code articleDate}, {@code image/fileReference}, {@code articleAuthor}.
+ *
+ * <p>Applies basic in-memory text and {@code primaryTag} filtering over a fixed article list.
  */
 @Component(service = ArticleSearchService.class)
 @ServiceDescription("Mock Article Search Service")
