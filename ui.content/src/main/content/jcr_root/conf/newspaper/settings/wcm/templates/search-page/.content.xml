@@ -13,7 +13,7 @@
         jcr:title="Search Page"
         jcr:description="Guardian-style search page with text, category, and date filters."
         cq:templateType="/conf/newspaper/settings/wcm/template-types/page"
-        allowedPaths="[/content/language-masters(/.*)?]"
+        allowedPaths="[/content/newspaper/language-masters(/.*)?]"
         ranking="{Long}10"
         status="enabled"/>
 </jcr:root>

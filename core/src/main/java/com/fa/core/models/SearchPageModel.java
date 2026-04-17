@@ -68,14 +68,14 @@ public class SearchPageModel {
     // ── Helpers ────────────────────────────────────────────────────────────────
 
     private String deriveLanguageRoot() {
-        // /content/language-masters/en/search → level 2 = /content/language-masters/en
+        // /content/newspaper/language-masters/en/search → level 3 = /content/newspaper/language-masters/en
         if (currentPage != null) {
-            Page langRoot = currentPage.getAbsoluteParent(2);
+            Page langRoot = currentPage.getAbsoluteParent(3);
             if (langRoot != null) {
                 return langRoot.getPath();
             }
         }
-        return "/content/language-masters";
+        return "/content/newspaper/language-masters";
     }
 
     private String encode(String value) {
@@ -102,7 +102,7 @@ public class SearchPageModel {
 
     public String getLanguageCode() {
         if (currentPage != null) {
-            Page langRoot = currentPage.getAbsoluteParent(2);
+            Page langRoot = currentPage.getAbsoluteParent(3);
             if (langRoot != null) {
                 return langRoot.getName();
             }
