@@ -20,7 +20,7 @@
         jcr:description="Search articles by keyword, category, or date range."
         cq:template="/conf/newspaper/settings/wcm/templates/search-page"
         sling:resourceType="newspaper/components/structure/search-page"
-        hideInNav="{Boolean}false">
+        hideInNav="{Boolean}true">
 
         <experiencefragment-header
             jcr:primaryType="nt:unstructured"

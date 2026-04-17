@@ -2,7 +2,7 @@
 <!--
   Editable Template: Search Page
   - status=enabled    → visible in the "Create Page" wizard
-  - allowedPaths      → only under /content/language-masters (language masters + all language copies)
+  - allowedPaths      → only under /content/newspaper/language-masters (language masters + all language copies)
   - cq:templateType   → inherits behaviours from the base page template type
 -->
 <jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0"

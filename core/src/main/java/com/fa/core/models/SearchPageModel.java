@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Model(
         adaptables = SlingHttpServletRequest.class,
@@ -93,15 +94,8 @@ public class SearchPageModel {
 
     // ── Date helpers ───────────────────────────────────────────────────────────
 
-    /**
-     * Presets override manual date inputs.
-     * If no date params are provided at all, default to "today" so the page
-     * always has a sensible initial state.
-     */
+    /** Presets override manual date inputs when a recognized preset value is present. */
     private void applyDatePreset() {
-        if (datePreset == null && fromDate == null && toDate == null) {
-            datePreset = "today";
-        }
         if (datePreset != null) {
             LocalDate today = LocalDate.now();
             switch (datePreset) {
@@ -121,9 +115,9 @@ public class SearchPageModel {
     // ── Category helpers ───────────────────────────────────────────────────────
 
     /**
-     * Reads sibling nodes of {@code articles/} under the language root.
-     * Path: /content/newspaper/language-masters/<lang>/*  (excluding articles/).
-     * Each child page's name is its primaryTag value; title is its jcr:title.
+     * Reads sibling nav pages under the language root (excluding {@code articles/}).
+     * Falls back to {@link ArticleSearchService#getCategories} when no nav pages exist yet
+     * (e.g. fresh install without category pages).
      */
     private List<CategoryItem> buildCategories() {
         if (currentPage == null) return Collections.emptyList();
@@ -139,7 +133,15 @@ public class SearchPageModel {
             if (child.getProperties().get("hideInNav", false)) continue;
             list.add(new CategoryItem(child.getName(), child.getTitle()));
         }
-        return list;
+        if (!list.isEmpty()) return list;
+
+        // Fallback: populate from service when JCR nav pages haven't been created yet
+        if (searchService != null) {
+            return searchService.getCategories(langRoot.getPath()).stream()
+                    .map(name -> new CategoryItem(name, name))
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 
     // ── Pagination helpers ─────────────────────────────────────────────────────
@@ -252,6 +254,8 @@ public class SearchPageModel {
     public boolean isHasPrevPage()    { return pageNum > 1; }
     public boolean isHasNextPage()    { return pageNum < totalPages; }
     public boolean isShowPagination() { return totalPages > 1; }
+    /** True when the user entered manual dates with no preset — drives custom date range visibility. */
+    public boolean isCustomDateMode() { return datePreset == null && (fromDate != null || toDate != null); }
 
     // ── Inner value objects ────────────────────────────────────────────────────
 

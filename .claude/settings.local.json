@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:experienceleague.adobe.com)",
-      "WebFetch(domain:sling.apache.org)"
+      "WebFetch(domain:sling.apache.org)",
+      "Bash(grep -E '^\\\\s*\\\\.[a-z-]+\\(\\\\s|,|{|&\\)' /c/Users/truon/source/newspaper/ui.frontend/src/main/webpack/components/content/search/_searchpage.scss)"
     ]
   }
 }

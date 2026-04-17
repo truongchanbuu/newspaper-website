@@ -63,74 +63,34 @@
                             </select>
                         </div>
 
-                        <!--/* Date presets */-->
+                        <!--/* Date preset dropdown + custom range toggle */-->
                         <div class="search-page__filter-group">
-                            <span class="search-page__filter-label" id="sp-date-label">Date</span>
-                            <div class="search-page__date-presets"
-                                 role="group"
-                                 aria-labelledby="sp-date-label">
+                            <label class="search-page__filter-label" for="sp-date-preset">Date</label>
+                            <select class="search-page__select"
+                                    id="sp-date-preset"
+                                    name="datePreset"
+                                    data-sp-preset-select>
+                                <option value=""       data-sly-attribute.selected="${!model.datePreset}">Any time</option>
+                                <option value="today"  data-sly-attribute.selected="${model.datePreset == 'today'}">Today</option>
+                                <option value="1"      data-sly-attribute.selected="${model.datePreset == '1'}">Yesterday</option>
+                                <option value="7"      data-sly-attribute.selected="${model.datePreset == '7'}">Last 7 days</option>
+                                <option value="14"     data-sly-attribute.selected="${model.datePreset == '14'}">Last 14 days</option>
+                                <option value="30"     data-sly-attribute.selected="${model.datePreset == '30'}">Last 30 days</option>
+                            </select>
 
-                                <label class="search-page__preset-btn"
-                                       data-sly-attribute.aria-current="${model.datePreset == 'today'}">
-                                    <input class="search-page__preset-input"
-                                           type="radio" name="datePreset" value="today"
-                                           data-sp-preset
-                                           data-sly-attribute.checked="${model.datePreset == 'today'}"/>
-                                    Today
-                                </label>
-
-                                <label class="search-page__preset-btn"
-                                       data-sly-attribute.aria-current="${model.datePreset == '1'}">
-                                    <input class="search-page__preset-input"
-                                           type="radio" name="datePreset" value="1"
-                                           data-sp-preset
-                                           data-sly-attribute.checked="${model.datePreset == '1'}"/>
-                                    Yesterday
-                                </label>
-
-                                <label class="search-page__preset-btn"
-                                       data-sly-attribute.aria-current="${model.datePreset == '7'}">
-                                    <input class="search-page__preset-input"
-                                           type="radio" name="datePreset" value="7"
-                                           data-sp-preset
-                                           data-sly-attribute.checked="${model.datePreset == '7'}"/>
-                                    7 days
-                                </label>
-
-                                <label class="search-page__preset-btn"
-                                       data-sly-attribute.aria-current="${model.datePreset == '14'}">
-                                    <input class="search-page__preset-input"
-                                           type="radio" name="datePreset" value="14"
-                                           data-sp-preset
-                                           data-sly-attribute.checked="${model.datePreset == '14'}"/>
-                                    14 days
-                                </label>
-
-                                <label class="search-page__preset-btn"
-                                       data-sly-attribute.aria-current="${model.datePreset == '30'}">
-                                    <input class="search-page__preset-input"
-                                           type="radio" name="datePreset" value="30"
-                                           data-sp-preset
-                                           data-sly-attribute.checked="${model.datePreset == '30'}"/>
-                                    30 days
-                                </label>
-
-                                <!--/* "Custom" radio clears all presets so date inputs appear */-->
-                                <label class="search-page__preset-btn"
-                                       data-sly-attribute.aria-current="${!model.datePreset}">
-                                    <input class="search-page__preset-input"
-                                           type="radio" name="datePreset" value=""
-                                           data-sp-preset
-                                           data-sly-attribute.checked="${!model.datePreset}"/>
-                                    Custom
-                                </label>
-
-                            </div>
+                            <!--/* Toggle button — reveals the from/to date inputs */-->
+                            <button type="button"
+                                    class="search-page__date-toggle"
+                                    data-sp-date-toggle
+                                    aria-pressed="${model.customDateMode ? 'true' : 'false'}">
+                                Custom range
+                            </button>
                         </div>
 
-                        <!--/* Manual date inputs — visible only when no preset selected */-->
+                        <!--/* Custom date range — collapsed unless customDateMode is active */-->
                         <div class="search-page__filter-group search-page__date-range"
-                             data-sly-test="${!model.datePreset}">
+                             data-sp-date-range
+                             data-sly-attribute.data-sp-collapsed="${!model.customDateMode}">
                             <label class="search-page__filter-label" for="sp-from">From</label>
                             <input class="search-page__date-input"
                                    type="date" id="sp-from" name="fromDate"
@@ -232,7 +192,7 @@
                             </sly>
                         </ol>
 
-                        <!--/* Jump to page — carries all current filter state as hidden fields */-->
+                        <!--/* Jump to page — carries current filter state as hidden fields */-->
                         <form class="search-page__jump-form"
                               method="get"
                               action="${model.pageUrl @ context='uri'}"
@@ -272,11 +232,11 @@
                            data-sly-test="${model.hasNextPage}">Next →</a>
 
                     </nav>
-                </sly><!--/* /.showPagination */-->
+                </sly>
 
-            </section><!--/* /.search-page__results */-->
+            </section>
 
-        </div><!--/* /.l-container */-->
+        </div>
     </main>
 
     <sly data-sly-resource="./experiencefragment-footer"/>

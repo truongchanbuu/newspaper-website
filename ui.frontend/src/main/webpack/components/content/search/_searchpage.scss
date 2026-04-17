@@ -84,14 +84,8 @@
     }
   }
 
-  // ── Date presets ──────────────────────────────────────────────────────────
-  &__date-presets {
-    display: flex;
-    flex-wrap: wrap;
-    gap: $space-1;
-  }
-
-  &__preset-btn {
+  // ── Custom range toggle button ────────────────────────────────────────────
+  &__date-toggle {
     display: inline-flex;
     align-items: center;
     padding: $space-1 $space-3;
@@ -102,6 +96,7 @@
     letter-spacing: $ls-label;
     text-transform: uppercase;
     color: $color-body;
+    background: $color-canvas;
     cursor: pointer;
     user-select: none;
     transition: border-color $duration-fast $ease-out,
@@ -113,7 +108,8 @@
       color: $color-heading;
     }
 
-    &[aria-current] {
+    // Pressed = custom date range is open
+    &[aria-pressed="true"] {
       background-color: $color-heading;
       border-color: $color-heading;
       color: $color-canvas;
@@ -122,13 +118,14 @@
     @include focus-visible-ring;
   }
 
-  &__preset-input {
-    @include visually-hidden;
-  }
-
-  // ── Manual date range ─────────────────────────────────────────────────────
+  // ── Custom date range row ─────────────────────────────────────────────────
   &__date-range {
     gap: $space-2;
+
+    // Collapsed by the server (preset active) or by JS toggle
+    &[data-sp-collapsed] {
+      display: none;
+    }
 
     @include respond-below('sm') {
       flex-wrap: wrap;
