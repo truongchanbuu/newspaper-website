@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Template Initial Content — Search Page
+  Copied into every new page created from this template.
+  Authors cannot remove the locked XF nodes; they are enforced by the structure layer.
+-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          jcr:primaryType="cq:Page">
+
+    <jcr:content
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Search"
+        sling:resourceType="newspaper/components/structure/search-page">
+
+        <experiencefragment-header
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/experiencefragment"
+            fragmentVariationPath="/content/experience-fragments/newspaper/us/en/site/header/master"/>
+
+        <experiencefragment-footer
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/experiencefragment"
+            fragmentVariationPath="/content/experience-fragments/newspaper/us/en/site/footer/master"/>
+
+    </jcr:content>
+
+</jcr:root>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html data-sly-use.model="com.fa.core.models.SearchPageModel"
+      lang="${model.languageCode @ context='attribute'}">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="robots" content="noindex, follow"/>
+    <title>${currentPage.title @ context='text'} — Search | Newspaper</title>
+    <sly data-sly-use.clientLib="${'/libs/granite/sightly/templates/clientlib.html'}">
+        <sly data-sly-call="${clientLib.css @ categories='newspaper.site'}"/>
+    </sly>
+</head>
+<body>
+
+    <sly data-sly-resource="./experiencefragment-header"/>
+
+    <main class="search-page" id="main-content" role="main">
+        <div class="l-container">
+
+            <!--/* ── Search hero ──────────────────────────────────────────── */-->
+            <section class="search-page__hero">
+                <form class="search-page__form"
+                      method="get"
+                      action="${model.pageUrl @ context='uri'}"
+                      role="search">
+
+                    <h1 class="search-page__heading t-label">Search</h1>
+
+                    <div class="search-bar search-bar--hero">
+                        <div class="search-bar__field">
+                            <input type="search"
+                                   class="search-bar__input"
+                                   name="q"
+                                   value="${model.query @ context='attribute'}"
+                                   placeholder="Search news, topics, people…"
+                                   aria-label="Search"
+                                   autocomplete="off"/>
+                            <button type="submit" class="search-bar__submit" aria-label="Search">
+                                Search
+                            </button>
+                        </div>
+                    </div>
+
+                    <!--/* ── Filters ──────────────────────────────────────── */-->
+                    <div class="search-page__filters" role="group" aria-label="Filter results">
+
+                        <!--/* Category pills — only shown when categories are available */-->
+                        <div class="search-page__filter-group"
+                             data-sly-test="${model.availableCategories}">
+                            <span class="search-page__filter-label">Section</span>
+                            <div class="search-page__pills">
+
+                                <label class="search-page__pill"
+                                       data-sly-attribute.aria-current="${!model.category}">
+                                    <input class="search-page__pill-input"
+                                           type="radio" name="category" value=""
+                                           data-sly-attribute.checked="${!model.category}"/>
+                                    All
+                                </label>
+
+                                <sly data-sly-list.cat="${model.availableCategories}">
+                                    <label class="search-page__pill"
+                                           data-sly-attribute.aria-current="${model.category == cat}">
+                                        <input class="search-page__pill-input"
+                                               type="radio"
+                                               name="category"
+                                               value="${cat @ context='attribute'}"
+                                               data-sly-attribute.checked="${model.category == cat}"/>
+                                        ${cat @ context='text'}
+                                    </label>
+                                </sly>
+
+                            </div>
+                        </div>
+
+                        <!--/* Date range */-->
+                        <div class="search-page__filter-group">
+                            <span class="search-page__filter-label">Date range</span>
+                            <div class="search-page__date-range">
+                                <label class="search-page__date-label"
+                                       for="search-date-from">From</label>
+                                <input class="search-page__date-input"
+                                       type="date" id="search-date-from" name="dateFrom"
+                                       value="${model.dateFrom @ context='attribute'}"/>
+                                <label class="search-page__date-label"
+                                       for="search-date-to">To</label>
+                                <input class="search-page__date-input"
+                                       type="date" id="search-date-to" name="dateTo"
+                                       value="${model.dateTo @ context='attribute'}"/>
+                            </div>
+                        </div>
+
+                    </div><!--/* /.search-page__filters */-->
+
+                </form>
+            </section><!--/* /.search-page__hero */-->
+
+            <!--/* ── Results ─────────────────────────────────────────────── */-->
+            <section class="search-page__results"
+                     aria-label="Search results"
+                     aria-live="polite">
+
+                <!--/* State: user has submitted a query or applied a filter */-->
+                <sly data-sly-test="${model.hasQuery}">
+
+                    <div class="search-page__results-header">
+                        <p class="search-page__count t-meta">
+                            <sly data-sly-test="${model.hasResults}">
+                                ${model.resultLabel}
+                                <sly data-sly-test="${model.query}">
+                                    for <strong>"${model.query @ context='text'}"</strong>
+                                </sly>
+                            </sly>
+                            <sly data-sly-test="${!model.hasResults}">
+                                No results found
+                                <sly data-sly-test="${model.query}">
+                                    for <strong>"${model.query @ context='text'}"</strong>
+                                </sly>
+                            </sly>
+                        </p>
+                    </div>
+
+                    <sly data-sly-test="${model.hasResults}">
+
+                        <ol class="search-page__grid" role="list">
+                            <sly data-sly-list.result="${model.results}">
+                                <li class="article-card">
+                                    <a class="article-card__link"
+                                       href="${result.path @ context='uri'}.html">
+                                        <sly data-sly-test="${result.imageUrl}">
+                                            <div class="article-card__image-wrap">
+                                                <img class="article-card__image"
+                                                     src="${result.imageUrl @ context='uri'}"
+                                                     alt="${result.title @ context='attribute'}"
+                                                     loading="lazy"/>
+                                            </div>
+                                        </sly>
+                                        <div class="article-card__body">
+                                            <span class="article-card__category">
+                                                ${result.category @ context='text'}
+                                            </span>
+                                            <h2 class="article-card__title">
+                                                ${result.title @ context='text'}
+                                            </h2>
+                                            <p class="article-card__desc">
+                                                ${result.description @ context='text'}
+                                            </p>
+                                            <footer class="article-card__meta">
+                                                <span class="article-card__author t-meta">
+                                                    ${result.author @ context='text'}
+                                                </span>
+                                                <time class="article-card__date t-meta">
+                                                    ${result.publishedDate @ context='text'}
+                                                </time>
+                                            </footer>
+                                        </div>
+                                    </a>
+                                </li>
+                            </sly>
+                        </ol>
+
+                        <!--/* Pagination — only shown when there is more than one page */-->
+                        <nav class="search-page__pagination"
+                             aria-label="Results pages"
+                             data-sly-test="${model.hasPrev || model.hasNext}">
+                            <sly data-sly-test="${model.hasPrev}">
+                                <a class="search-page__page-btn"
+                                   href="${model.prevPageUrl @ context='uri'}">
+                                    ← Previous
+                                </a>
+                            </sly>
+                            <sly data-sly-test="${model.hasNext}">
+                                <a class="search-page__page-btn search-page__page-btn--next"
+                                   href="${model.nextPageUrl @ context='uri'}">
+                                    Next →
+                                </a>
+                            </sly>
+                        </nav>
+
+                    </sly><!--/* end hasResults */-->
+
+                    <sly data-sly-test="${!model.hasResults}">
+                        <div class="search-page__empty">
+                            <p class="t-meta">
+                                Try a different search term or remove some filters.
+                            </p>
+                        </div>
+                    </sly>
+
+                </sly><!--/* end hasQuery */-->
+
+                <!--/* State: landing — no query submitted yet */-->
+                <sly data-sly-test="${!model.hasQuery}">
+                    <p class="search-page__prompt t-meta">
+                        Enter a search term above to find articles.
+                    </p>
+                </sly>
+
+            </section><!--/* /.search-page__results */-->
+
+        </div><!--/* /.l-container */-->
+    </main>
+
+    <sly data-sly-resource="./experiencefragment-footer"/>
+
+    <sly data-sly-use.clientLib="${'/libs/granite/sightly/templates/clientlib.html'}">
+        <sly data-sly-call="${clientLib.js @ categories='newspaper.site'}"/>
+    </sly>
+
+</body>
+</html>

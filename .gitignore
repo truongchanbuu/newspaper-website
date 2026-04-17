@@ -104,3 +104,5 @@ reports/
 
 # Others
 dispatcher/src/conf.d/variables/default.vars
+CLAUDE.md
+docs/*

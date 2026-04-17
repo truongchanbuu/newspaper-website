@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Language-master search page.
+  Path: /content/language-masters/en/search
+  When an author rolls out this page via Live Copy / Language Copy, AEM creates
+  the equivalent node under the target language root, e.g.
+  /content/language-masters/fr/search (SearchPageModel.deriveLanguageRoot() then
+  scopes the query to /content/language-masters/fr automatically).
+-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          jcr:primaryType="cq:Page">
+
+    <jcr:content
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Search"
+        jcr:description="Search articles by keyword, category, or date range."
+        cq:template="/conf/newspaper/settings/wcm/templates/search-page"
+        sling:resourceType="newspaper/components/structure/search-page"
+        hideInNav="{Boolean}false">
+
+        <experiencefragment-header
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/experiencefragment"
+            fragmentVariationPath="/content/experience-fragments/newspaper/us/en/site/header/master"/>
+
+        <experiencefragment-footer
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/experiencefragment"
+            fragmentVariationPath="/content/experience-fragments/newspaper/us/en/site/footer/master"/>
+
+    </jcr:content>
+
+</jcr:root>

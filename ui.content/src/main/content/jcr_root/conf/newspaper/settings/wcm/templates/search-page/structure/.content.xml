@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Template Structure — Search Page
+  All nodes are LOCKED (no editable=true). The entire search UI is rendered
+  by SearchPageModel via request parameters; there are no authored editable zones.
+
+  Render order (matches search-page.html data-sly-resource keys):
+    experiencefragment-header  LOCKED — Guardian masthead
+    [search UI rendered inline by search-page.html + SearchPageModel]
+    experiencefragment-footer  LOCKED — Guardian footer
+-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          jcr:primaryType="cq:Page">
+
+    <jcr:content
+        jcr:primaryType="cq:PageContent"
+        cq:deviceGroups="[mobile/groups/responsive]"
+        cq:template="/conf/newspaper/settings/wcm/templates/search-page"
+        sling:resourceType="newspaper/components/structure/search-page">
+
+        <!-- ── LOCKED: Header Experience Fragment ────────────────────── -->
+        <experiencefragment-header
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/experiencefragment"
+            fragmentVariationPath="/content/experience-fragments/newspaper/us/en/site/header/master"/>
+
+        <!-- ── LOCKED: Footer Experience Fragment ────────────────────── -->
+        <experiencefragment-footer
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/experiencefragment"
+            fragmentVariationPath="/content/experience-fragments/newspaper/us/en/site/footer/master"/>
+
+        <!-- ── Responsive breakpoints ────────────────────────────────── -->
+        <cq:responsive jcr:primaryType="nt:unstructured">
+            <breakpoints jcr:primaryType="nt:unstructured">
+                <phone
+                    jcr:primaryType="nt:unstructured"
+                    title="Mobile (&lt;740 px)"
+                    width="{Long}740"/>
+                <tablet
+                    jcr:primaryType="nt:unstructured"
+                    title="Tablet (740–1140 px)"
+                    width="{Long}1140"/>
+                <desktop
+                    jcr:primaryType="nt:unstructured"
+                    title="Desktop (&gt;1140 px)"
+                    width="{Long}1300"/>
+            </breakpoints>
+        </cq:responsive>
+
+    </jcr:content>
+
+</jcr:root>
