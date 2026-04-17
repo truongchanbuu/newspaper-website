@@ -1,29 +1,47 @@
 // ── Search Page ───────────────────────────────────────────────────────────────
-// Covers the full search page layout (.search-page) and the article result
-// cards (.article-card) that are only used in this context.
+// .search-page — full page layout
+// .article-card — result card (inline BEM, placeholder until Article Listing ships)
 
 // ── Page shell ────────────────────────────────────────────────────────────────
 .search-page {
-  padding-top: $space-8;
+  padding-top: 0;
   padding-bottom: $space-20;
 
-  // ── Hero — search bar + filter bar ──────────────────────────────────────
+  // ── Hero — full-bleed within container, canvas-secondary bg ─────────────
   &__hero {
+    // Negative margins bleed to container edges so the bg fills wall-to-wall
+    margin-left:  -$grid-gutter;
+    margin-right: -$grid-gutter;
+    padding:       $space-8 $grid-gutter;
+    background-color: $color-canvas-secondary;
     @include divider(bottom);
-    padding-bottom: $space-8;
     margin-bottom: $space-8;
+
+    @include respond-to('lg') {
+      margin-left:  -$grid-gutter-lg;
+      margin-right: -$grid-gutter-lg;
+      padding:       $space-12 $grid-gutter-lg;
+    }
   }
 
   &__heading {
-    margin-bottom: $space-4;
+    margin-bottom: $space-6;
   }
 
   // ── Filters row ──────────────────────────────────────────────────────────
   &__filters {
     display: flex;
     flex-wrap: wrap;
-    gap: $space-6;
+    align-items: center;
+    gap: $space-4 $space-6;
     margin-top: $space-6;
+
+    // Stack filter groups vertically on mobile
+    @include respond-below('sm') {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $space-4;
+    }
   }
 
   &__filter-group {
@@ -31,6 +49,10 @@
     align-items: center;
     gap: $space-3;
     flex-wrap: wrap;
+
+    @include respond-below('sm') {
+      gap: $space-2;
+    }
   }
 
   &__filter-label {
@@ -38,17 +60,38 @@
     white-space: nowrap;
   }
 
-  // ── Category pills ────────────────────────────────────────────────────────
-  &__pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: $space-2;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+  // ── Category select dropdown ──────────────────────────────────────────────
+  &__select {
+    padding: $space-2 $space-8 $space-2 $space-3;
+    border: $border-width solid $color-divider;
+    border-radius: $radius-sm;
+    background-color: $color-canvas;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23333333' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right $space-3 center;
+    font-size: $font-size-sm;
+    font-weight: $weight-medium;
+    color: $color-heading;
+    cursor: pointer;
+    appearance: none;
+    max-width: 100%;
+    transition: border-color $duration-fast $ease-out;
+
+    &:focus {
+      outline: none;
+      border-color: $color-heading;
+      box-shadow: 0 0 0 3px rgba(18, 18, 18, 0.08);
+    }
   }
 
-  &__pill {
+  // ── Date presets ──────────────────────────────────────────────────────────
+  &__date-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-1;
+  }
+
+  &__preset-btn {
     display: inline-flex;
     align-items: center;
     padding: $space-1 $space-3;
@@ -70,7 +113,6 @@
       color: $color-heading;
     }
 
-    // Active pill (driven by aria-current set in HTL)
     &[aria-current] {
       background-color: $color-heading;
       border-color: $color-heading;
@@ -80,23 +122,17 @@
     @include focus-visible-ring;
   }
 
-  &__pill-input {
+  &__preset-input {
     @include visually-hidden;
   }
 
-  // ── Date range ────────────────────────────────────────────────────────────
+  // ── Manual date range ─────────────────────────────────────────────────────
   &__date-range {
-    display: flex;
-    align-items: center;
     gap: $space-2;
-    flex-wrap: wrap;
-  }
 
-  &__date-label {
-    font-size: $font-size-xs;
-    font-weight: $weight-medium;
-    color: $color-meta;
-    white-space: nowrap;
+    @include respond-below('sm') {
+      flex-wrap: wrap;
+    }
   }
 
   &__date-input {
@@ -107,12 +143,23 @@
     color: $color-heading;
     background: $color-canvas;
     cursor: pointer;
+    // Prevent overflow on narrow screens
+    max-width: 140px;
     transition: border-color $duration-fast $ease-out;
 
     &:focus {
       outline: none;
       border-color: $color-heading;
       box-shadow: 0 0 0 3px rgba(18, 18, 18, 0.08);
+    }
+  }
+
+  // ── Search bar hero overrides ─────────────────────────────────────────────
+  // Reduce hero input font size on mobile so it doesn't overflow
+  .search-bar--hero .search-bar__input {
+    @include respond-below('sm') {
+      font-size: $font-size-md; // 18px instead of 24px
+      padding: $space-3 0;
     }
   }
 
@@ -136,21 +183,21 @@
     }
   }
 
-  // ── 3-col results grid ────────────────────────────────────────────────────
+  // ── Results grid — mobile-first ───────────────────────────────────────────
   &__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;           // mobile: single column
     gap: $space-8 $space-6;
     padding: 0;
     margin: 0;
     list-style: none;
 
-    @include respond-to(tablet) {
+    @include respond-to('sm') {           // 740px+: 2 columns
       grid-template-columns: repeat(2, 1fr);
     }
 
-    @include respond-below(phone) {
-      grid-template-columns: 1fr;
+    @include respond-to('lg') {           // 1140px+: 3 columns
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 
@@ -159,9 +206,17 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: $space-4;
     margin-top: $space-12;
     padding-top: $space-8;
     @include divider(top);
+
+    // Stack vertically on mobile; center-align each row
+    @include respond-below('sm') {
+      flex-direction: column;
+      align-items: center;
+    }
   }
 
   &__page-btn {
@@ -174,6 +229,7 @@
     font-weight: $weight-medium;
     color: $color-heading;
     text-decoration: none;
+    white-space: nowrap;
     transition: border-color $duration-fast $ease-out,
                 background-color $duration-fast $ease-out;
 
@@ -182,16 +238,136 @@
       background-color: $color-canvas-secondary;
     }
 
-    &--next {
-      margin-left: auto;
+    @include focus-visible-ring;
+  }
+
+  // ── Numbered page buttons ─────────────────────────────────────────────────
+  &__page-numbers {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    // Hide numbered pages on very narrow screens — prev/next + jump form
+    // provide sufficient navigation
+    @include respond-below('xs') {
+      display: none;
+    }
+  }
+
+  &__page-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: $border-width solid $color-divider;
+    border-radius: $radius-sm;
+    font-size: $font-size-sm;
+    font-weight: $weight-medium;
+    color: $color-heading;
+    text-decoration: none;
+    transition: border-color $duration-fast $ease-out,
+                background-color $duration-fast $ease-out,
+                color $duration-fast $ease-out;
+
+    &:hover {
+      border-color: $color-heading;
+      background-color: $color-canvas-secondary;
+    }
+
+    &[aria-current="page"] {
+      background-color: $color-heading;
+      border-color: $color-heading;
+      color: $color-canvas;
+      pointer-events: none;
     }
 
     @include focus-visible-ring;
   }
 
-  // ── Empty / landing prompt states ─────────────────────────────────────────
-  &__empty,
-  &__prompt {
+  &__page-ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    font-size: $font-size-sm;
+    color: $color-meta;
+    list-style: none;
+  }
+
+  // ── Jump-to-page form ─────────────────────────────────────────────────────
+  &__jump-form {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+
+    // Hide jump form on mobile — too cramped; prev/next + page numbers suffice
+    @include respond-below('sm') {
+      display: none;
+    }
+  }
+
+  &__jump-label {
+    font-size: $font-size-xs;
+    font-weight: $weight-medium;
+    color: $color-meta;
+    white-space: nowrap;
+  }
+
+  &__jump-input {
+    width: 56px;
+    padding: $space-2;
+    border: $border-width solid $color-divider;
+    border-radius: $radius-sm;
+    font-size: $font-size-sm;
+    color: $color-heading;
+    text-align: center;
+    background: $color-canvas;
+    transition: border-color $duration-fast $ease-out;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $color-heading;
+      box-shadow: 0 0 0 3px rgba(18, 18, 18, 0.08);
+    }
+  }
+
+  &__jump-submit {
+    padding: $space-2 $space-4;
+    background-color: $color-canvas-secondary;
+    border: $border-width solid $color-divider;
+    border-radius: $radius-sm;
+    font-size: $font-size-xs;
+    font-weight: $weight-bold;
+    letter-spacing: $ls-label;
+    text-transform: uppercase;
+    color: $color-heading;
+    cursor: pointer;
+    transition: background-color $duration-fast $ease-out,
+                border-color $duration-fast $ease-out;
+
+    &:hover {
+      background-color: $color-divider;
+      border-color: $color-heading;
+    }
+
+    @include focus-visible-ring;
+  }
+
+  // ── Empty state ───────────────────────────────────────────────────────────
+  &__empty {
     padding: $space-16 0;
     text-align: center;
     color: $color-meta;
@@ -201,8 +377,7 @@
 }
 
 // ── Article Card ──────────────────────────────────────────────────────────────
-// BEM block used for each search result row. Borderless + shadowless per the
-// Guardian design rule (§5 Component Logic).
+// Borderless + shadowless per Guardian design rules (§5 Component Logic).
 
 .article-card {
 

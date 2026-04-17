@@ -17,12 +17,13 @@
     <main class="search-page" id="main-content" role="main">
         <div class="l-container">
 
-            <!--/* ── Search hero ──────────────────────────────────────────── */-->
+            <!--/* ── Search hero ────────────────────────────────────────── */-->
             <section class="search-page__hero">
                 <form class="search-page__form"
                       method="get"
                       action="${model.pageUrl @ context='uri'}"
-                      role="search">
+                      role="search"
+                      data-sp-form>
 
                     <h1 class="search-page__heading t-label">Search</h1>
 
@@ -33,61 +34,111 @@
                                    name="q"
                                    value="${model.query @ context='attribute'}"
                                    placeholder="Search news, topics, people…"
-                                   aria-label="Search"
-                                   autocomplete="off"/>
-                            <button type="submit" class="search-bar__submit" aria-label="Search">
+                                   aria-label="Search query"
+                                   autocomplete="off"
+                                   data-sp-input/>
+                            <button type="submit" class="search-bar__submit" aria-label="Submit search">
                                 Search
                             </button>
                         </div>
                     </div>
 
-                    <!--/* ── Filters ──────────────────────────────────────── */-->
+                    <!--/* ── Filters row ────────────────────────────────── */-->
                     <div class="search-page__filters" role="group" aria-label="Filter results">
 
-                        <!--/* Category pills — only shown when categories are available */-->
-                        <div class="search-page__filter-group"
-                             data-sly-test="${model.availableCategories}">
-                            <span class="search-page__filter-label">Section</span>
-                            <div class="search-page__pills">
+                        <!--/* Category dropdown */-->
+                        <div class="search-page__filter-group">
+                            <label class="search-page__filter-label" for="sp-category">Section</label>
+                            <select class="search-page__select"
+                                    id="sp-category"
+                                    name="category"
+                                    data-sp-category>
+                                <option value="">All sections</option>
+                                <sly data-sly-list.cat="${model.categories}">
+                                    <option value="${cat.name @ context='attribute'}"
+                                            data-sly-attribute.selected="${model.category == cat.name}">
+                                        ${cat.title @ context='text'}
+                                    </option>
+                                </sly>
+                            </select>
+                        </div>
 
-                                <label class="search-page__pill"
-                                       data-sly-attribute.aria-current="${!model.category}">
-                                    <input class="search-page__pill-input"
-                                           type="radio" name="category" value=""
-                                           data-sly-attribute.checked="${!model.category}"/>
-                                    All
+                        <!--/* Date presets */-->
+                        <div class="search-page__filter-group">
+                            <span class="search-page__filter-label" id="sp-date-label">Date</span>
+                            <div class="search-page__date-presets"
+                                 role="group"
+                                 aria-labelledby="sp-date-label">
+
+                                <label class="search-page__preset-btn"
+                                       data-sly-attribute.aria-current="${model.datePreset == 'today'}">
+                                    <input class="search-page__preset-input"
+                                           type="radio" name="datePreset" value="today"
+                                           data-sp-preset
+                                           data-sly-attribute.checked="${model.datePreset == 'today'}"/>
+                                    Today
                                 </label>
 
-                                <sly data-sly-list.cat="${model.availableCategories}">
-                                    <label class="search-page__pill"
-                                           data-sly-attribute.aria-current="${model.category == cat}">
-                                        <input class="search-page__pill-input"
-                                               type="radio"
-                                               name="category"
-                                               value="${cat @ context='attribute'}"
-                                               data-sly-attribute.checked="${model.category == cat}"/>
-                                        ${cat @ context='text'}
-                                    </label>
-                                </sly>
+                                <label class="search-page__preset-btn"
+                                       data-sly-attribute.aria-current="${model.datePreset == '1'}">
+                                    <input class="search-page__preset-input"
+                                           type="radio" name="datePreset" value="1"
+                                           data-sp-preset
+                                           data-sly-attribute.checked="${model.datePreset == '1'}"/>
+                                    Yesterday
+                                </label>
+
+                                <label class="search-page__preset-btn"
+                                       data-sly-attribute.aria-current="${model.datePreset == '7'}">
+                                    <input class="search-page__preset-input"
+                                           type="radio" name="datePreset" value="7"
+                                           data-sp-preset
+                                           data-sly-attribute.checked="${model.datePreset == '7'}"/>
+                                    7 days
+                                </label>
+
+                                <label class="search-page__preset-btn"
+                                       data-sly-attribute.aria-current="${model.datePreset == '14'}">
+                                    <input class="search-page__preset-input"
+                                           type="radio" name="datePreset" value="14"
+                                           data-sp-preset
+                                           data-sly-attribute.checked="${model.datePreset == '14'}"/>
+                                    14 days
+                                </label>
+
+                                <label class="search-page__preset-btn"
+                                       data-sly-attribute.aria-current="${model.datePreset == '30'}">
+                                    <input class="search-page__preset-input"
+                                           type="radio" name="datePreset" value="30"
+                                           data-sp-preset
+                                           data-sly-attribute.checked="${model.datePreset == '30'}"/>
+                                    30 days
+                                </label>
+
+                                <!--/* "Custom" radio clears all presets so date inputs appear */-->
+                                <label class="search-page__preset-btn"
+                                       data-sly-attribute.aria-current="${!model.datePreset}">
+                                    <input class="search-page__preset-input"
+                                           type="radio" name="datePreset" value=""
+                                           data-sp-preset
+                                           data-sly-attribute.checked="${!model.datePreset}"/>
+                                    Custom
+                                </label>
 
                             </div>
                         </div>
 
-                        <!--/* Date range */-->
-                        <div class="search-page__filter-group">
-                            <span class="search-page__filter-label">Date range</span>
-                            <div class="search-page__date-range">
-                                <label class="search-page__date-label"
-                                       for="search-date-from">From</label>
-                                <input class="search-page__date-input"
-                                       type="date" id="search-date-from" name="dateFrom"
-                                       value="${model.dateFrom @ context='attribute'}"/>
-                                <label class="search-page__date-label"
-                                       for="search-date-to">To</label>
-                                <input class="search-page__date-input"
-                                       type="date" id="search-date-to" name="dateTo"
-                                       value="${model.dateTo @ context='attribute'}"/>
-                            </div>
+                        <!--/* Manual date inputs — visible only when no preset selected */-->
+                        <div class="search-page__filter-group search-page__date-range"
+                             data-sly-test="${!model.datePreset}">
+                            <label class="search-page__filter-label" for="sp-from">From</label>
+                            <input class="search-page__date-input"
+                                   type="date" id="sp-from" name="fromDate"
+                                   value="${model.fromDate @ context='attribute'}"/>
+                            <label class="search-page__filter-label" for="sp-to">To</label>
+                            <input class="search-page__date-input"
+                                   type="date" id="sp-to" name="toDate"
+                                   value="${model.toDate @ context='attribute'}"/>
                         </div>
 
                     </div><!--/* /.search-page__filters */-->
@@ -95,106 +146,133 @@
                 </form>
             </section><!--/* /.search-page__hero */-->
 
-            <!--/* ── Results ─────────────────────────────────────────────── */-->
+            <!--/* ── Results ───────────────────────────────────────────── */-->
             <section class="search-page__results"
                      aria-label="Search results"
                      aria-live="polite">
 
-                <!--/* State: user has submitted a query or applied a filter */-->
-                <sly data-sly-test="${model.hasQuery}">
+                <div class="search-page__results-header">
+                    <p class="search-page__count t-meta">
+                        ${model.resultsLabel @ context='text'}
+                        <sly data-sly-test="${model.query}">
+                            for <strong>"${model.query @ context='text'}"</strong>
+                        </sly>
+                    </p>
+                </div>
 
-                    <div class="search-page__results-header">
-                        <p class="search-page__count t-meta">
-                            <sly data-sly-test="${model.hasResults}">
-                                ${model.resultLabel}
-                                <sly data-sly-test="${model.query}">
-                                    for <strong>"${model.query @ context='text'}"</strong>
-                                </sly>
-                            </sly>
-                            <sly data-sly-test="${!model.hasResults}">
-                                No results found
-                                <sly data-sly-test="${model.query}">
-                                    for <strong>"${model.query @ context='text'}"</strong>
-                                </sly>
-                            </sly>
-                        </p>
-                    </div>
-
-                    <sly data-sly-test="${model.hasResults}">
-
-                        <ol class="search-page__grid" role="list">
-                            <sly data-sly-list.result="${model.results}">
-                                <li class="article-card">
-                                    <a class="article-card__link"
-                                       href="${result.path @ context='uri'}.html">
-                                        <sly data-sly-test="${result.imageUrl}">
-                                            <div class="article-card__image-wrap">
-                                                <img class="article-card__image"
-                                                     src="${result.imageUrl @ context='uri'}"
-                                                     alt="${result.title @ context='attribute'}"
-                                                     loading="lazy"/>
-                                            </div>
-                                        </sly>
-                                        <div class="article-card__body">
-                                            <span class="article-card__category">
-                                                ${result.category @ context='text'}
-                                            </span>
-                                            <h2 class="article-card__title">
-                                                ${result.title @ context='text'}
-                                            </h2>
-                                            <p class="article-card__desc">
-                                                ${result.description @ context='text'}
-                                            </p>
-                                            <footer class="article-card__meta">
-                                                <span class="article-card__author t-meta">
-                                                    ${result.author @ context='text'}
-                                                </span>
-                                                <time class="article-card__date t-meta">
-                                                    ${result.publishedDate @ context='text'}
-                                                </time>
-                                            </footer>
+                <!--/* Results grid */-->
+                <sly data-sly-test="${model.hasResults}">
+                    <ol class="search-page__grid" role="list">
+                        <sly data-sly-list.result="${model.results}">
+                            <li class="article-card">
+                                <a class="article-card__link"
+                                   href="${result.path @ context='uri'}.html">
+                                    <sly data-sly-test="${result.imageUrl}">
+                                        <div class="article-card__image-wrap">
+                                            <img class="article-card__image"
+                                                 src="${result.imageUrl @ context='uri'}"
+                                                 alt="${result.title @ context='attribute'}"
+                                                 loading="lazy"/>
                                         </div>
+                                    </sly>
+                                    <div class="article-card__body">
+                                        <span class="article-card__category">
+                                            ${result.category @ context='text'}
+                                        </span>
+                                        <h2 class="article-card__title">
+                                            ${result.title @ context='text'}
+                                        </h2>
+                                        <p class="article-card__desc">
+                                            ${result.description @ context='text'}
+                                        </p>
+                                        <footer class="article-card__meta">
+                                            <span class="article-card__author t-meta">
+                                                ${result.author @ context='text'}
+                                            </span>
+                                            <time class="article-card__date t-meta">
+                                                ${result.publishedDate @ context='text'}
+                                            </time>
+                                        </footer>
+                                    </div>
+                                </a>
+                            </li>
+                        </sly>
+                    </ol>
+                </sly>
+
+                <!--/* Empty state */-->
+                <sly data-sly-test="${!model.hasResults}">
+                    <div class="search-page__empty">
+                        <p class="t-meta">No results found. Try a different search term or adjust your filters.</p>
+                    </div>
+                </sly>
+
+                <!--/* ── Pagination ─────────────────────────────────────── */-->
+                <sly data-sly-test="${model.showPagination}">
+                    <nav class="search-page__pagination" aria-label="Results pages">
+
+                        <a class="search-page__page-btn"
+                           href="${model.prevPageUrl @ context='uri'}"
+                           aria-label="Previous page"
+                           data-sly-test="${model.hasPrevPage}">← Prev</a>
+
+                        <ol class="search-page__page-numbers" role="list">
+                            <sly data-sly-list.pn="${model.pageNumbers}">
+                                <li class="search-page__page-ellipsis"
+                                    aria-hidden="true"
+                                    data-sly-test="${pn.ellipsis}">…</li>
+                                <li data-sly-test="${!pn.ellipsis}">
+                                    <a class="search-page__page-num"
+                                       href="${pn.url @ context='uri'}"
+                                       data-sly-attribute.aria-current="${pn.current ? 'page' : false}"
+                                       aria-label="Page ${pn.number @ context='number'}">
+                                        ${pn.number @ context='number'}
                                     </a>
                                 </li>
                             </sly>
                         </ol>
 
-                        <!--/* Pagination — only shown when there is more than one page */-->
-                        <nav class="search-page__pagination"
-                             aria-label="Results pages"
-                             data-sly-test="${model.hasPrev || model.hasNext}">
-                            <sly data-sly-test="${model.hasPrev}">
-                                <a class="search-page__page-btn"
-                                   href="${model.prevPageUrl @ context='uri'}">
-                                    ← Previous
-                                </a>
+                        <!--/* Jump to page — carries all current filter state as hidden fields */-->
+                        <form class="search-page__jump-form"
+                              method="get"
+                              action="${model.pageUrl @ context='uri'}"
+                              aria-label="Jump to page">
+                            <input type="hidden" name="q"
+                                   value="${model.query @ context='attribute'}"
+                                   data-sly-test="${model.query}"/>
+                            <input type="hidden" name="category"
+                                   value="${model.category @ context='attribute'}"
+                                   data-sly-test="${model.category}"/>
+                            <sly data-sly-test="${model.datePreset}">
+                                <input type="hidden" name="datePreset"
+                                       value="${model.datePreset @ context='attribute'}"/>
                             </sly>
-                            <sly data-sly-test="${model.hasNext}">
-                                <a class="search-page__page-btn search-page__page-btn--next"
-                                   href="${model.nextPageUrl @ context='uri'}">
-                                    Next →
-                                </a>
+                            <sly data-sly-test="${!model.datePreset}">
+                                <input type="hidden" name="fromDate"
+                                       value="${model.fromDate @ context='attribute'}"
+                                       data-sly-test="${model.fromDate}"/>
+                                <input type="hidden" name="toDate"
+                                       value="${model.toDate @ context='attribute'}"
+                                       data-sly-test="${model.toDate}"/>
                             </sly>
-                        </nav>
+                            <label class="search-page__jump-label" for="sp-jump">Go to page</label>
+                            <input class="search-page__jump-input"
+                                   type="number"
+                                   id="sp-jump"
+                                   name="page"
+                                   min="1"
+                                   max="${model.totalPages @ context='number'}"
+                                   placeholder="${model.pageNum @ context='number'}"/>
+                            <button class="search-page__jump-submit" type="submit">Go</button>
+                        </form>
 
-                    </sly><!--/* end hasResults */-->
+                        <a class="search-page__page-btn search-page__page-btn--next"
+                           href="${model.nextPageUrl @ context='uri'}"
+                           aria-label="Next page"
+                           data-sly-test="${model.hasNextPage}">Next →</a>
 
-                    <sly data-sly-test="${!model.hasResults}">
-                        <div class="search-page__empty">
-                            <p class="t-meta">
-                                Try a different search term or remove some filters.
-                            </p>
-                        </div>
-                    </sly>
-
-                </sly><!--/* end hasQuery */-->
-
-                <!--/* State: landing — no query submitted yet */-->
-                <sly data-sly-test="${!model.hasQuery}">
-                    <p class="search-page__prompt t-meta">
-                        Enter a search term above to find articles.
-                    </p>
-                </sly>
+                    </nav>
+                </sly><!--/* /.showPagination */-->
 
             </section><!--/* /.search-page__results */-->
 

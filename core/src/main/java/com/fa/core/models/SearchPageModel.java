@@ -1,21 +1,26 @@
 package com.fa.core.models;
 
 import com.day.cq.wcm.api.Page;
-import com.fa.core.search.SearchResultItem;
 import com.fa.core.search.ArticleSearchService;
+import com.fa.core.search.SearchResultItem;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.apache.sling.models.annotations.injectorspecific.Self;
 
 import javax.annotation.PostConstruct;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Model(
         adaptables = SlingHttpServletRequest.class,
@@ -23,9 +28,14 @@ import java.util.List;
 )
 public class SearchPageModel {
 
-    private static final int PAGE_SIZE = 12;
+    // ── Constants ──────────────────────────────────────────────────────────────
 
-    @SlingObject
+    private static final int    PAGE_SIZE      = 10;
+    private static final String ARTICLES_NODE  = "articles";
+
+    // ── Injected ───────────────────────────────────────────────────────────────
+
+    @Self
     private SlingHttpServletRequest request;
 
     @ScriptVariable
@@ -34,110 +44,246 @@ public class SearchPageModel {
     @OSGiService
     private ArticleSearchService searchService;
 
+    // ── Parsed request params ─────────────────────────────────────────────────
+
     private String query;
     private String category;
-    private String dateFrom;
-    private String dateTo;
-    private int currentOffset;
+    private String fromDate;
+    private String toDate;
+    private String datePreset;
+    private int    pageNum;   // 1-based
 
-    private List<SearchResultItem> results       = Collections.emptyList();
-    private List<String>              availableCategories = Collections.emptyList();
-    private long                      totalCount;
+    // ── Computed ───────────────────────────────────────────────────────────────
+
+    private List<SearchResultItem> results             = Collections.emptyList();
+    private List<CategoryItem>     categories          = Collections.emptyList();
+    private List<PageNumberItem>   pageNumbers         = Collections.emptyList();
+    private long                   totalCount;
+    private int                    totalPages          = 1;
+
+    // ── Init ───────────────────────────────────────────────────────────────────
 
     @PostConstruct
     private void init() {
-        query    = StringUtils.trimToEmpty(request.getParameter("q"));
-        category = StringUtils.trimToNull(request.getParameter("category"));
-        dateFrom = StringUtils.trimToNull(request.getParameter("dateFrom"));
-        dateTo   = StringUtils.trimToNull(request.getParameter("dateTo"));
+        parseParams();
+        applyDatePreset();
+        categories = buildCategories();
 
-        String offsetParam = request.getParameter("offset");
-        currentOffset = StringUtils.isNumeric(offsetParam) ? Integer.parseInt(offsetParam) : 0;
+        if (searchService == null) return;
 
-        if (searchService == null) {
-            return;
-        }
-
-        String root         = deriveLanguageRoot();
-        availableCategories = searchService.getCategories(root);
-        totalCount          = searchService.count(root, query, category, dateFrom, dateTo);
-        results             = searchService.search(root, query, category, dateFrom, dateTo,
-                                                   currentOffset, PAGE_SIZE);
+        String root = deriveLanguageRoot();
+        totalCount  = searchService.count(root, query, category, fromDate, toDate);
+        totalPages  = totalCount > 0 ? (int) Math.ceil((double) totalCount / PAGE_SIZE) : 1;
+        pageNum     = Math.max(1, Math.min(pageNum, totalPages));
+        int offset  = (pageNum - 1) * PAGE_SIZE;
+        results     = searchService.search(root, query, category, fromDate, toDate, offset, PAGE_SIZE);
+        pageNumbers = buildPageNumbers(pageNum, totalPages);
     }
 
-    // ── Helpers ────────────────────────────────────────────────────────────────
+    private void parseParams() {
+        query      = StringUtils.trimToEmpty(request.getParameter("q"));
+        category   = StringUtils.trimToNull(request.getParameter("category"));
+        fromDate   = StringUtils.trimToNull(request.getParameter("fromDate"));
+        toDate     = StringUtils.trimToNull(request.getParameter("toDate"));
+        datePreset = StringUtils.trimToNull(request.getParameter("datePreset"));
+
+        String pageParam = request.getParameter("page");
+        pageNum = StringUtils.isNumeric(pageParam) ? Math.max(1, Integer.parseInt(pageParam)) : 1;
+    }
+
+    // ── Date helpers ───────────────────────────────────────────────────────────
+
+    /**
+     * Presets override manual date inputs.
+     * If no date params are provided at all, default to "today" so the page
+     * always has a sensible initial state.
+     */
+    private void applyDatePreset() {
+        if (datePreset == null && fromDate == null && toDate == null) {
+            datePreset = "today";
+        }
+        if (datePreset != null) {
+            LocalDate today = LocalDate.now();
+            switch (datePreset) {
+                case "today": fromDate = today.toString();                          break;
+                case "1":     fromDate = today.minusDays(1).toString();             break;
+                case "7":     fromDate = today.minusDays(7).toString();             break;
+                case "14":    fromDate = today.minusDays(14).toString();            break;
+                case "30":    fromDate = today.minusDays(30).toString();            break;
+                default:      datePreset = null;                                    break;
+            }
+            if (datePreset != null) {
+                toDate = today.toString();
+            }
+        }
+    }
+
+    // ── Category helpers ───────────────────────────────────────────────────────
+
+    /**
+     * Reads sibling nodes of {@code articles/} under the language root.
+     * Path: /content/newspaper/language-masters/<lang>/*  (excluding articles/).
+     * Each child page's name is its primaryTag value; title is its jcr:title.
+     */
+    private List<CategoryItem> buildCategories() {
+        if (currentPage == null) return Collections.emptyList();
+
+        Page langRoot = currentPage.getAbsoluteParent(3);
+        if (langRoot == null) return Collections.emptyList();
+
+        List<CategoryItem> list = new ArrayList<>();
+        Iterator<Page> children = langRoot.listChildren();
+        while (children.hasNext()) {
+            Page child = children.next();
+            if (ARTICLES_NODE.equalsIgnoreCase(child.getName())) continue;
+            if (child.getProperties().get("hideInNav", false)) continue;
+            list.add(new CategoryItem(child.getName(), child.getTitle()));
+        }
+        return list;
+    }
+
+    // ── Pagination helpers ─────────────────────────────────────────────────────
+
+    /**
+     * Builds the page-number window: always shows 1, last, and current±2 pages,
+     * with ellipsis nodes ({@code number=0, ellipsis=true}) filling the gaps.
+     */
+    private List<PageNumberItem> buildPageNumbers(int current, int total) {
+        if (total <= 1) return Collections.emptyList();
+
+        Set<Integer> show = new LinkedHashSet<>();
+        show.add(1);
+        for (int i = Math.max(2, current - 2); i <= Math.min(total - 1, current + 2); i++) {
+            show.add(i);
+        }
+        show.add(total);
+
+        List<PageNumberItem> result = new ArrayList<>();
+        int prev = 0;
+        for (int p : show) {
+            if (p - prev > 1) {
+                result.add(new PageNumberItem(0, false, true, null));
+            }
+            result.add(new PageNumberItem(p, p == current, false, buildPageUrl(p)));
+            prev = p;
+        }
+        return result;
+    }
+
+    // ── URL builder ────────────────────────────────────────────────────────────
+
+    private String buildPageUrl(int page) {
+        if (currentPage == null) return "#";
+        List<String> params = new ArrayList<>();
+        if (StringUtils.isNotEmpty(query))    params.add("q=" + encode(query));
+        if (StringUtils.isNotEmpty(category)) params.add("category=" + encode(category));
+        if (StringUtils.isNotEmpty(datePreset)) {
+            params.add("datePreset=" + encode(datePreset));
+        } else {
+            if (StringUtils.isNotEmpty(fromDate)) params.add("fromDate=" + encode(fromDate));
+            if (StringUtils.isNotEmpty(toDate))   params.add("toDate=" + encode(toDate));
+        }
+        if (page > 1) params.add("page=" + page);
+        String base = currentPage.getPath() + ".html";
+        return params.isEmpty() ? base : base + "?" + String.join("&", params);
+    }
+
+    private static String encode(String v) {
+        try { return URLEncoder.encode(v, "UTF-8"); }
+        catch (UnsupportedEncodingException e) { return v; }
+    }
+
+    // ── Language root ──────────────────────────────────────────────────────────
 
     private String deriveLanguageRoot() {
-        // /content/newspaper/language-masters/en/search → level 3 = /content/newspaper/language-masters/en
+        // /content/newspaper/language-masters/en/... → level 3
         if (currentPage != null) {
             Page langRoot = currentPage.getAbsoluteParent(3);
-            if (langRoot != null) {
-                return langRoot.getPath();
-            }
+            if (langRoot != null) return langRoot.getPath();
         }
         return "/content/newspaper/language-masters";
     }
 
-    private String encode(String value) {
-        if (StringUtils.isEmpty(value)) return "";
-        try {
-            return URLEncoder.encode(value, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            return value;
-        }
+    // ── Computed display helpers ───────────────────────────────────────────────
+
+    public String getResultsLabel() {
+        if (totalCount == 0) return "No results found";
+        int from = (pageNum - 1) * PAGE_SIZE + 1;
+        int to   = (int) Math.min((long) pageNum * PAGE_SIZE, totalCount);
+        return "Showing " + from + "\u2013" + to + " of " + totalCount
+               + " result" + (totalCount == 1 ? "" : "s");
     }
 
-    private String buildPageUrl(int offset) {
-        if (currentPage == null) return "#";
-        StringBuilder sb = new StringBuilder(currentPage.getPath()).append(".html?");
-        sb.append("q=").append(encode(query));
-        if (StringUtils.isNotEmpty(category)) sb.append("&category=").append(encode(category));
-        if (StringUtils.isNotEmpty(dateFrom))  sb.append("&dateFrom=").append(encode(dateFrom));
-        if (StringUtils.isNotEmpty(dateTo))    sb.append("&dateTo=").append(encode(dateTo));
-        if (offset > 0)                        sb.append("&offset=").append(offset);
-        return sb.toString();
+    public String getPageUrl() {
+        return currentPage != null ? currentPage.getPath() + ".html" : "#";
     }
-
-    // ── Computed properties for HTL ────────────────────────────────────────────
 
     public String getLanguageCode() {
         if (currentPage != null) {
-            Page langRoot = currentPage.getAbsoluteParent(3);
-            if (langRoot != null) {
-                return langRoot.getName();
-            }
+            Page lr = currentPage.getAbsoluteParent(3);
+            if (lr != null) return lr.getName();
         }
         return "en";
     }
 
-    public String getPageUrl() {
-        return currentPage != null ? currentPage.getPath() + ".html" : "/search.html";
+    public String getPrevPageUrl() {
+        return pageNum > 1 ? buildPageUrl(pageNum - 1) : null;
     }
 
-    public String getResultLabel() {
-        return totalCount + " result" + (totalCount == 1 ? "" : "s");
+    public String getNextPageUrl() {
+        return pageNum < totalPages ? buildPageUrl(pageNum + 1) : null;
     }
-
-    public String getPrevPageUrl() { return buildPageUrl(getPrevOffset()); }
-    public String getNextPageUrl() { return buildPageUrl(getNextOffset()); }
 
     // ── Accessors ──────────────────────────────────────────────────────────────
 
-    public String                    getQuery()              { return query; }
-    public String                    getCategory()           { return category; }
-    public String                    getDateFrom()           { return dateFrom; }
-    public String                    getDateTo()             { return dateTo; }
-    public List<SearchResultItem> getResults()            { return results; }
-    public List<String>              getAvailableCategories(){ return availableCategories; }
-    public long                      getTotalCount()         { return totalCount; }
-    public int                       getCurrentOffset()      { return currentOffset; }
-    public int                       getPageSize()           { return PAGE_SIZE; }
-    public int                       getNextOffset()         { return currentOffset + PAGE_SIZE; }
-    public int                       getPrevOffset()         { return Math.max(0, currentOffset - PAGE_SIZE); }
-    public boolean                   isHasPrev()             { return currentOffset > 0; }
-    public boolean                   isHasNext()             { return (currentOffset + PAGE_SIZE) < totalCount; }
-    public boolean                   isHasResults()          { return !results.isEmpty(); }
-    public boolean                   isHasQuery()            {
-        return StringUtils.isNotEmpty(query) || category != null || dateFrom != null || dateTo != null;
+    public String                  getQuery()          { return query; }
+    public String                  getCategory()       { return category; }
+    public String                  getFromDate()       { return fromDate; }
+    public String                  getToDate()         { return toDate; }
+    public String                  getDatePreset()     { return datePreset; }
+    public int                     getPageNum()        { return pageNum; }
+    public int                     getTotalPages()     { return totalPages; }
+    public long                    getTotalCount()     { return totalCount; }
+    public List<SearchResultItem>  getResults()        { return results; }
+    public List<CategoryItem>      getCategories()     { return categories; }
+    public List<PageNumberItem>    getPageNumbers()    { return pageNumbers; }
+
+    public boolean isHasResults()     { return !results.isEmpty(); }
+    public boolean isHasPrevPage()    { return pageNum > 1; }
+    public boolean isHasNextPage()    { return pageNum < totalPages; }
+    public boolean isShowPagination() { return totalPages > 1; }
+
+    // ── Inner value objects ────────────────────────────────────────────────────
+
+    public static final class CategoryItem {
+        private final String name;
+        private final String title;
+
+        public CategoryItem(String name, String title) {
+            this.name  = name;
+            this.title = title;
+        }
+
+        public String getName()  { return name; }
+        public String getTitle() { return StringUtils.isNotEmpty(title) ? title : name; }
+    }
+
+    public static final class PageNumberItem {
+        private final int     number;
+        private final boolean current;
+        private final boolean ellipsis;
+        private final String  url;
+
+        public PageNumberItem(int number, boolean current, boolean ellipsis, String url) {
+            this.number   = number;
+            this.current  = current;
+            this.ellipsis = ellipsis;
+            this.url      = url;
+        }
+
+        public int     getNumber()      { return number; }
+        public boolean isCurrent()      { return current; }
+        public boolean isEllipsis()     { return ellipsis; }
+        public String  getUrl()         { return url; }
     }
 }
