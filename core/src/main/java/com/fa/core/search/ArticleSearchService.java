@@ -13,7 +13,8 @@ import java.util.List;
  *   <li>{@code jcr:description} — article intro    → {@link SearchResultItem#getDescription()}</li>
  *   <li>{@code primaryTag}      — single category  → {@link SearchResultItem#getCategory()}</li>
  *   <li>{@code cq:tags}         — all tags (included in free-text query match)</li>
- *   <li>{@code articleDate}     — publication date → {@link SearchResultItem#getPublishedDate()}</li>
+ *   <li>path {@code /articles/<yyyy>/<mm>/<dd>/} — date derived from path segments,
+ *       not a stored property (always authoritative, indexed by Oak)</li>
  *   <li>{@code image/fileReference} — hero image  → {@link SearchResultItem#getImageUrl()}</li>
  *   <li>{@code articleAuthor}   — byline           → {@link SearchResultItem#getAuthor()}</li>
  * </ul>
