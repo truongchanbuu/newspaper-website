@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Page-properties dialog for the Search Page component.
+
+  WHY this file exists:
+  AEM's "Create Page" wizard looks for cq:dialog directly on the page component
+  (at /apps/newspaper/components/structure/search-page/cq:dialog).
+  It does NOT walk the sling:resourceSuperType chain automatically, so without
+  this file the Properties panel is empty and the wizard is blocked.
+
+  The sling:resourceSuperType on this dialog node activates the Sling Resource
+  Merger: all tabs and fields from core/wcm/components/page/v3/page/cq:dialog
+  are merged in, giving authors the full standard page-properties experience
+  (Title, Tags, Hide in Navigation, Thumbnail, etc.) with no duplication.
+-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          jcr:primaryType="nt:unstructured"
+          jcr:title="Search Page"
+          sling:resourceType="cq/gui/components/authoring/dialog"
+          sling:resourceSuperType="core/wcm/components/page/v3/page/cq:dialog"/>
