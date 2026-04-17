@@ -84,24 +84,26 @@
     }
   }
 
-  // ── Custom range toggle button ────────────────────────────────────────────
+  // ── Custom range toggle button (icon-only) ───────────────────────────────
   &__date-toggle {
     display: inline-flex;
     align-items: center;
-    padding: $space-1 $space-3;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
     border: $border-width solid $color-divider;
     border-radius: $radius-sm;
-    font-size: $font-size-xs;
-    font-weight: $weight-medium;
-    letter-spacing: $ls-label;
-    text-transform: uppercase;
     color: $color-body;
     background: $color-canvas;
     cursor: pointer;
     user-select: none;
+    flex-shrink: 0;
     transition: border-color $duration-fast $ease-out,
                 background-color $duration-fast $ease-out,
                 color $duration-fast $ease-out;
+
+    svg { pointer-events: none; }
 
     &:hover {
       border-color: $color-heading;
@@ -163,6 +165,12 @@
   // ── Results section ───────────────────────────────────────────────────────
   &__results {
     padding-top: $space-8;
+    transition: opacity 150ms ease;
+
+    &--loading {
+      opacity: 0.4;
+      pointer-events: none;
+    }
   }
 
   &__results-header {

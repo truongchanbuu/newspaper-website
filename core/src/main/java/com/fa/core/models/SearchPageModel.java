@@ -126,10 +126,12 @@ public class SearchPageModel {
         if (langRoot == null) return Collections.emptyList();
 
         List<CategoryItem> list = new ArrayList<>();
+        String selfPath = currentPage.getPath();
         Iterator<Page> children = langRoot.listChildren();
         while (children.hasNext()) {
             Page child = children.next();
             if (ARTICLES_NODE.equalsIgnoreCase(child.getName())) continue;
+            if (child.getPath().equals(selfPath)) continue;
             if (child.getProperties().get("hideInNav", false)) continue;
             list.add(new CategoryItem(child.getName(), child.getTitle()));
         }

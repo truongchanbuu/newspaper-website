@@ -82,8 +82,20 @@
                             <button type="button"
                                     class="search-page__date-toggle"
                                     data-sp-date-toggle
-                                    aria-pressed="${model.customDateMode ? 'true' : 'false'}">
-                                Custom range
+                                    aria-pressed="${model.customDateMode ? 'true' : 'false'}"
+                                    title="Custom date range"
+                                    aria-label="Custom date range">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                     viewBox="0 0 16 16" aria-hidden="true" focusable="false" fill="none">
+                                    <rect x="1.5" y="3" width="13" height="11.5" rx="1"
+                                          stroke="currentColor" stroke-width="1.5"/>
+                                    <line x1="5" y1="1" x2="5" y2="5"
+                                          stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                    <line x1="11" y1="1" x2="11" y2="5"
+                                          stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                    <line x1="1.5" y1="7" x2="14.5" y2="7"
+                                          stroke="currentColor" stroke-width="1.5"/>
+                                </svg>
                             </button>
                         </div>
 
@@ -109,7 +121,8 @@
             <!--/* ── Results ───────────────────────────────────────────── */-->
             <section class="search-page__results"
                      aria-label="Search results"
-                     aria-live="polite">
+                     aria-live="polite"
+                     data-sp-results>
 
                 <div class="search-page__results-header">
                     <p class="search-page__count t-meta">

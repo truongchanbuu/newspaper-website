@@ -9,6 +9,9 @@
   const dateRange    = form.querySelector<HTMLElement>('[data-sp-date-range]');
   const dateInputs   = dateRange?.querySelectorAll<HTMLInputElement>('input[type="date"]');
 
+  // Lives outside the form; updated after each DOM swap
+  let resultsEl = document.querySelector<HTMLElement>('[data-sp-results]');
+
   // ── Helpers ───────────────────────────────────────────────────────────────
 
   function collapseRange() {
@@ -25,30 +28,84 @@
     return dateRange ? !dateRange.hasAttribute('data-sp-collapsed') : false;
   }
 
+  function buildUrl(): string {
+    const data   = new FormData(form);
+    const params = new URLSearchParams();
+    data.forEach((v, k) => { if (String(v).trim()) params.set(k, String(v)); });
+    const base = form.getAttribute('action') || window.location.pathname;
+    const qs   = params.toString();
+    return qs ? `${base}?${qs}` : base;
+  }
+
+  // ── AJAX result swap ──────────────────────────────────────────────────────
+
+  let abortCtrl: AbortController | null = null;
+
+  async function loadResults(url: string): Promise<void> {
+    if (!resultsEl) return;
+
+    abortCtrl?.abort();
+    abortCtrl = new AbortController();
+
+    resultsEl.classList.add('search-page__results--loading');
+    try {
+      const resp = await fetch(url, {
+        headers: { Accept: 'text/html' },
+        signal:  abortCtrl.signal,
+      });
+      if (!resp.ok) throw new Error('non-2xx');
+
+      const html  = await resp.text();
+      const doc   = new DOMParser().parseFromString(html, 'text/html');
+      const fresh = doc.querySelector<HTMLElement>('[data-sp-results]');
+
+      if (fresh && resultsEl.parentNode) {
+        resultsEl.parentNode.replaceChild(fresh, resultsEl);
+        resultsEl = fresh;
+      }
+      history.pushState(null, '', url);
+    } catch (e) {
+      if (e instanceof Error && e.name === 'AbortError') return;
+      // Network failure: fall back to normal navigation
+      window.location.href = url;
+    } finally {
+      resultsEl?.classList.remove('search-page__results--loading');
+    }
+  }
+
+  function submitAsync(): void {
+    loadResults(buildUrl());
+  }
+
   // ── Auto-focus on page load ───────────────────────────────────────────────
   if (input && document.activeElement === document.body) {
     input.focus();
   }
 
-  // ── 400ms debounce on text input → submit ─────────────────────────────────
+  // ── Intercept form submit (search button / Enter key) ────────────────────
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    submitAsync();
+  });
+
+  // ── 400ms debounce on text input ──────────────────────────────────────────
   let debounceTimer: ReturnType<typeof setTimeout>;
   input?.addEventListener('input', () => {
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => form.submit(), 400);
+    debounceTimer = setTimeout(submitAsync, 400);
   });
 
-  // ── Category change → immediate submit ────────────────────────────────────
-  categorySel?.addEventListener('change', () => form.submit());
+  // ── Category change → immediate async update ──────────────────────────────
+  categorySel?.addEventListener('change', submitAsync);
 
   // ── Preset select change ──────────────────────────────────────────────────
   presetSel?.addEventListener('change', () => {
     if (presetSel.value !== '') {
-      // Named preset chosen: collapse custom range, clear date inputs, submit
       collapseRange();
       dateInputs?.forEach(i => { i.value = ''; });
-      form.submit();
+      submitAsync();
     } else {
-      // "Any time" chosen: reveal custom range so user can enter dates manually
+      // "Any time" → reveal custom range, no submit until user enters dates
       expandRange();
     }
   });
@@ -56,16 +113,13 @@
   // ── Custom range toggle button ────────────────────────────────────────────
   dateToggle?.addEventListener('click', () => {
     if (isRangeOpen()) {
-      // Close: hide range, clear dates, reset preset to "Any time", submit to clear filter
       collapseRange();
       dateInputs?.forEach(i => { i.value = ''; });
       if (presetSel) presetSel.value = '';
-      form.submit();
+      submitAsync();
     } else {
-      // Open: show range, clear any active preset (user will enter dates manually)
       if (presetSel) presetSel.value = '';
       expandRange();
-      // Focus the first date input for quick entry
       (dateRange?.querySelector<HTMLInputElement>('input[type="date"]'))?.focus();
     }
   });
