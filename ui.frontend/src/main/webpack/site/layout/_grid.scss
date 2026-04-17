@@ -1,0 +1,110 @@
+// ── Editorial Grid ─────────────────────────────────────────────────────────────
+
+// ── Symmetric multi-column grid ───────────────────────────────────────────────
+// Mobile-first: single column, steps up at breakpoints.
+
+.l-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $grid-gutter;
+
+  @include respond-to('lg') {
+    gap: $grid-gutter-lg;
+  }
+
+  // 2-col: two equal columns from sm up
+  &--2col {
+    @include respond-to('sm') {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  // 3-col: 2 at sm, 3 at md
+  &--3col {
+    @include respond-to('sm') { grid-template-columns: repeat(2, 1fr); }
+    @include respond-to('md') { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  // 4-col: 2 at sm, 4 at md
+  &--4col {
+    @include respond-to('sm') { grid-template-columns: repeat(2, 1fr); }
+    @include respond-to('md') { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  // Prevent overflow in narrow cells
+  > * { min-width: 0; }
+}
+
+// ── Asymmetric editorial layout ───────────────────────────────────────────────
+// Feature (left, ~55%) + secondary list (right, ~45%).
+// Used at top of section or homepage hero area.
+
+.l-editorial {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $grid-gutter;
+
+  @include respond-to('md') {
+    grid-template-columns: 55fr 45fr;
+    align-items: start;
+    gap: $grid-gutter-lg;
+  }
+
+  &__main  { min-width: 0; }
+  &__aside { min-width: 0; }
+}
+
+// ── Sidebar layout ────────────────────────────────────────────────────────────
+// Content (left, 7/12) + rail (right, 5/12). Collapses on mobile.
+
+.l-sidebar {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $grid-gutter;
+
+  @include respond-to('md') {
+    grid-template-columns: 7fr 5fr;
+    align-items: start;
+    gap: $grid-gutter-lg;
+  }
+
+  // Narrower rail (8/4 split)
+  &--wide-main {
+    @include respond-to('md') {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  &__main { min-width: 0; }
+  &__rail { min-width: 0; }
+}
+
+// ── Section header bar ────────────────────────────────────────────────────────
+// Thin top-border title row, used above each news listing block.
+
+.l-section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $space-4;
+  padding-bottom: $space-4;
+  border-top: 3px solid $color-category;
+  margin-bottom: $space-6;
+
+  &__title {
+    font-size: $font-size-lg;
+    font-weight: $weight-bold;
+    color: $color-heading;
+    letter-spacing: $ls-tight;
+    text-transform: uppercase;
+  }
+
+  &__link {
+    font-size: $font-size-sm;
+    color: $color-meta;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    &:hover { color: $color-link-hover; }
+  }
+}

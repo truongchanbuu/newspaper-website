@@ -1,0 +1,12 @@
+<sly data-sly-use.model="com.adobe.cq.wcm.core.components.models.Search" />
+<form class="search-bar" method="get" action="${model.resultsPagePath @ context='uri'}" role="search">
+    <div class="search-bar__field">
+        <input id="${model.id}" name="${model.parameterName}" type="search" class="search-bar__input"
+               placeholder="${properties.placeholderText || 'Search news, topics, people…'}"
+               aria-label="${properties.ariaLabel || 'Search'}" autocomplete="off" />
+
+        <button type="submit" class="search-bar__submit" aria-label="Submit search">
+            Search
+        </button>
+    </div>
+</form>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Newspaper — UI Preview</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <!-- clientlib-site is the webpack bundle output; served by webpack-dev-server -->
+  <link rel="stylesheet" href="/etc.clientlibs/newspaper/clientlibs/clientlib-site.css"/>
+  <style>
+    /* Preview scaffolding — not part of the component */
+    body { background: #f6f6f6; margin: 0; font-family: sans-serif; }
+    .preview-page { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
+    .preview-label {
+      font: 700 11px/1 'Helvetica Neue', sans-serif;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #767676;
+      border-left: 3px solid #ffbb00;
+      padding: .25rem .5rem;
+      margin: 2.5rem 0 1rem;
+    }
+    .preview-divider { border: none; border-top: 1px solid #dcdcdc; margin: 3rem 0; }
+  </style>
+</head>
+<body>
+
+<div class="preview-page">
+
+  <h1 style="font-family:'Guardian Text Sans Web',sans-serif;font-size:1.25rem;font-weight:700;margin-bottom:2rem;padding-bottom:.75rem;border-bottom:3px solid #052962;">
+    Newspaper · UI Component Preview
+  </h1>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       STANDALONE NEWS ITEM — featured variant
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <p class="preview-label">News Item — featured</p>
+  <div style="max-width:480px;">
+    <article class="news-item news-item--featured news-item--thumb-top news-item--section-tech"
+             data-component="news-item">
+      <div class="news-item__media">
+        <img class="news-item__image"
+             src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='480' viewBox='0 0 800 480'%3E%3Crect width='800' height='480' fill='%23c8ddf0'/%3E%3Ccircle cx='400' cy='200' r='120' fill='%239bbde0' opacity='.5'/%3E%3Crect x='160' y='370' width='480' height='18' rx='6' fill='%239bbde0' opacity='.4'/%3E%3Crect x='240' y='400' width='320' height='14' rx='6' fill='%239bbde0' opacity='.3'/%3E%3C/svg%3E"
+             alt="Featured placeholder" loading="eager" width="800" height="480"/>
+      </div>
+      <div class="news-item__body">
+        <a class="news-item__section-label news-item__section-label--tech" href="#">Technology</a>
+        <h3 class="news-item__headline">
+          <a class="news-item__headline-link" href="#">
+            How artificial intelligence is reshaping the future of journalism and news production
+          </a>
+        </h3>
+        <p class="news-item__trail">
+          A new generation of tools is transforming the way reporters find stories,
+          verify information and reach readers around the world — but questions remain
+          about accuracy, bias, and the role of human editors.
+        </p>
+        <footer class="news-item__meta">
+          <span class="news-item__byline">By <span class="news-item__author">Sarah Connor</span></span>
+          <time class="news-item__time-ago" datetime="2026-04-16" title="16 Apr 2026">2h ago</time>
+        </footer>
+      </div>
+    </article>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       STANDALONE NEWS ITEM — standard variants row
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <p class="preview-label">News Item — standard (top / left / right)</p>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;align-items:start;">
+
+    <article class="news-item news-item--standard news-item--thumb-top news-item--section-politics" data-component="news-item">
+      <div class="news-item__media">
+        <img class="news-item__image"
+             src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23dde6f5'/%3E%3Crect x='60' y='80' width='280' height='140' rx='6' fill='%23b0c4e8' opacity='.5'/%3E%3C/svg%3E"
+             alt="" loading="lazy" width="400" height="300"/>
+      </div>
+      <div class="news-item__body">
+        <a class="news-item__section-label news-item__section-label--politics" href="#">Politics</a>
+        <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">Ministers face new pressure over housing targets as deadline looms</a></h3>
+        <p class="news-item__trail">Hidden on standard.</p>
+        <footer class="news-item__meta">
+          <span class="news-item__byline">By <span class="news-item__author">James Walker</span></span>
+          <time class="news-item__time-ago" datetime="2026-04-16">4h ago</time>
+        </footer>
+      </div>
+    </article>
+
+    <article class="news-item news-item--standard news-item--thumb-left news-item--section-sport" data-component="news-item">
+      <div class="news-item__media">
+        <img class="news-item__image"
+             src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' fill='%23d5ede4'/%3E%3Ccircle cx='48' cy='48' r='28' fill='%2390c8a8' opacity='.5'/%3E%3C/svg%3E"
+             alt="" loading="lazy" width="96" height="96"/>
+      </div>
+      <div class="news-item__body">
+        <a class="news-item__section-label news-item__section-label--sport" href="#">Sport</a>
+        <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">Champions League final preview: everything you need to know</a></h3>
+        <footer class="news-item__meta">
+          <time class="news-item__time-ago" datetime="2026-04-16">5h ago</time>
+        </footer>
+      </div>
+    </article>
+
+    <article class="news-item news-item--standard news-item--thumb-right news-item--section-culture" data-component="news-item">
+      <div class="news-item__media">
+        <img class="news-item__image"
+             src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' fill='%23f5dede'/%3E%3Ccircle cx='48' cy='48' r='28' fill='%23e89898' opacity='.5'/%3E%3C/svg%3E"
+             alt="" loading="lazy" width="96" height="96"/>
+      </div>
+      <div class="news-item__body">
+        <a class="news-item__section-label news-item__section-label--culture" href="#">Culture</a>
+        <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">This year's Booker Prize longlist is surprisingly radical</a></h3>
+        <footer class="news-item__meta">
+          <span class="news-item__byline">By <span class="news-item__author">Roisin Delaney</span></span>
+          <time class="news-item__date" datetime="2026-04-15">15 Apr 2026</time>
+        </footer>
+      </div>
+    </article>
+
+  </div>
+
+  <hr class="preview-divider"/>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       LAYOUT: HERO (Guardian signature — featured left + stack right)
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <p class="preview-label">News Listing — layout: hero (tech)</p>
+
+  <section class="news-listing news-listing--layout-hero news-listing--section-tech" data-component="news-listing">
+    <div class="news-listing__header news-listing__header--tech">
+      <h2 class="news-listing__title"><a class="news-listing__title-link" href="#">Technology</a></h2>
+      <a class="news-listing__see-all" href="#">All Technology &rsaquo;</a>
+    </div>
+    <ul class="news-listing__articles" role="list">
+
+      <li class="news-listing__article-item">
+        <article class="news-item news-item--standard news-item--section-tech" data-component="news-item">
+          <div class="news-item__media">
+            <img class="news-item__image"
+                 src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='480' viewBox='0 0 800 480'%3E%3Crect width='800' height='480' fill='%23c4d8ee'/%3E%3Cellipse cx='400' cy='220' rx='200' ry='130' fill='%23a0bcd8' opacity='.4'/%3E%3C/svg%3E"
+                 alt="" loading="lazy" width="800" height="480"/>
+          </div>
+          <div class="news-item__body">
+            <a class="news-item__section-label news-item__section-label--tech" href="#">Technology</a>
+            <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">How AI is reshaping the future of journalism and news production worldwide</a></h3>
+            <p class="news-item__trail">A new generation of tools is transforming the way reporters find stories, verify information and reach readers — but questions about accuracy remain.</p>
+            <footer class="news-item__meta">
+              <span class="news-item__byline">By <span class="news-item__author">Sarah Connor</span></span>
+              <time class="news-item__time-ago" datetime="2026-04-16">2h ago</time>
+            </footer>
+          </div>
+        </article>
+      </li>
+
+      <li class="news-listing__article-item">
+        <article class="news-item news-item--standard news-item--section-tech" data-component="news-item">
+          <div class="news-item__media">
+            <img class="news-item__image"
+                 src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='267' viewBox='0 0 400 267'%3E%3Crect width='400' height='267' fill='%23d0e4f5'/%3E%3Crect x='40' y='40' width='320' height='187' rx='6' fill='%23a8cce8' opacity='.4'/%3E%3C/svg%3E"
+                 alt="" loading="lazy" width="400" height="267"/>
+          </div>
+          <div class="news-item__body">
+            <a class="news-item__section-label news-item__section-label--tech" href="#">Technology</a>
+            <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">Silicon Valley braces for new antitrust crackdown from Brussels regulators</a></h3>
+            <footer class="news-item__meta">
+              <span class="news-item__byline">By <span class="news-item__author">Mark Elliot</span></span>
+              <time class="news-item__time-ago" datetime="2026-04-16">4h ago</time>
+            </footer>
+          </div>
+        </article>
+      </li>
+
+      <li class="news-listing__article-item">
+        <article class="news-item news-item--standard news-item--section-tech" data-component="news-item">
+          <div class="news-item__media">
+            <img class="news-item__image"
+                 src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='267' viewBox='0 0 400 267'%3E%3Crect width='400' height='267' fill='%23d8eaf8'/%3E%3Ccircle cx='200' cy='130' r='80' fill='%23b4d0e8' opacity='.4'/%3E%3C/svg%3E"
+                 alt="" loading="lazy" width="400" height="267"/>
+          </div>
+          <div class="news-item__body">
+            <a class="news-item__section-label news-item__section-label--tech" href="#">Technology</a>
+            <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">The hidden cost of training large language models on the world's data</a></h3>
+            <footer class="news-item__meta">
+              <span class="news-item__byline">By <span class="news-item__author">Priya Mehta</span></span>
+              <time class="news-item__time-ago" datetime="2026-04-15">1d ago</time>
+            </footer>
+          </div>
+        </article>
+      </li>
+
+      <li class="news-listing__article-item">
+        <article class="news-item news-item--standard news-item--section-tech" data-component="news-item">
+          <div class="news-item__media">
+            <img class="news-item__image"
+                 src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='267' viewBox='0 0 400 267'%3E%3Crect width='400' height='267' fill='%23ccddf0'/%3E%3Cpolygon points='200,30 370,237 30,237' fill='%23a0bcd8' opacity='.4'/%3E%3C/svg%3E"
+                 alt="" loading="lazy" width="400" height="267"/>
+          </div>
+          <div class="news-item__body">
+            <a class="news-item__section-label news-item__section-label--tech" href="#">Technology</a>
+            <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">Open-source AI models close the gap with proprietary rivals in latest benchmarks</a></h3>
+            <footer class="news-item__meta">
+              <span class="news-item__byline">By <span class="news-item__author">Tom Higgins</span></span>
+              <time class="news-item__date" datetime="2026-04-14">14 Apr 2026</time>
+            </footer>
+          </div>
+        </article>
+      </li>
+
+    </ul>
+  </section>
+
+  <hr class="preview-divider"/>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       LAYOUT: GRID 3-column (sport section)
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <p class="preview-label">News Listing — layout: grid 3-col (sport)</p>
+
+  <section class="news-listing news-listing--layout-grid news-listing--cols-3 news-listing--section-sport" data-component="news-listing">
+    <div class="news-listing__header news-listing__header--sport">
+      <h2 class="news-listing__title"><a class="news-listing__title-link" href="#">Sport</a></h2>
+      <a class="news-listing__see-all" href="#">All Sport &rsaquo;</a>
+    </div>
+    <ul class="news-listing__articles" role="list">
+      <li class="news-listing__article-item">
+        <article class="news-item news-item--standard news-item--section-sport" data-component="news-item">
+          <div class="news-item__media"><img class="news-item__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23d0ece0'/%3E%3Ccircle cx='200' cy='150' r='80' fill='%2390c8a8' opacity='.5'/%3E%3C/svg%3E" alt="" loading="lazy" width="400" height="300"/></div>
+          <div class="news-item__body">
+            <a class="news-item__section-label news-item__section-label--sport" href="#">Sport</a>
+            <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">Champions League final preview: everything you need to know before kick-off</a></h3>
+            <p class="news-item__trail">Hidden on standard.</p>
+            <footer class="news-item__meta"><time class="news-item__time-ago" datetime="2026-04-16">1h ago</time></footer>
+          </div>
+        </article>
+      </li>
+      <li class="news-listing__article-item">
+        <article class="news-item news-item--standard news-item--section-sport" data-component="news-item">
+          <div class="news-item__media"><img class="news-item__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23c8e8d8'/%3E%3Crect x='50' y='80' width='300' height='140' rx='8' fill='%2380b898' opacity='.4'/%3E%3C/svg%3E" alt="" loading="lazy" width="400" height="300"/></div>
+          <div class="news-item__body">
+            <a class="news-item__section-label news-item__section-label--sport" href="#">Sport</a>
+            <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">Wimbledon wild cards announced ahead of this summer's grass-court season</a></h3>
+            <p class="news-item__trail">Hidden on standard.</p>
+            <footer class="news-item__meta"><span class="news-item__byline">By <span class="news-item__author">Leo Morales</span></span><time class="news-item__time-ago" datetime="2026-04-16">3h ago</time></footer>
+          </div>
+        </article>
+      </li>
+      <li class="news-listing__article-item">
+        <article class="news-item news-item--standard news-item--section-sport" data-component="news-item">
+          <div class="news-item__media"><img class="news-item__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23daf0e8'/%3E%3Cellipse cx='200' cy='150' rx='140' ry='80' fill='%2398d0b0' opacity='.4'/%3E%3C/svg%3E" alt="" loading="lazy" width="400" height="300"/></div>
+          <div class="news-item__body">
+            <a class="news-item__section-label news-item__section-label--sport" href="#">Sport</a>
+            <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">Tour de France route revealed: the queen stages that will decide the winner</a></h3>
+            <p class="news-item__trail">Hidden on standard.</p>
+            <footer class="news-item__meta"><time class="news-item__date" datetime="2026-04-15">15 Apr 2026</time></footer>
+          </div>
+        </article>
+      </li>
+    </ul>
+  </section>
+
+  <hr class="preview-divider"/>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       LAYOUT: STACK (culture section — compact thumb-left list)
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <p class="preview-label">News Listing — layout: stack (culture)</p>
+  <div style="max-width:480px;">
+    <section class="news-listing news-listing--layout-stack news-listing--section-culture" data-component="news-listing">
+      <div class="news-listing__header news-listing__header--culture">
+        <h2 class="news-listing__title"><a class="news-listing__title-link" href="#">Culture</a></h2>
+        <a class="news-listing__see-all" href="#">All Culture &rsaquo;</a>
+      </div>
+      <ul class="news-listing__articles" role="list">
+        <li class="news-listing__article-item">
+          <article class="news-item news-item--standard news-item--section-culture" data-component="news-item">
+            <div class="news-item__media"><img class="news-item__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' fill='%23f5dede'/%3E%3Ccircle cx='48' cy='48' r='30' fill='%23e89898' opacity='.5'/%3E%3C/svg%3E" alt="" loading="lazy" width="96" height="96"/></div>
+            <div class="news-item__body">
+              <a class="news-item__section-label news-item__section-label--culture" href="#">Culture</a>
+              <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">This year's Booker Prize longlist is surprisingly radical</a></h3>
+              <footer class="news-item__meta"><span class="news-item__byline">By <span class="news-item__author">Roisin Delaney</span></span><time class="news-item__date" datetime="2026-04-15">15 Apr 2026</time></footer>
+            </div>
+          </article>
+        </li>
+        <li class="news-listing__article-item">
+          <article class="news-item news-item--standard news-item--section-culture" data-component="news-item">
+            <div class="news-item__media"><img class="news-item__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' fill='%23f8e8e8'/%3E%3Crect x='20' y='20' width='56' height='56' rx='4' fill='%23e8a8a8' opacity='.5'/%3E%3C/svg%3E" alt="" loading="lazy" width="96" height="96"/></div>
+            <div class="news-item__body">
+              <a class="news-item__section-label news-item__section-label--culture" href="#">Culture</a>
+              <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">The five most anticipated films of the summer season</a></h3>
+              <footer class="news-item__meta"><time class="news-item__time-ago" datetime="2026-04-16">6h ago</time></footer>
+            </div>
+          </article>
+        </li>
+        <li class="news-listing__article-item">
+          <article class="news-item news-item--standard news-item--section-culture" data-component="news-item">
+            <div class="news-item__media"><img class="news-item__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' fill='%23fae8e0'/%3E%3Cellipse cx='48' cy='48' rx='30' ry='24' fill='%23f0a880' opacity='.5'/%3E%3C/svg%3E" alt="" loading="lazy" width="96" height="96"/></div>
+            <div class="news-item__body">
+              <a class="news-item__section-label news-item__section-label--culture" href="#">Culture</a>
+              <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">Behind the Cannes comeback of a director written off too soon</a></h3>
+              <footer class="news-item__meta"><span class="news-item__byline">By <span class="news-item__author">Fatima Okonkwo</span></span><time class="news-item__date" datetime="2026-04-14">14 Apr 2026</time></footer>
+            </div>
+          </article>
+        </li>
+      </ul>
+    </section>
+  </div>
+
+  <hr class="preview-divider"/>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       LAYOUT: HORIZONTAL (scrollable rail — business section)
+       JS injects prev/next arrow buttons.
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <p class="preview-label">News Listing — layout: horizontal / scrollable rail (business)</p>
+
+  <section class="news-listing news-listing--layout-horizontal news-listing--section-business" data-component="news-listing">
+    <div class="news-listing__header news-listing__header--business">
+      <h2 class="news-listing__title"><a class="news-listing__title-link" href="#">Business</a></h2>
+      <a class="news-listing__see-all" href="#">All Business &rsaquo;</a>
+    </div>
+    <ul class="news-listing__articles" role="list">
+      <li class="news-listing__article-item">
+        <article class="news-item news-item--standard news-item--section-business" data-component="news-item">
+          <div class="news-item__media"><img class="news-item__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23f0e8f5'/%3E%3Ccircle cx='200' cy='150' r='90' fill='%23c890d0' opacity='.4'/%3E%3C/svg%3E" alt="" loading="lazy" width="400" height="300"/></div>
+          <div class="news-item__body">
+            <a class="news-item__section-label news-item__section-label--business" href="#">Business</a>
+            <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">FTSE 100 hits record high as inflation fears ease</a></h3>
+            <footer class="news-item__meta"><time class="news-item__time-ago" datetime="2026-04-16">1h ago</time></footer>
+          </div>
+        </article>
+      </li>
+      <li class="news-listing__article-item">
+        <article class="news-item news-item--standard news-item--section-business" data-component="news-item">
+          <div class="news-item__media"><img class="news-item__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23ece0f5'/%3E%3Crect x='60' y='60' width='280' height='180' rx='8' fill='%23b880d0' opacity='.4'/%3E%3C/svg%3E" alt="" loading="lazy" width="400" height="300"/></div>
+          <div class="news-item__body">
+            <a class="news-item__section-label news-item__section-label--business" href="#">Business</a>
+            <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">Major UK retailer announces 3,000 job cuts amid falling high street footfall</a></h3>
+            <footer class="news-item__meta"><span class="news-item__byline">By <span class="news-item__author">Ana Kovacs</span></span><time class="news-item__time-ago" datetime="2026-04-16">3h ago</time></footer>
+          </div>
+        </article>
+      </li>
+      <li class="news-listing__article-item">
+        <article class="news-item news-item--standard news-item--section-business" data-component="news-item">
+          <div class="news-item__media"><img class="news-item__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23e8d8f2'/%3E%3Cellipse cx='200' cy='150' rx='130' ry='90' fill='%23a870c0' opacity='.3'/%3E%3C/svg%3E" alt="" loading="lazy" width="400" height="300"/></div>
+          <div class="news-item__body">
+            <a class="news-item__section-label news-item__section-label--business" href="#">Business</a>
+            <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">Bank of England holds rates steady despite rising energy costs</a></h3>
+            <footer class="news-item__meta"><time class="news-item__date" datetime="2026-04-15">15 Apr 2026</time></footer>
+          </div>
+        </article>
+      </li>
+      <li class="news-listing__article-item">
+        <article class="news-item news-item--standard news-item--section-business" data-component="news-item">
+          <div class="news-item__media"><img class="news-item__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23f2e4f8'/%3E%3Cpolygon points='200,40 360,260 40,260' fill='%23c090d8' opacity='.4'/%3E%3C/svg%3E" alt="" loading="lazy" width="400" height="300"/></div>
+          <div class="news-item__body">
+            <a class="news-item__section-label news-item__section-label--business" href="#">Business</a>
+            <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">IPO drought ends as three tech unicorns file for listing in the same week</a></h3>
+            <footer class="news-item__meta"><span class="news-item__byline">By <span class="news-item__author">James Porter</span></span><time class="news-item__date" datetime="2026-04-14">14 Apr 2026</time></footer>
+          </div>
+        </article>
+      </li>
+      <li class="news-listing__article-item">
+        <article class="news-item news-item--standard news-item--section-business" data-component="news-item">
+          <div class="news-item__media"><img class="news-item__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23e4d4f0'/%3E%3Ccircle cx='140' cy='140' r='70' fill='%23a060b8' opacity='.3'/%3E%3Ccircle cx='280' cy='180' r='50' fill='%23a060b8' opacity='.3'/%3E%3C/svg%3E" alt="" loading="lazy" width="400" height="300"/></div>
+          <div class="news-item__body">
+            <a class="news-item__section-label news-item__section-label--business" href="#">Business</a>
+            <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">Supermarket price wars intensify as own-brand ranges hit new highs</a></h3>
+            <footer class="news-item__meta"><time class="news-item__date" datetime="2026-04-13">13 Apr 2026</time></footer>
+          </div>
+        </article>
+      </li>
+      <li class="news-listing__article-item">
+        <article class="news-item news-item--standard news-item--section-business" data-component="news-item">
+          <div class="news-item__media"><img class="news-item__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23ecd8f8'/%3E%3Crect x='80' y='80' width='240' height='140' rx='12' fill='%23b078d0' opacity='.4'/%3E%3C/svg%3E" alt="" loading="lazy" width="400" height="300"/></div>
+          <div class="news-item__body">
+            <a class="news-item__section-label news-item__section-label--business" href="#">Business</a>
+            <h3 class="news-item__headline"><a class="news-item__headline-link" href="#">Pension reform sparks protest as millions fear retirement cliff edge</a></h3>
+            <footer class="news-item__meta"><time class="news-item__time-ago" datetime="2026-04-16">Yesterday</time></footer>
+          </div>
+        </article>
+      </li>
+    </ul>
+    <!-- JS injects .news-listing__scroll-controls here -->
+  </section>
+
+</div><!-- /preview-page -->
+
+<script src="/etc.clientlibs/newspaper/clientlibs/clientlib-site.js"></script>
+</body>
+</html>

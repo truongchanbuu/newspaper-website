@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root
+    xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    xmlns:dam="http://www.day.com/dam/1.0"
+    xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
+    jcr:primaryType="dam:AssetModel"
+    jcr:title="Article"
+    dam:noVersioning="{Boolean}true">
+
+  <cq:dialog jcr:primaryType="nt:unstructured">
+    <content
+        jcr:primaryType="granite:Container"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+      <items jcr:primaryType="nt:unstructured">
+
+        <headline
+            jcr:primaryType="granite:FormField"
+            sling:resourceType="dam/cfm/models/editor/components/datatypes/singleline"
+            fieldLabel="Headline"
+            name="headline"
+            valueType="string"
+            required="{Boolean}true"/>
+
+        <subHeadline
+            jcr:primaryType="granite:FormField"
+            sling:resourceType="dam/cfm/models/editor/components/datatypes/singleline"
+            fieldLabel="Sub Headline"
+            name="subHeadline"
+            valueType="string"
+            required="{Boolean}false"/>
+
+        <author
+            jcr:primaryType="granite:FormField"
+            sling:resourceType="dam/cfm/models/editor/components/datatypes/singleline"
+            fieldLabel="Author"
+            name="author"
+            valueType="string"
+            required="{Boolean}true"/>
+
+        <featuredImage
+            jcr:primaryType="granite:FormField"
+            sling:resourceType="dam/cfm/models/editor/components/datatypes/contentreference"
+            fieldLabel="Featured Image"
+            name="featuredImage"
+            valueType="string"
+            required="{Boolean}true"
+            rootPath="/content/dam"/>
+
+        <category
+            jcr:primaryType="granite:FormField"
+            sling:resourceType="dam/cfm/models/editor/components/datatypes/tags"
+            fieldLabel="Category"
+            name="category"
+            valueType="string[]"
+            required="{Boolean}false"/>
+
+      </items>
+    </content>
+  </cq:dialog>
+
+</jcr:root>

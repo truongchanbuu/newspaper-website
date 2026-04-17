@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- // [ABC] Homepage template initial content — copied to every new page created from this template -->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          jcr:primaryType="cq:Page">
+    <jcr:content
+        jcr:primaryType="cq:PageContent"
+        sling:resourceType="newspaper/components/structure/homepage">
+
+        <experiencefragment-header
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/experiencefragment"
+            fragmentVariationPath="/content/experience-fragments/newspaper/us/en/site/header/master"/>
+
+        <hero
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/container">
+            <herobanner
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="newspaper/components/content/herobanner"/>
+        </hero>
+
+        <carousel
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/carousel"
+            autoplay="{Boolean}true"
+            delay="{Long}5000"/>
+
+        <main
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/container">
+            <newslisting
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="newspaper/components/content/newslisting"
+                listingMode="tag"
+                itemsPerPage="{Long}6"
+                sortBy="articleDate"
+                sortOrder="desc"
+                showSectionLink="{Boolean}true"/>
+        </main>
+
+        <experiencefragment-footer
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/experiencefragment"
+            fragmentVariationPath="/content/experience-fragments/newspaper/us/en/site/footer/master"/>
+
+    </jcr:content>
+</jcr:root>

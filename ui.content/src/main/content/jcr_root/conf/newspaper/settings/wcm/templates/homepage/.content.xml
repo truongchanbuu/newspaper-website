@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- // [ABC]
+  Editable Template: Home Page
+  - status=enabled  → visible in "Create Page" wizard
+  - allowedPaths    → only allow under /content/newspaper
+  - ranking         → sorts before general page-content template in the wizard
+  - cq:templateType → inherits behaviours from the base page template type
+-->
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          jcr:primaryType="cq:Template">
+    <jcr:content
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Home Page"
+        jcr:description="Guardian-style newspaper home page — hero, breaking-news carousel, and section listings."
+        cq:templateType="/conf/newspaper/settings/wcm/template-types/page"
+        allowedPaths="[/content/newspaper(/.*)?]"
+        ranking="{Long}5"
+        status="enabled"/>
+</jcr:root>

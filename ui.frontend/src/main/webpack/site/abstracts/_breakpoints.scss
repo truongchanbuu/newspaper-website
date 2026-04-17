@@ -1,0 +1,35 @@
+// ── Breakpoints ───────────────────────────────────────────────────────────────
+// Aligned with homepage template responsive breakpoints (phone 740 / tablet 1140)
+
+$breakpoints: (
+  'xs':  480px,
+  'sm':  740px,
+  'md':  980px,
+  'lg':  1140px,
+  'xl':  1300px
+) !default;
+
+// Mobile-first: min-width query
+@mixin respond-to($bp) {
+  @if map-has-key($breakpoints, $bp) {
+    @media screen and (min-width: map-get($breakpoints, $bp)) { @content; }
+  } @else {
+    @warn 'Unknown breakpoint `#{$bp}`. Available: #{map-keys($breakpoints)}';
+  }
+}
+
+// Desktop-first: max-width query
+@mixin respond-below($bp) {
+  @if map-has-key($breakpoints, $bp) {
+    @media screen and (max-width: #{map-get($breakpoints, $bp) - 1px}) { @content; }
+  }
+}
+
+// Range query
+@mixin respond-between($lower, $upper) {
+  @media screen and
+    (min-width: map-get($breakpoints, $lower)) and
+    (max-width: #{map-get($breakpoints, $upper) - 1px}) {
+    @content;
+  }
+}

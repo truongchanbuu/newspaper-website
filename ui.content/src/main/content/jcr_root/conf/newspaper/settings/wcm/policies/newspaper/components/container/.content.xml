@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- // [ABC]
+  Policy: Homepage Content Containers
+  hero-zone    allows only the hero banner component
+  main-zone    allows news listings (both newspaper - Content groups)
+-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          jcr:primaryType="nt:unstructured">
+
+    <hero-zone
+        jcr:primaryType="nt:unstructured"
+        jcr:title="Homepage Hero Zone"
+        sling:resourceType="wcm/core/components/policy/policy"
+        components="[/apps/newspaper/components/content/herobanner]">
+        <jcr:content jcr:primaryType="nt:unstructured"/>
+    </hero-zone>
+
+    <main-zone
+        jcr:primaryType="nt:unstructured"
+        jcr:title="Homepage Main Zone"
+        sling:resourceType="wcm/core/components/policy/policy"
+        components="[/apps/newspaper/components/content/newslisting,/apps/newspaper/components/content/newsitem,group:Newspaper Website - Content]">
+        <jcr:content jcr:primaryType="nt:unstructured"/>
+    </main-zone>
+
+</jcr:root>

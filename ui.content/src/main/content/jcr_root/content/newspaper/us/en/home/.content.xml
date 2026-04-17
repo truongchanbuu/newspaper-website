@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- // [ABC]
+  Home Page — pre-authored content.
+  Zones:
+    experiencefragment-header  locked header XF
+    hero                       hero banner (top featured article from language-masters)
+    carousel                   breaking news teaser carousel
+    main                       7 news-listing sections (politics hero, tech 4-col, sport
+                               horizontal, culture 3-col, environment 2-col,
+                               business stack, lifestyle stack)
+    experiencefragment-footer  locked footer XF
+-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          jcr:primaryType="cq:Page">
+    <jcr:content
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Home"
+        pageTitle="The Newspaper — News, Politics, Sport, Culture &amp; More"
+        jcr:description="Breaking news, analysis and opinion from The Newspaper."
+        sling:resourceType="newspaper/components/structure/homepage"
+        cq:template="/conf/newspaper/settings/wcm/templates/homepage"
+        cq:contextHubPath="/etc/cloudsettings/default/contexthub"
+        cq:contextHubSegmentsPath="/etc/segmentation/contexthub">
+
+        <!-- ═══════════════════════════════════════════
+             HEADER XF
+             ═══════════════════════════════════════════ -->
+        <experiencefragment-header
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/experiencefragment"
+            fragmentVariationPath="/content/experience-fragments/newspaper/us/en/site/header/master"/>
+
+        <!-- ═══════════════════════════════════════════
+             HERO ZONE
+             articlePath → top article under language-masters
+             Authors configure this in the hero banner dialog.
+             ═══════════════════════════════════════════ -->
+        <hero
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/container">
+            <herobanner
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="newspaper/components/content/herobanner"
+                articlePath="/content/language-masters/en/articles"/>
+        </hero>
+
+        <!-- ═══════════════════════════════════════════
+             BREAKING NEWS CAROUSEL
+             3 teaser slides; autoplay 5 s
+             ═══════════════════════════════════════════ -->
+        <carousel
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/carousel"
+            accessibilityLabel="Breaking news"
+            autoplay="{Boolean}true"
+            delay="{Long}5000"
+            autopauseDisabled="{Boolean}false">
+
+            <item_politics
+                jcr:primaryType="nt:unstructured"
+                jcr:title="Breaking: Parliament votes on landmark climate legislation"
+                jcr:description="Lawmakers face a crucial test as the most ambitious environmental bill in a decade comes to a final vote, with margins razor thin on both sides of the chamber."
+                sling:resourceType="newspaper/components/teaser"
+                actionsEnabled="{Boolean}false"
+                titleFromPage="{Boolean}false"
+                descriptionFromPage="{Boolean}false"
+                textIsRich="{Boolean}false"/>
+
+            <item_tech
+                jcr:primaryType="nt:unstructured"
+                jcr:title="AI regulation: Europe's rules set a global standard"
+                jcr:description="Brussels has published the final text of the AI Act, forcing tech giants to disclose training data and conduct algorithmic impact assessments from January 2027."
+                sling:resourceType="newspaper/components/teaser"
+                actionsEnabled="{Boolean}false"
+                titleFromPage="{Boolean}false"
+                descriptionFromPage="{Boolean}false"
+                textIsRich="{Boolean}false"/>
+
+            <item_sport
+                jcr:primaryType="nt:unstructured"
+                jcr:title="Champions League semi-final: drama in Madrid"
+                jcr:description="A last-minute penalty overturns the aggregate and sends Real Madrid to the final in an extraordinary, rain-soaked night at the Bernabéu."
+                sling:resourceType="newspaper/components/teaser"
+                actionsEnabled="{Boolean}false"
+                titleFromPage="{Boolean}false"
+                descriptionFromPage="{Boolean}false"
+                textIsRich="{Boolean}false"/>
+
+        </carousel>
+
+        <!-- ═══════════════════════════════════════════
+             MAIN — 7 section news listings
+             Style System class drives layout per section;
+             add  cq:styleIds  once policies are configured.
+             ═══════════════════════════════════════════ -->
+        <main
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/container">
+
+            <!-- Politics — hero layout (featured left + secondary stack right) -->
+            <politics-listing
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="newspaper/components/content/newslisting"
+                listingMode="tag"
+                categoryTag="newspaper:section/politics"
+                itemsPerPage="{Long}5"
+                sortBy="articleDate"
+                sortOrder="desc"
+                showSectionLink="{Boolean}true"/>
+
+            <!-- Technology — 4-column grid -->
+            <tech-listing
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="newspaper/components/content/newslisting"
+                listingMode="tag"
+                categoryTag="newspaper:section/tech"
+                itemsPerPage="{Long}4"
+                sortBy="articleDate"
+                sortOrder="desc"
+                showSectionLink="{Boolean}true"/>
+
+            <!-- Sport — horizontal scrollable rail -->
+            <sport-listing
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="newspaper/components/content/newslisting"
+                listingMode="tag"
+                categoryTag="newspaper:section/sport"
+                itemsPerPage="{Long}6"
+                sortBy="articleDate"
+                sortOrder="desc"
+                showSectionLink="{Boolean}true"/>
+
+            <!-- Culture — 3-column grid -->
+            <culture-listing
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="newspaper/components/content/newslisting"
+                listingMode="tag"
+                categoryTag="newspaper:section/culture"
+                itemsPerPage="{Long}3"
+                sortBy="articleDate"
+                sortOrder="desc"
+                showSectionLink="{Boolean}true"/>
+
+            <!-- Environment — 2-column grid -->
+            <environment-listing
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="newspaper/components/content/newslisting"
+                listingMode="tag"
+                categoryTag="newspaper:section/environment"
+                itemsPerPage="{Long}4"
+                sortBy="articleDate"
+                sortOrder="desc"
+                showSectionLink="{Boolean}true"/>
+
+            <!-- Business — stack (vertical list) -->
+            <business-listing
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="newspaper/components/content/newslisting"
+                listingMode="tag"
+                categoryTag="newspaper:section/business"
+                itemsPerPage="{Long}4"
+                sortBy="articleDate"
+                sortOrder="desc"
+                showSectionLink="{Boolean}true"/>
+
+            <!-- Lifestyle — stack (vertical list) -->
+            <lifestyle-listing
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="newspaper/components/content/newslisting"
+                listingMode="tag"
+                categoryTag="newspaper:section/lifestyle"
+                itemsPerPage="{Long}5"
+                sortBy="articleDate"
+                sortOrder="desc"
+                showSectionLink="{Boolean}true"/>
+
+        </main>
+
+        <!-- ═══════════════════════════════════════════
+             FOOTER XF
+             ═══════════════════════════════════════════ -->
+        <experiencefragment-footer
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/experiencefragment"
+            fragmentVariationPath="/content/experience-fragments/newspaper/us/en/site/footer/master"/>
+
+        <cq:responsive jcr:primaryType="nt:unstructured">
+            <breakpoints jcr:primaryType="nt:unstructured">
+                <phone
+                    jcr:primaryType="nt:unstructured"
+                    title="Mobile"
+                    width="{Long}768"/>
+                <tablet
+                    jcr:primaryType="nt:unstructured"
+                    title="Tablet"
+                    width="{Long}1140"/>
+            </breakpoints>
+        </cq:responsive>
+
+    </jcr:content>
+</jcr:root>

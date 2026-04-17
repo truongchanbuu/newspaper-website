@@ -1,0 +1,22 @@
+// ── Newspaper Site — Main Stylesheet ─────────────────────────────────────────
+// ITCSS import order: Abstracts → Base → Layout → Components
+// Entry point: ui.frontend/src/main/webpack/site/main.ts imports this file.
+// Output: dist/clientlib-site/site.css → ui.apps/.../clientlibs/clientlib-site/
+
+// 1. Abstracts (no CSS output — variables, functions, mixins only)
+@import 'abstracts/tokens';
+@import 'abstracts/breakpoints';
+@import 'abstracts/functions';
+@import 'abstracts/mixins';
+
+// 2. Base (element-level defaults and resets)
+@import 'base/reset';
+@import 'base/root';
+@import 'base/typography';
+
+// 3. Layout (structural frames and grid)
+@import 'layout/container';
+@import 'layout/grid';
+
+// 4. Components (BEM blocks — one @import per component)
+@import '../components/content/search/searchbar';

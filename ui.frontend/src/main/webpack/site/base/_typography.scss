@@ -1,0 +1,85 @@
+// ── Base Typography ───────────────────────────────────────────────────────────
+
+body {
+  font-family: 'Guardian Text Egyptian', Georgia, 'Times New Roman', serif;
+  font-size: $font-size-base;
+  font-weight: $weight-regular;
+  color: $color-body;
+  background-color: $color-canvas;
+  line-height: $lh-relaxed;
+}
+
+// Headline hierarchy — strong, tight-tracked, high contrast
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'GH Guardian Headline', 'Guardian Headline', Georgia, serif;
+  font-weight: $weight-bold;
+  color: $color-heading;
+  line-height: $lh-snug;
+  letter-spacing: $ls-tight;
+}
+
+h1 { font-size: $font-size-4xl; }
+h2 { font-size: $font-size-3xl; }
+h3 { font-size: $font-size-2xl; }
+h4 { font-size: $font-size-xl; }
+h5 { font-size: $font-size-lg; }
+h6 { font-size: $font-size-md; }
+
+p {
+  line-height: $lh-relaxed;
+  color: $color-body;
+}
+
+a {
+  color: $color-body;
+  text-decoration: none;
+  transition: color $duration-fast $ease-out;
+
+  &:hover {
+    color: $color-link-hover;
+  }
+
+  @include focus-visible-ring;
+}
+
+strong, b { font-weight: $weight-bold; }
+em, i     { font-style: italic; }
+
+// Thin Gainsboro rule
+hr {
+  border: 0;
+  border-top: $border-width solid $color-divider;
+  margin: $space-6 0;
+}
+
+// ── Utility typography classes ───────────────────────────────────────────────
+
+// Timestamps, bylines, image captions
+.t-meta {
+  font-size: $font-size-sm;
+  font-weight: $weight-regular;
+  color: $color-meta;
+  line-height: $lh-snug;
+}
+
+// Section / category label — all-caps left-tick marker
+.t-label {
+  @include section-label;
+}
+
+// Comfortable long-form reading
+.t-body {
+  font-size: $font-size-md;
+  line-height: $lh-relaxed;
+  color: $color-body;
+}
+
+// Dark-background context (footer, multimedia strips)
+.on-dark {
+  color: $color-footer-text;
+  background-color: $color-footer-bg;
+
+  h1, h2, h3, h4, h5, h6 { color: $color-canvas; }
+
+  a:hover { color: $color-canvas; }
+}

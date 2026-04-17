@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- // [ABC]
+  Template Policy Mappings — Homepage
+  Maps each structural node in the template to its policy.
+  Policies live under /conf/newspaper/settings/wcm/policies/.
+  The mapping key is the relative path of the template structural node.
+-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          jcr:primaryType="cq:Page">
+
+    <jcr:content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="wcm/core/components/policies/mappings">
+
+        <!-- jcr:content → the homepage component itself (page-level policy) -->
+        <jcr:content
+            jcr:primaryType="nt:unstructured"
+            cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/page/policy"/>
+
+        <!-- jcr:content/experiencefragment-header → header XF locked zone -->
+        <experiencefragment-header
+            jcr:primaryType="nt:unstructured"
+            cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/experiencefragment/policy_header"/>
+
+        <!-- jcr:content/hero → hero zone container; only herobanner allowed -->
+        <hero
+            jcr:primaryType="nt:unstructured"
+            cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/container/hero-zone"/>
+
+        <!-- jcr:content/hero/herobanner → hero banner component -->
+        <hero
+            jcr:primaryType="nt:unstructured">
+            <herobanner
+                jcr:primaryType="nt:unstructured"
+                cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/content/herobanner"/>
+        </hero>
+
+        <!-- jcr:content/carousel → carousel; policy uses teaser group -->
+        <carousel
+            jcr:primaryType="nt:unstructured"
+            cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/container/policy_1574694950110"/>
+
+        <!-- jcr:content/main → main zone; news listing components allowed -->
+        <main
+            jcr:primaryType="nt:unstructured"
+            cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/container/main-zone"/>
+
+        <!-- jcr:content/main/* → newslisting instances use the style system policy -->
+        <main
+            jcr:primaryType="nt:unstructured">
+            <newslisting-default
+                jcr:primaryType="nt:unstructured"
+                cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/content/newslisting"/>
+        </main>
+
+        <!-- jcr:content/experiencefragment-footer → footer XF locked zone -->
+        <experiencefragment-footer
+            jcr:primaryType="nt:unstructured"
+            cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/experiencefragment/policy_footer"/>
+
+    </jcr:content>
+
+</jcr:root>

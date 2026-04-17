@@ -1,0 +1,99 @@
+// ── Design Tokens — Guardian Newspaper ──────────────────────────────────────
+// Source of truth: CLAUDE.md §2 Color System + §3 Typography + §4 Layout
+
+// === CANVAS ===
+$color-canvas:            #ffffff;
+$color-canvas-secondary:  #f7f7f8;
+$color-divider:           #dcdcdc;
+$color-footer-bg:         #1a1a1a;
+
+// === TYPOGRAPHY ===
+$color-heading:           #121212;
+$color-body:              #333333;
+$color-meta:              #767676;
+$color-footer-text:       #a1a1a1;
+
+// === FUNCTIONAL ACCENTS ===
+$color-category:          #c70000;  // labels, tags, live indicators
+$color-cta:               #1e40b0;  // subscribe / support buttons
+$color-link-hover:        #0056b3;
+$color-focus:             #ffbf47;  // keyboard focus ring (Guardian yellow)
+
+// Backward-compat aliases (used by any pre-existing partials)
+$color-foreground:        $color-heading;
+$color-background:        $color-canvas;
+$color-link:              $color-cta;
+
+// === ATMOSPHERIC HEADER GRADIENT (135deg) ===
+$gradient-header: linear-gradient(135deg, #e2ebf5 0%, #eee5f0 50%, #fdf3f0 100%);
+
+// === FONT SCALE (base 16px) ===
+$font-size-xs:    0.75rem;    // 12px
+$font-size-sm:    0.875rem;   // 14px
+$font-size-base:  1rem;       // 16px
+$font-size-md:    1.125rem;   // 18px
+$font-size-lg:    1.25rem;    // 20px
+$font-size-xl:    1.5rem;     // 24px
+$font-size-2xl:   2rem;       // 32px
+$font-size-3xl:   2.5rem;     // 40px
+$font-size-4xl:   3rem;       // 48px
+
+// === FONT WEIGHTS ===
+$weight-regular:   400;
+$weight-medium:    500;
+$weight-semibold:  600;
+$weight-bold:      700;
+$weight-black:     900;
+
+// === LETTER SPACING ===
+$ls-tight:  -0.02em;  // headlines
+$ls-label:   0.06em;  // all-caps labels
+
+// === LINE HEIGHTS ===
+$lh-none:    1;
+$lh-tight:   1.15;
+$lh-snug:    1.25;
+$lh-normal:  1.5;
+$lh-relaxed: 1.6;
+
+// === SPACING (base-8 scale) ===
+$space-1:   0.25rem;   //  4px
+$space-2:   0.5rem;    //  8px
+$space-3:   0.75rem;   // 12px
+$space-4:   1rem;      // 16px
+$space-5:   1.25rem;   // 20px
+$space-6:   1.5rem;    // 24px
+$space-8:   2rem;      // 32px
+$space-10:  2.5rem;    // 40px
+$space-12:  3rem;      // 48px
+$space-16:  4rem;      // 64px
+$space-20:  5rem;      // 80px
+$space-24:  6rem;      // 96px
+
+// === GRID ===
+$grid-columns:    12;
+$grid-gutter:     1.5rem;    // 24px default
+$grid-gutter-lg:  2rem;      // 32px wide screens
+$container-max:   1300px;
+
+// === BORDERS / RADIUS ===
+$radius-sm:     2px;
+$radius-md:     4px;
+$radius-lg:     8px;
+$border-width:  1px;
+
+// === Z-INDEX ===
+$z-below:    -1;
+$z-base:      0;
+$z-card:      1;
+$z-sticky:   10;
+$z-header:   20;
+$z-overlay:  30;
+$z-modal:    40;
+
+// === MOTION ===
+$duration-fast:  120ms;
+$duration-base:  200ms;
+$duration-slow:  350ms;
+$ease-out:       cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$ease-in-out:    cubic-bezier(0.45, 0, 0.55, 1);

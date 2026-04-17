@@ -1,0 +1,101 @@
+// ── Search Bar Component ──────────────────────────────────────────────────────
+// BEM block: .search-bar
+// Proxy of core/wcm/components/search/v2/search
+
+.search-bar {
+  background-color: $color-canvas;
+
+  // ── Input row ──────────────────────────────────────────────────────────────
+  &__field {
+    display: flex;
+    align-items: stretch;
+    border: $border-width solid $color-divider;
+    border-radius: $radius-sm;
+    overflow: hidden;
+    transition: border-color $duration-fast $ease-out,
+                box-shadow $duration-fast $ease-out;
+
+    &:focus-within {
+      border-color: $color-heading;
+      box-shadow: 0 0 0 3px rgba(18, 18, 18, 0.08);
+    }
+  }
+
+  &__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: $space-3 $space-4;
+    border: 0;
+    background: transparent;
+    font-size: $font-size-base;
+    color: $color-heading;
+    appearance: none;
+
+    // Remove the native webkit search decorations
+    &::-webkit-search-decoration,
+    &::-webkit-search-cancel-button {
+      display: none;
+    }
+
+    &::placeholder {
+      color: $color-meta;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__submit {
+    flex: 0 0 auto;
+    padding: $space-3 $space-6;
+    background-color: $color-category;
+    border: 0;
+    color: $color-canvas;
+    font-size: $font-size-sm;
+    font-weight: $weight-bold;
+    letter-spacing: $ls-label;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color $duration-fast $ease-out;
+
+    &:hover {
+      background-color: #a50000;  // darken $color-category ~10%
+    }
+
+    @include focus-visible-ring;
+  }
+
+  // ── Hero variant (search page hero bar) ────────────────────────────────────
+  &--hero {
+    .search-bar__field {
+      border-color: transparent;
+      border-bottom-color: $color-divider;
+      border-radius: 0;
+      border-width: 0 0 2px;
+    }
+
+    .search-bar__input {
+      font-size: $font-size-xl;
+      padding: $space-4 0;
+    }
+
+    .search-bar__submit {
+      font-size: $font-size-base;
+      padding: $space-4 $space-8;
+    }
+  }
+
+  // ── Compact variant (header / nav bar) ─────────────────────────────────────
+  &--compact {
+    .search-bar__input {
+      padding: $space-2 $space-3;
+      font-size: $font-size-sm;
+    }
+
+    .search-bar__submit {
+      padding: $space-2 $space-4;
+      font-size: $font-size-xs;
+    }
+  }
+}

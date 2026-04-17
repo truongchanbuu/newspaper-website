@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- // [ABC]
+  Policy: News Listing Component
+  Defines the AEM Style System groups that let authors pick layout + section
+  colour without touching a single dialog field.
+
+  Layout group  → maps to the BEM layout modifier classes on .news-listing
+  Section group → maps to the coloured top-border accent modifiers
+-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          jcr:primaryType="nt:unstructured"
+          jcr:title="News Listing"
+          sling:resourceType="wcm/core/components/policy/policy">
+
+    <jcr:content jcr:primaryType="nt:unstructured"/>
+
+    <!-- ═══════════════════════════════════════════════════════
+         STYLE SYSTEM
+         ═══════════════════════════════════════════════════════ -->
+    <cq:styleGroups jcr:primaryType="nt:unstructured">
+
+        <!-- ─── Group 1: Layout ───────────────────────────── -->
+        <item0
+            jcr:primaryType="nt:unstructured"
+            cq:styleGroupLabel="Layout">
+            <cq:styles jcr:primaryType="nt:unstructured">
+
+                <item0
+                    jcr:primaryType="nt:unstructured"
+                    cq:styleId="news-listing-layout-hero"
+                    cq:styleLabel="Hero (featured + secondary stack)"
+                    cq:styles="news-listing--layout-hero"/>
+
+                <item1
+                    jcr:primaryType="nt:unstructured"
+                    cq:styleId="news-listing-layout-grid-3"
+                    cq:styleLabel="Grid — 3 columns"
+                    cq:styles="news-listing--layout-grid news-listing--cols-3"/>
+
+                <item2
+                    jcr:primaryType="nt:unstructured"
+                    cq:styleId="news-listing-layout-grid-4"
+                    cq:styleLabel="Grid — 4 columns"
+                    cq:styles="news-listing--layout-grid news-listing--cols-4"/>
+
+                <item3
+                    jcr:primaryType="nt:unstructured"
+                    cq:styleId="news-listing-layout-grid-2"
+                    cq:styleLabel="Grid — 2 columns"
+                    cq:styles="news-listing--layout-grid news-listing--cols-2"/>
+
+                <item4
+                    jcr:primaryType="nt:unstructured"
+                    cq:styleId="news-listing-layout-stack"
+                    cq:styleLabel="Stack (vertical list)"
+                    cq:styles="news-listing--layout-stack"/>
+
+                <item5
+                    jcr:primaryType="nt:unstructured"
+                    cq:styleId="news-listing-layout-horizontal"
+                    cq:styleLabel="Horizontal rail (scrollable)"
+                    cq:styles="news-listing--layout-horizontal"/>
+
+            </cq:styles>
+        </item0>
+
+        <!-- ─── Group 2: Section / Accent colour ──────────── -->
+        <item1
+            jcr:primaryType="nt:unstructured"
+            cq:styleGroupLabel="Section Accent">
+            <cq:styles jcr:primaryType="nt:unstructured">
+
+                <item0
+                    jcr:primaryType="nt:unstructured"
+                    cq:styleId="news-listing-section-politics"
+                    cq:styleLabel="Politics (navy)"
+                    cq:styles="news-listing--section-politics"/>
+
+                <item1
+                    jcr:primaryType="nt:unstructured"
+                    cq:styleId="news-listing-section-tech"
+                    cq:styleLabel="Technology (blue)"
+                    cq:styles="news-listing--section-tech"/>
+
+                <item2
+                    jcr:primaryType="nt:unstructured"
+                    cq:styleId="news-listing-section-sport"
+                    cq:styleLabel="Sport (green)"
+                    cq:styles="news-listing--section-sport"/>
+
+                <item3
+                    jcr:primaryType="nt:unstructured"
+                    cq:styleId="news-listing-section-culture"
+                    cq:styleLabel="Culture (red)"
+                    cq:styles="news-listing--section-culture"/>
+
+                <item4
+                    jcr:primaryType="nt:unstructured"
+                    cq:styleId="news-listing-section-environment"
+                    cq:styleLabel="Environment (olive)"
+                    cq:styles="news-listing--section-environment"/>
+
+                <item5
+                    jcr:primaryType="nt:unstructured"
+                    cq:styleId="news-listing-section-business"
+                    cq:styleLabel="Business (purple)"
+                    cq:styles="news-listing--section-business"/>
+
+                <item6
+                    jcr:primaryType="nt:unstructured"
+                    cq:styleId="news-listing-section-lifestyle"
+                    cq:styleLabel="Lifestyle (orange)"
+                    cq:styles="news-listing--section-lifestyle"/>
+
+            </cq:styles>
+        </item1>
+
+    </cq:styleGroups>
+
+</jcr:root>

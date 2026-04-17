@@ -1,0 +1,37 @@
+// ── CSS Custom Properties (bridged from SCSS tokens) ─────────────────────────
+// Exposes tokens as runtime variables for JS access and future theming.
+
+:root {
+  // Canvas
+  --color-canvas:           #{$color-canvas};
+  --color-canvas-secondary: #{$color-canvas-secondary};
+  --color-divider:          #{$color-divider};
+  --color-footer-bg:        #{$color-footer-bg};
+
+  // Typography
+  --color-heading:          #{$color-heading};
+  --color-body:             #{$color-body};
+  --color-meta:             #{$color-meta};
+  --color-footer-text:      #{$color-footer-text};
+
+  // Accents
+  --color-category:         #{$color-category};
+  --color-cta:              #{$color-cta};
+  --color-link-hover:       #{$color-link-hover};
+  --color-focus:            #{$color-focus};
+
+  // Spacing shortcuts
+  --space-4:   #{$space-4};
+  --space-6:   #{$space-6};
+  --space-8:   #{$space-8};
+  --space-16:  #{$space-16};
+  --space-20:  #{$space-20};
+
+  // Grid
+  --grid-gutter:   #{$grid-gutter};
+  --container-max: #{$container-max};
+
+  // Motion
+  --duration-base: #{$duration-base};
+  --ease-out:      #{$ease-out};
+}

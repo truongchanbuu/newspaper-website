@@ -1,0 +1,14 @@
+// ── Functions ─────────────────────────────────────────────────────────────────
+@use 'sass:math';
+
+// Convert px to rem (assumes 16px root font size)
+@function rem($px) {
+  @return math.div($px, 16) * 1rem;
+}
+
+// Fluid type / spacing: clamp between a min and max across a viewport range
+@function fluid($min-size, $max-size, $min-vw: 375px, $max-vw: 1300px) {
+  $slope: math.div($max-size - $min-size, $max-vw - $min-vw);
+  $intercept: $min-size - ($slope * $min-vw);
+  @return clamp(#{$min-size}, calc(#{$slope * 100vw} + #{$intercept}), #{$max-size});
+}

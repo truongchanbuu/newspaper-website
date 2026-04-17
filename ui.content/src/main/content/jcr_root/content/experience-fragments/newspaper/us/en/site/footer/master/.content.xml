@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- // [ABC]
+  Footer Experience Fragment — Guardian-style footer.
+  Contains: site description, section links, legal text, copyright.
+-->
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          jcr:primaryType="cq:Page">
+    <jcr:content
+        cq:tags="[]"
+        cq:template="/conf/newspaper/settings/wcm/templates/xf-web-variation"
+        cq:xfMasterVariation="{Boolean}true"
+        cq:xfVariantType="web"
+        jcr:primaryType="cq:PageContent"
+        jcr:title="Footer"
+        sling:resourceType="newspaper/components/xfpage">
+
+        <root
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="newspaper/components/container"
+            layout="responsiveGrid">
+
+            <separator
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="newspaper/components/separator"/>
+
+            <!-- Section navigation links in footer -->
+            <navigation
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="newspaper/components/navigation"
+                collectAllPages="{Boolean}false"
+                navigationRoot="/content/newspaper/us/en"
+                skipNavigationRoot="{Boolean}false"
+                structureDepth="{Long}1"
+                accessibilityLabel="Footer navigation"/>
+
+            <!-- About / legal text -->
+            <text
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="newspaper/components/text"
+                textIsRich="{Boolean}true"
+                text="&lt;p&gt;The Newspaper is an independent news organisation committed to fearless, quality journalism. Our editorial standards are maintained independently of commercial interests.&lt;/p&gt;"/>
+
+            <!-- Copyright -->
+            <copyright
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="newspaper/components/text"
+                textIsRich="{Boolean}true"
+                text="&lt;p&gt;&amp;copy; 2026 The Newspaper. All rights reserved. &lt;a href=&apos;/content/newspaper/us/en/privacy.html&apos;&gt;Privacy policy&lt;/a&gt; &amp;middot; &lt;a href=&apos;/content/newspaper/us/en/terms.html&apos;&gt;Terms &amp;amp; conditions&lt;/a&gt;&lt;/p&gt;"/>
+
+        </root>
+    </jcr:content>
+</jcr:root>

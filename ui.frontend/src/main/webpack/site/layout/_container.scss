@@ -1,0 +1,68 @@
+// ── Container ─────────────────────────────────────────────────────────────────
+
+.l-container {
+  width: 100%;
+  max-width: $container-max;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: $grid-gutter;
+  padding-left: $grid-gutter;
+
+  @include respond-to('lg') {
+    padding-right: $grid-gutter-lg;
+    padding-left: $grid-gutter-lg;
+  }
+
+  // Narrow: long-form article reading column (~740px)
+  &--narrow {
+    max-width: 740px;
+  }
+
+  // Wide: multimedia / full-feature sections
+  &--wide {
+    max-width: 1440px;
+  }
+
+  // Full bleed: flush to viewport (banner images, multimedia strips)
+  &--bleed {
+    max-width: 100%;
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+// ── Section vertical rhythm ───────────────────────────────────────────────────
+// ~64–80px between major sections per CLAUDE.md §4
+
+.l-section {
+  padding-top: $space-16;     // 64px
+  padding-bottom: $space-16;
+
+  @include respond-to('lg') {
+    padding-top: $space-20;   // 80px
+    padding-bottom: $space-20;
+  }
+
+  // Compressed: inner sub-sections
+  &--tight {
+    padding-top: $space-8;
+    padding-bottom: $space-8;
+  }
+
+  // Header/intro area: top padding only
+  &--top-only {
+    padding-top: $space-12;
+    padding-bottom: 0;
+  }
+
+  // Flush: no block padding (used inside containers that already pad)
+  &--flush {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  // Alternate background strip
+  &--alt {
+    background-color: $color-canvas-secondary;
+  }
+}
