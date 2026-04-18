@@ -1,0 +1,54 @@
+// ── Homepage layout ────────────────────────────────────────────────────────────
+// Structural zones rendered by homepage.html:
+//   .homepage__hero        — 2-col featured zone (two article-listing side-by-side)
+//   .homepage__latest      — full-width latest news grid
+//   .homepage__categories  — stacked category sections with dividers
+
+.homepage__main {
+  padding-bottom: $space-16;
+}
+
+// ── Hero: 2-column featured zone ───────────────────────────────────────────────
+.homepage__hero {
+  padding: $space-8 0;
+  border-bottom: $border-width solid $color-divider;
+
+  // AEM responsive grid renders child components as .aem-GridColumn inside .aem-Grid.
+  // Override AEM's float-based layout with CSS grid for the 2-col hero.
+  .aem-Grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $space-8;
+  }
+
+  .aem-GridColumn {
+    float: none;
+    width: 100% !important;
+    padding: 0;
+  }
+
+  @include respond-below('md') {
+    .aem-Grid {
+      grid-template-columns: 1fr;
+      gap: $space-6;
+    }
+  }
+}
+
+// ── Latest News: full-width ────────────────────────────────────────────────────
+.homepage__latest {
+  padding: $space-8 0;
+  border-bottom: $border-width solid $color-divider;
+}
+
+// ── Category Sections: stacked with top-rule separators ───────────────────────
+.homepage__categories {
+  padding: $space-8 0;
+
+  // Divider between consecutive category sections within the zone
+  .aem-Grid > .aem-GridColumn + .aem-GridColumn {
+    margin-top: $space-8;
+    padding-top: $space-8;
+    border-top: $border-width solid $color-divider;
+  }
+}

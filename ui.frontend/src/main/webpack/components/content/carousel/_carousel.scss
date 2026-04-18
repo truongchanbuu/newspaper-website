@@ -1,0 +1,155 @@
+// ── Newspaper Carousel ─────────────────────────────────────────────────────────
+// Wraps Core Components carousel/v1/carousel (.cmp-carousel).
+// All overrides are scoped inside .newspaper-carousel to avoid collision.
+
+.newspaper-carousel {
+  position: relative;
+  overflow: hidden;
+  border-top: $border-width solid $color-divider;
+
+  // ── Slide container ────────────────────────────────────────────────────────
+  .cmp-carousel__content {
+    position: relative;
+    min-height: 0;
+  }
+
+  // ── Individual slide ───────────────────────────────────────────────────────
+  // Core Components hides inactive slides via [hidden]; we add a fade-in on
+  // the active one so there is no jarring hard cut when JS removes [hidden].
+  .cmp-carousel__item {
+    width: 100%;
+
+    &--active {
+      animation: nc-fade-in $duration-base $ease-out both;
+    }
+  }
+
+  // ── Navigation arrows ──────────────────────────────────────────────────────
+  .cmp-carousel__actions {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 $space-3;
+    z-index: $z-card;
+  }
+
+  .cmp-carousel__action {
+    pointer-events: all;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: $border-width solid $color-divider;
+    border-radius: 50%;
+    background: $color-canvas;
+    color: $color-heading;
+    cursor: pointer;
+    transition: background $duration-fast $ease-out,
+                border-color $duration-fast $ease-out,
+                color $duration-fast $ease-out;
+
+    &:hover,
+    &:focus-visible {
+      background: $color-heading;
+      border-color: $color-heading;
+      color: $color-canvas;
+      outline: none;
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 3px $color-focus;
+    }
+  }
+
+  // Guardian-style chevron via CSS borders — no icon font needed
+  .cmp-carousel__action-icon {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-top: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    flex-shrink: 0;
+  }
+
+  .cmp-carousel__action--previous .cmp-carousel__action-icon {
+    transform: rotate(-135deg) translateX(-1px);
+  }
+
+  .cmp-carousel__action--next .cmp-carousel__action-icon {
+    transform: rotate(45deg) translateX(-1px);
+  }
+
+  // Visually hide the text label (keep for screen readers)
+  .cmp-carousel__action-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  // ── Indicators (dots) ──────────────────────────────────────────────────────
+  .cmp-carousel__indicators {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: $space-2;
+    list-style: none;
+    margin: 0;
+    padding: $space-3 0 $space-4;
+  }
+
+  .cmp-carousel__indicator {
+    display: flex;
+  }
+
+  // The indicator is a <button> inside the <li>
+  .cmp-carousel__indicator button,
+  .cmp-carousel__indicator [role="tab"] {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $color-divider;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background $duration-fast $ease-out,
+                transform $duration-fast $ease-out;
+    font-size: 0;
+    line-height: 0;
+
+    &[aria-selected="true"],
+    &.cmp-carousel__indicator--active {
+      background: $color-category;
+      transform: scale(1.35);
+    }
+
+    &:hover {
+      background: $color-meta;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-focus;
+      outline-offset: 2px;
+    }
+  }
+}
+
+// ── Fade-in keyframe for active slide ──────────────────────────────────────────
+@keyframes nc-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+// ── Reduced-motion: disable animation ─────────────────────────────────────────
+@media (prefers-reduced-motion: reduce) {
+  .newspaper-carousel .cmp-carousel__item--active {
+    animation: none;
+  }
+}

@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- // [ABC]
-  Template Structure — Homepage
-  Defines the locked framework that surrounds the editable zones.
-
-  Node states:
-    (no editable attr)   = LOCKED by template; page authors cannot add/remove/edit
-    editable=true        = UNLOCKED; page authors can add components
-
-  Zones in render order (matches homepage.html data-sly-resource keys):
-    experiencefragment-header  LOCKED  — Guardian masthead
-    hero                       editable — hero banner
-    carousel                   editable — breaking-news teaser carousel
-    main                       editable — stacked news listing sections
-    experiencefragment-footer  LOCKED  — Guardian footer
--->
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
           xmlns:cq="http://www.day.com/jcr/cq/1.0"
           xmlns:jcr="http://www.jcp.org/jcr/1.0"
@@ -26,43 +11,44 @@
         cq:template="/conf/newspaper/settings/wcm/templates/homepage"
         sling:resourceType="newspaper/components/structure/homepage">
 
-        <!-- ── LOCKED: Header Experience Fragment ─────────────────── -->
+        <!-- ── LOCKED: Header Experience Fragment ──────────────────────── -->
         <experiencefragment-header
             jcr:primaryType="nt:unstructured"
             sling:resourceType="newspaper/components/experiencefragment"
-            fragmentVariationPath="/content/experience-fragments/newspaper/us/en/site/header/master"
-            cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/experiencefragment/policy_header"/>
+            fragmentVariationPath="/content/experience-fragments/newspaper/us/en/site/header/master"/>
 
-        <!-- ── EDITABLE: Hero banner zone ─────────────────────────── -->
+        <!-- ── EDITABLE: Hero zone — 2-col featured articles ───────────── -->
+        <!--
+            Authors drop two article-listing components here;
+            CSS (.homepage__hero .aem-Grid) enforces the 2-column layout.
+        -->
         <hero
             jcr:primaryType="nt:unstructured"
-            sling:resourceType="newspaper/components/container"
+            sling:resourceType="wcm/foundation/components/responsivegrid"
             editable="{Boolean}true"
             cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/container/hero-zone"/>
 
-        <!-- ── EDITABLE: Breaking news carousel ───────────────────── -->
-        <carousel
+        <!-- ── EDITABLE: Latest News zone — full-width grid ─────────────── -->
+        <latest
             jcr:primaryType="nt:unstructured"
-            sling:resourceType="newspaper/components/carousel"
-            editable="{Boolean}true"
-            autoplay="{Boolean}true"
-            delay="{Long}5000"/>
-
-        <!-- ── EDITABLE: Main news sections ───────────────────────── -->
-        <main
-            jcr:primaryType="nt:unstructured"
-            sling:resourceType="newspaper/components/container"
+            sling:resourceType="wcm/foundation/components/responsivegrid"
             editable="{Boolean}true"
             cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/container/main-zone"/>
 
-        <!-- ── LOCKED: Footer Experience Fragment ─────────────────── -->
+        <!-- ── EDITABLE: Category sections — stacked listings ───────────── -->
+        <categories
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="wcm/foundation/components/responsivegrid"
+            editable="{Boolean}true"
+            cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/container/main-zone"/>
+
+        <!-- ── LOCKED: Footer Experience Fragment ──────────────────────── -->
         <experiencefragment-footer
             jcr:primaryType="nt:unstructured"
             sling:resourceType="newspaper/components/experiencefragment"
-            fragmentVariationPath="/content/experience-fragments/newspaper/us/en/site/footer/master"
-            cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/experiencefragment/policy_footer"/>
+            fragmentVariationPath="/content/experience-fragments/newspaper/us/en/site/footer/master"/>
 
-        <!-- ── Responsive breakpoints ─────────────────────────────── -->
+        <!-- ── Responsive breakpoints ──────────────────────────────────── -->
         <cq:responsive jcr:primaryType="nt:unstructured">
             <breakpoints jcr:primaryType="nt:unstructured">
                 <phone

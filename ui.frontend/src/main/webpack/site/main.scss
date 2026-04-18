@@ -23,3 +23,7 @@
 @import '../components/content/search/searchpage';
 @import '../components/content/article-listing/article-listing';
 @import '../components/content/article-card/article-card';
+@import '../components/content/carousel/carousel';
+
+// 5. Page-specific layouts
+@import 'homepage/homepage';

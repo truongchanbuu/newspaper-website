@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>${currentPage.title @ context='text'} | Newspaper</title>
+    <sly data-sly-use.clientLib="${'/libs/granite/sightly/templates/clientlib.html'}">
+        <sly data-sly-call="${clientLib.css @ categories='newspaper.site'}"/>
+    </sly>
+</head>
+<body class="homepage">
+
+    <!--/* ── XF Header (locked in template structure) ────────────────────── */-->
+    <sly data-sly-resource="experiencefragment-header"/>
+
+    <main class="homepage__main" id="main-content" role="main">
+        <div class="l-container">
+
+            <!--/* ── Featured Hero: 2-column zone ─────────────────────────── */-->
+            <!--/*
+                Authors can drop 2 article-listing components side-by-side here.
+                CSS targets .aem-Grid children to enforce the 2-col layout.
+            */-->
+            <section class="homepage__hero" aria-label="Featured stories">
+                <sly data-sly-resource="hero"/>
+            </section>
+
+            <!--/* ── Latest News: full-width grid ──────────────────────────── */-->
+            <section class="homepage__latest" aria-label="Latest news">
+                <sly data-sly-resource="latest"/>
+            </section>
+
+            <!--/* ── Category Sections: stacked article-listing zones ───────── */-->
+            <section class="homepage__categories" aria-label="News by category">
+                <sly data-sly-resource="categories"/>
+            </section>
+
+        </div>
+    </main>
+
+    <!--/* ── XF Footer (locked in template structure) ────────────────────── */-->
+    <sly data-sly-resource="experiencefragment-footer"/>
+
+    <sly data-sly-use.clientLib="${'/libs/granite/sightly/templates/clientlib.html'}">
+        <sly data-sly-call="${clientLib.js @ categories='newspaper.site'}"/>
+    </sly>
+
+</body>
+</html>
