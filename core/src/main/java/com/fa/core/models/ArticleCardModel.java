@@ -96,14 +96,21 @@ public class ArticleCardModel {
 
         String pageTitle = articlePage.getTitle();
         resolvedTitle = StringUtils.defaultIfBlank(pageTitle, articlePage.getName());
-        resolvedSummary = articlePage.getProperties().get("summary", String.class);
+        resolvedSummary = articlePage.getDescription();
         resolvedLink = articlePage.getPath() + ".html";
 
-        resolvedAuthor = articlePage.getProperties().get("author", String.class);
-        publishedDate = articlePage.getProperties().get("publishedDate", Calendar.class);
+        resolvedAuthor = articlePage.getProperties().get("articleAuthor", String.class);
+        publishedDate = articlePage.getProperties().get("articleDate", Calendar.class);
 
-        resolvedImageSrc = articlePage.getProperties().get("thumbnail", String.class);
-        String alt = articlePage.getProperties().get("alt", String.class);
+        // image/fileReference is stored as a property on the child 'image' node
+        Resource contentResource = articlePage.getContentResource();
+        if (contentResource != null) {
+            Resource imageResource = contentResource.getChild("image");
+            if (imageResource != null) {
+                resolvedImageSrc = imageResource.getValueMap().get("fileReference", String.class);
+            }
+        }
+        String alt = articlePage.getProperties().get("imageAlt", String.class);
         resolvedImageAlt = StringUtils.defaultIfBlank(alt, resolvedTitle);
 
         resolveSectionFromTags(articlePage);

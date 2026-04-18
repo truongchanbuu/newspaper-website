@@ -1,0 +1,68 @@
+<!--/*
+  Reusable card template.
+  Called by articlecard.html (standalone) and articlelisting.html (listing).
+  Parameters match both ArticleCardModel and ArticleListingModel.ArticleCardItem.
+*/-->
+<template data-sly-template.card="${@ title, link, imageSrc='', imageAlt='', categoryLabel='', categoryLink='', description='', author='', formattedDate='', isoDate='', timeAgo=''}">
+
+    <article class="article-card" data-component="article-card">
+
+        <div class="article-card__media ${!imageSrc ? 'article-card__media--placeholder' : ''}">
+            <sly data-sly-test="${imageSrc}">
+                <img class="article-card__image"
+                     src="${imageSrc @ context='uri'}"
+                     alt="${imageAlt ? imageAlt : title @ context='attribute'}"
+                     loading="lazy" />
+            </sly>
+        </div>
+
+        <div class="article-card__body">
+
+            <sly data-sly-test="${categoryLabel && categoryLink}">
+                <a class="article-card__section-label"
+                   href="${categoryLink @ context='uri'}">
+                    ${categoryLabel}
+                </a>
+            </sly>
+            <sly data-sly-test="${categoryLabel && !categoryLink}">
+                <span class="article-card__section-label">${categoryLabel}</span>
+            </sly>
+
+            <h3 class="article-card__headline line-clamp">
+                <a class="article-card__headline-link"
+                   href="${link @ context='uri'}">
+                    ${title}
+                </a>
+            </h3>
+
+            <sly data-sly-test="${description}">
+                <p class="article-card__trail line-clamp">${description}</p>
+            </sly>
+
+            <footer class="article-card__meta">
+                <sly data-sly-test="${author}">
+                    <span class="article-card__byline">
+                        By <span class="article-card__author">${author}</span>
+                    </span>
+                </sly>
+
+                <sly data-sly-test="${timeAgo}">
+                    <time class="article-card__time-ago"
+                          datetime="${isoDate}"
+                          title="${formattedDate}">
+                        ${timeAgo}
+                    </time>
+                </sly>
+                <sly data-sly-test="${formattedDate && !timeAgo}">
+                    <time class="article-card__date"
+                          datetime="${isoDate}">
+                        ${formattedDate}
+                    </time>
+                </sly>
+            </footer>
+
+        </div>
+
+    </article>
+
+</template>

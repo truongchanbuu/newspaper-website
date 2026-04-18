@@ -101,6 +101,7 @@ public class ArticleListingModel {
         private final String link;
         private final String imageSrc;
         private final String category;
+        private final String categoryLink;
         private final String description;
         private final String author;
         private final String formattedDate;
@@ -119,6 +120,7 @@ public class ArticleListingModel {
             category = StringUtils.isNotBlank(tag)
                     ? StringUtils.capitalize(tag.toLowerCase(Locale.ENGLISH))
                     : null;
+            categoryLink = StringUtils.isNotBlank(tag) ? langRootPath + "/" + tag + ".html" : null;
 
             Calendar articleDate = props.get("articleDate", Calendar.class);
             if (articleDate != null) {
@@ -134,6 +136,7 @@ public class ArticleListingModel {
         public String getLink()          { return link; }
         public String getImageSrc()      { return imageSrc; }
         public String getCategory()      { return category; }
+        public String getCategoryLink()  { return categoryLink; }
         public String getDescription()   { return description; }
         public String getAuthor()        { return author; }
         public String getFormattedDate() { return formattedDate; }

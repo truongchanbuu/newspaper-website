@@ -1,5 +1,7 @@
 <sly data-sly-use.listing="com.fa.core.models.ArticleListingModel"
-    data-sly-use.styles="core/wcm/components/commons/v1/templates/styles.html">
+    data-sly-use.styles="core/wcm/components/commons/v1/templates/template.html"
+    data-sly-use.cardTemplate="${'newspaper/components/content/articlecard/template.html'}">
+
     <section class="article-listing ${styles.toString}"
              data-sly-test="${wcmmode.edit || listing.hasItems}">
 
@@ -11,45 +13,17 @@
             data-sly-test="${listing.hasItems}">
             <sly data-sly-repeat.article="${listing.cards}">
                 <li>
-                    <article class="article-card">
-                        <a class="article-card__link"
-                           href="${article.link @ context='uri'}">
-
-                            <div class="article-card__image-wrap">
-                                <sly data-sly-test="${article.imageSrc}">
-                                    <img class="article-card__image"
-                                         src="${article.imageSrc @ context='uri'}"
-                                         alt="${article.title @ context='attribute'}"
-                                         loading="lazy" />
-                                </sly>
-                            </div>
-
-                            <div class="article-card__body">
-                                <sly data-sly-test="${article.category}">
-                                    <span class="article-card__category">${article.category}</span>
-                                </sly>
-
-                                <h3 class="article-card__title">${article.title}</h3>
-
-                                <sly data-sly-test="${article.description}">
-                                    <p class="article-card__desc">${article.description}</p>
-                                </sly>
-
-                                <div class="article-card__meta">
-                                    <sly data-sly-test="${article.author}">
-                                        <span class="article-card__author">${article.author}</span>
-                                    </sly>
-                                    <sly data-sly-test="${article.formattedDate}">
-                                        <time class="article-card__date"
-                                              datetime="${article.isoDate}">
-                                            ${article.formattedDate}
-                                        </time>
-                                    </sly>
-                                </div>
-                            </div>
-
-                        </a>
-                    </article>
+                    <sly data-sly-call="${cardTemplate.card @
+                        title=article.title,
+                        link=article.link,
+                        imageSrc=article.imageSrc,
+                        imageAlt=article.title,
+                        categoryLabel=article.category,
+                        categoryLink=article.categoryLink,
+                        description=article.description,
+                        author=article.author,
+                        formattedDate=article.formattedDate,
+                        isoDate=article.isoDate}"/>
                 </li>
             </sly>
         </ul>
