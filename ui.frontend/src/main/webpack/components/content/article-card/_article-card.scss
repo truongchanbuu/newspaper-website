@@ -1,0 +1,233 @@
+$ac-section-colors: (
+  tech:         #1a6eb5,
+  business:     #9b4f96,
+  sport:        #00875a,
+  culture:      $color-category,
+  politics:     #052962,
+  environment:  #4b7f52,
+  lifestyle:    #e05c00,
+  default:      $color-body
+) !default;
+
+// Responsive thumb width for left/right variants
+$ac-thumb-size: clamp(120px, 22vw, 180px) !default;
+
+// ── Utility ────────────────────────────────────────────────────────────────────
+// Consumed by HTL via class="… line-clamp" and @extend inside this file only
+.line-clamp {
+  @include line-clamp(2);
+}
+
+// ── Base card ──────────────────────────────────────────────────────────────────
+article.article-card {
+  display: grid;
+  grid-template-areas: "media" "body";
+  gap: $space-3;
+  padding: 0;
+  border-top: $border-width solid $color-divider;
+  font-family: 'Guardian Text Egyptian', Georgia, 'Times New Roman', serif;
+  color: $color-heading;
+  position: relative;
+  cursor: pointer;
+}
+
+.article-card__media { grid-area: media; }
+.article-card__body  { grid-area: body; }
+
+// ── Card-clickable overlay ─────────────────────────────────────────────────────
+// Headline ::after covers the full card; secondary links sit above it via z-index
+.article-card__headline-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: $z-base;
+}
+
+.article-card__section-label,
+.article-card__meta a {
+  position: relative;
+  z-index: $z-card;
+}
+
+// ── Media ──────────────────────────────────────────────────────────────────────
+.article-card__media {
+  overflow: hidden;
+  line-height: 0;
+  aspect-ratio: 4 / 3;
+  background-color: $color-divider;
+}
+
+.article-card__image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: opacity $duration-base $ease-out;
+}
+
+article.article-card:hover .article-card__image {
+  opacity: 0.9;
+}
+
+.article-card__media--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::after {
+    content: "";
+    width: 40%;
+    height: 40%;
+    border-radius: 50%;
+    background-color: $color-canvas-secondary;
+  }
+}
+
+// ── Body ───────────────────────────────────────────────────────────────────────
+.article-card__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: $space-1 $space-3 $space-3;
+}
+
+// ── Section label ──────────────────────────────────────────────────────────────
+.article-card__section-label {
+  display: inline-block;
+  font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: $font-size-xs;
+  font-weight: $weight-bold;
+  letter-spacing: $ls-label;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: map-get($ac-section-colors, default);
+  margin-bottom: $space-2;
+
+  &:hover { opacity: 0.75; }
+}
+
+@each $name, $color in $ac-section-colors {
+  @if $name != default {
+    .article-card__section-label--#{$name} {
+      color: $color;
+    }
+  }
+}
+
+// ── Headline ───────────────────────────────────────────────────────────────────
+.article-card__headline {
+  margin: 0 0 $space-2;
+  font-size: $font-size-md;
+  font-weight: $weight-bold;
+  line-height: $lh-snug;
+  letter-spacing: $ls-tight;
+  word-break: break-word;
+}
+
+.article-card__headline-link {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+}
+
+.article-card--featured article.article-card .article-card__headline {
+  font-size: $font-size-xl;
+  line-height: $lh-tight;
+}
+
+// ── Trail / summary ────────────────────────────────────────────────────────────
+.article-card__trail {
+  @include line-clamp(2);
+  font-family: 'Guardian Text Egyptian', Georgia, serif;
+  font-size: $font-size-sm;
+  line-height: $lh-normal;
+  margin: 0 0 $space-2;
+  flex: 1;
+}
+
+.article-card--standard article.article-card .article-card__trail {
+  display: none;
+}
+
+.article-card--featured article.article-card .article-card__trail {
+  font-size: $font-size-base;
+}
+
+// ── Meta ───────────────────────────────────────────────────────────────────────
+.article-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-1 $space-3;
+  margin-top: auto;
+  padding-top: $space-2;
+  font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: $font-size-xs;
+  color: $color-meta;
+}
+
+// ── Layout variants ────────────────────────────────────────────────────────────
+.article-card--thumb-bottom article.article-card {
+  grid-template-areas: "body" "media";
+}
+
+.article-card--thumb-left article.article-card {
+  grid-template-columns: $ac-thumb-size 1fr;
+  grid-template-areas: "media body";
+  align-items: flex-start;
+
+  .article-card__media {
+    aspect-ratio: 1 / 1;
+    border-radius: $radius-sm;
+  }
+
+  .article-card__body     { padding-top: $space-1; }
+  .article-card__headline { font-size: $font-size-base; line-height: $lh-snug; }
+}
+
+.article-card--thumb-right article.article-card {
+  grid-template-columns: 1fr $ac-thumb-size;
+  grid-template-areas: "body media";
+  align-items: flex-start;
+
+  .article-card__media {
+    aspect-ratio: 1 / 1;
+    border-radius: $radius-sm;
+  }
+
+  .article-card__body     { padding-top: $space-1; }
+  .article-card__headline { font-size: $font-size-base; line-height: $lh-snug; }
+}
+
+// ── Responsive ─────────────────────────────────────────────────────────────────
+@include respond-below('sm') {
+  .article-card--thumb-left article.article-card,
+  .article-card--thumb-right article.article-card {
+    grid-template-columns: 1fr;
+    grid-template-areas: "media" "body";
+
+    .article-card__media {
+      aspect-ratio: 4 / 3;
+      border-radius: 0;
+    }
+  }
+
+  .article-card--featured article.article-card .article-card__headline {
+    font-size: $font-size-lg;
+  }
+}
+
+// ── Authoring placeholder ──────────────────────────────────────────────────────
+.article-card--placeholder {
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed $color-divider;
+  color: $color-meta;
+  font-family: sans-serif;
+  font-size: $font-size-sm;
+}

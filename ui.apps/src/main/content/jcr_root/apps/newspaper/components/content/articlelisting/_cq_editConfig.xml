@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cq:EditConfig
+    xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    cq:emptyText="Article Listing"
+    cq:emptyClass="cq-placeholder"
+/>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root
+        xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+        xmlns:cq="http://www.day.com/jcr/cq/1.0"
+        xmlns:jcr="http://www.jcp.org/jcr/1.0"
+        xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+        jcr:primaryType="nt:unstructured"
+        jcr:title="News Listing"
+        sling:resourceType="cq/gui/components/authoring/dialog">
+
+    <content
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                    maximized="{Boolean}true">
+
+                <items jcr:primaryType="nt:unstructured">
+                    <content
+                            jcr:primaryType="nt:unstructured"
+                            jcr:title="Content"
+                            sling:resourceType="granite/ui/components/coral/foundation/container"
+                            margin="{Boolean}true">
+
+                        <items jcr:primaryType="nt:unstructured">
+
+                            <!-- Optional section title override -->
+                            <sectionTitle
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                    fieldLabel="Section Display Title"
+                                    fieldDescription="Optional override for the section heading. Leave empty to use the category page title."
+                                    name="./sectionTitle" />
+
+                            <!-- Layout variant -->
+                            <layout
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                    fieldLabel="Layout"
+                                    fieldDescription="How articles are arranged in this section."
+                                    name="./layout">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <grid
+                                            jcr:primaryType="nt:unstructured"
+                                            text="Grid (responsive columns)"
+                                            value="grid"
+                                            selected="{Boolean}true" />
+                                    <vertical
+                                            jcr:primaryType="nt:unstructured"
+                                            text="Vertical list"
+                                            value="vertical" />
+                                    <horizontal
+                                            jcr:primaryType="nt:unstructured"
+                                            text="Horizontal scroll"
+                                            value="horizontal" />
+                                </items>
+                            </layout>
+
+                            <!-- Max items -->
+                            <maxItems
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                    fieldLabel="Number of Articles"
+                                    fieldDescription="Maximum number of articles to display. Recommended range: 3–12."
+                                    name="./maxItems"
+                                    value="6"
+                                    min="1"
+                                    max="24" />
+
+                        </items>
+                    </content>
+
+                    <advanced
+                            jcr:primaryType="nt:unstructured"
+                            jcr:title="Advanced"
+                            sling:resourceType="granite/ui/components/coral/foundation/container"
+                            margin="{Boolean}true">
+
+                        <items jcr:primaryType="nt:unstructured">
+
+                            <articlesRootPath
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                    fieldLabel="Articles Root (per language)"
+                                    fieldDescription="Root folder containing all article pages. Articles are resolved per language at runtime."
+                                    name="./articlesRootPath"
+                                    rootPath="/content/newspaper/language-masters"
+                                    value="/content/newspaper/language-masters" />
+
+                        </items>
+                    </advanced>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>

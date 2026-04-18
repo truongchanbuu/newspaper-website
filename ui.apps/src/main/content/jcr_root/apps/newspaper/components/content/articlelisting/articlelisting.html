@@ -1,0 +1,62 @@
+<sly data-sly-use.listing="com.fa.core.models.ArticleListingModel">
+    <section class="article-listing article-listing--${listing.layout}"
+             data-sly-test="${wcmmode.edit || listing.hasItems}">
+
+        <header class="l-section-header">
+            <h2 class="l-section-header__title">${listing.displayTitle}</h2>
+        </header>
+
+        <ul class="article-listing__items"
+            data-sly-test="${listing.hasItems}">
+            <sly data-sly-repeat.article="${listing.cards}">
+                <li>
+                    <article class="article-card">
+                        <a class="article-card__link"
+                           href="${article.link @ context='uri'}">
+
+                            <div class="article-card__image-wrap">
+                                <sly data-sly-test="${article.imageSrc}">
+                                    <img class="article-card__image"
+                                         src="${article.imageSrc @ context='uri'}"
+                                         alt="${article.title @ context='attribute'}"
+                                         loading="lazy" />
+                                </sly>
+                            </div>
+
+                            <div class="article-card__body">
+                                <sly data-sly-test="${article.category}">
+                                    <span class="article-card__category">${article.category}</span>
+                                </sly>
+
+                                <h3 class="article-card__title">${article.title}</h3>
+
+                                <sly data-sly-test="${article.description}">
+                                    <p class="article-card__desc">${article.description}</p>
+                                </sly>
+
+                                <div class="article-card__meta">
+                                    <sly data-sly-test="${article.author}">
+                                        <span class="article-card__author">${article.author}</span>
+                                    </sly>
+                                    <sly data-sly-test="${article.formattedDate}">
+                                        <time class="article-card__date"
+                                              datetime="${article.isoDate}">
+                                            ${article.formattedDate}
+                                        </time>
+                                    </sly>
+                                </div>
+                            </div>
+
+                        </a>
+                    </article>
+                </li>
+            </sly>
+        </ul>
+
+        <div class="article-listing__placeholder cq-placeholder"
+             data-sly-test="${wcmmode.edit && !listing.hasItems}">
+            <p>No articles found. Ensure articles exist under this language and are published.</p>
+        </div>
+
+    </section>
+</sly>

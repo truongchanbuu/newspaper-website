@@ -1,0 +1,70 @@
+// ── Article Listing ────────────────────────────────────────────────────────────
+// Three layout variants driven by article-listing--{layout} on the section root.
+// Card styles (.article-card) are shared from _searchpage.scss / _article-card.scss.
+
+.article-listing {
+  margin-bottom: $space-10;
+}
+
+// <ul> base reset — layout applied via variant modifier below
+.article-listing__items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+// ── Vertical (single-column stack) ────────────────────────────────────────────
+.article-listing--vertical .article-listing__items {
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+}
+
+// ── Grid (responsive multi-column) ────────────────────────────────────────────
+.article-listing--grid .article-listing__items {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-8 $grid-gutter;
+
+  @include respond-to('sm') { grid-template-columns: repeat(2, 1fr); }
+  @include respond-to('md') { grid-template-columns: repeat(3, 1fr); }
+  @include respond-to('xl') { grid-template-columns: repeat(4, 1fr); }
+}
+
+// ── Horizontal (scrollable row with snap) ─────────────────────────────────────
+.article-listing--horizontal .article-listing__items {
+  display: flex;
+  flex-direction: row;
+  gap: $grid-gutter;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  padding-bottom: $space-2;
+
+  &::-webkit-scrollbar       { height: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: $color-divider;
+    border-radius: $radius-sm;
+  }
+
+  > li {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    width: clamp(260px, 40vw, 320px);
+
+    @include respond-to('sm') { width: clamp(280px, 35vw, 340px); }
+    @include respond-to('lg') { width: 320px; }
+  }
+}
+
+// ── Authoring placeholder ──────────────────────────────────────────────────────
+.article-listing__placeholder {
+  padding: $space-6;
+  background-color: $color-canvas-secondary;
+  border: $border-width dashed $color-divider;
+  color: $color-meta;
+  font-size: $font-size-sm;
+  line-height: $lh-relaxed;
+}

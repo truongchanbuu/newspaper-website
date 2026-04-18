@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root
+        xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+        xmlns:cq="http://www.day.com/jcr/cq/1.0"
+        xmlns:jcr="http://www.jcp.org/jcr/1.0"
+        xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+        jcr:primaryType="nt:unstructured"
+        jcr:title="News Item"
+        sling:resourceType="cq/gui/components/authoring/dialog">
+    <content
+            jcr:primaryType="nt:unstructured"
+            sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                    jcr:primaryType="nt:unstructured"
+                    sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                    maximized="{Boolean}true">
+
+                <items jcr:primaryType="nt:unstructured">
+                    <sourceTab
+                            jcr:primaryType="nt:unstructured"
+                            jcr:title="Source"
+                            sling:resourceType="granite/ui/components/coral/foundation/container"
+                            margin="{Boolean}true">
+
+                        <items jcr:primaryType="nt:unstructured">
+
+                            <source
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                    fieldLabel="Content Source"
+                                    fieldDescription="Choose where the news item content comes from."
+                                    name="./source">
+
+                                <items jcr:primaryType="nt:unstructured">
+                                    <page
+                                            jcr:primaryType="nt:unstructured"
+                                            text="From Article Page (recommended)"
+                                            value="page"
+                                            selected="{Boolean}true" />
+                                    <manual
+                                            jcr:primaryType="nt:unstructured"
+                                            text="Manual (External / Promo)"
+                                            value="manual" />
+                                </items>
+                            </source>
+
+                            <pagePath
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                    fieldLabel="Article Page"
+                                    fieldDescription="Select an article page to pull title, image, meta, and link."
+                                    name="./pagePath"
+                                    rootPath="/content/newspaper/language-masters" />
+                        </items>
+                    </sourceTab>
+
+                    <mediaTab
+                            jcr:primaryType="nt:unstructured"
+                            jcr:title="Media"
+                            sling:resourceType="granite/ui/components/coral/foundation/container"
+                            margin="{Boolean}true">
+
+                        <items jcr:primaryType="nt:unstructured">
+
+                            <imageSrc
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                    fieldLabel="Image Override"
+                                    fieldDescription="Overrides the article hero image (optional)."
+                                    name="./imageSrc"
+                                    rootPath="/content/dam" />
+
+                            <imageAlt
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                    fieldLabel="Image Alt Text"
+                                    name="./imageAlt" />
+                        </items>
+                    </mediaTab>
+
+                    <metaTab
+                            jcr:primaryType="nt:unstructured"
+                            jcr:title="Meta"
+                            sling:resourceType="granite/ui/components/coral/foundation/container"
+                            margin="{Boolean}true">
+
+                        <items jcr:primaryType="nt:unstructured">
+
+                            <author
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                    fieldLabel="Author"
+                                    name="./author" />
+
+                            <articleDate
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/datepicker"
+                                    fieldLabel="Article Date"
+                                    name="./articleDate"
+                                    type="datetime" />
+                        </items>
+                    </metaTab>
+
+                    <contentTab
+                            jcr:primaryType="nt:unstructured"
+                            jcr:title="Content (Manual Override)"
+                            sling:resourceType="granite/ui/components/coral/foundation/container"
+                            margin="{Boolean}true">
+
+                        <items jcr:primaryType="nt:unstructured">
+                            <title
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                    fieldLabel="Headline (manual)"
+                                    fieldDescription="Only used when Content Source is Manual."
+                                    name="./title" />
+
+                            <summary
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                    fieldLabel="Summary (manual)"
+                                    fieldDescription="Optional teaser for external or promotional items."
+                                    name="./summary"
+                                    rows="3" />
+
+                            <link
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                    fieldLabel="External Link"
+                                    fieldDescription="Used only when Content Source is Manual."
+                                    name="./link" />
+
+                        </items>
+                    </contentTab>
+
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>
