@@ -1,0 +1,125 @@
+<sly data-sly-use.model="com.fa.core.models.NewsletterSignup" data-sly-set.isPopup="${model.variant == 'popup'}">
+</sly>
+
+<template data-sly-template.intro="${@ model}">
+    <h2 class="cmp-newsletter-signup__title" id="${model.id}-title">
+        ${model.title}
+    </h2>
+
+    <p class="cmp-newsletter-signup__description" data-sly-test="${model.description}">
+        ${model.description}
+    </p>
+</template>
+
+<template data-sly-template.sharedForm="${@ model}">
+    <form class="cmp-newsletter-signup__form" method="${model.method}" action="${model.endpoint @ context='uri'}"
+          aria-label="${model.formAriaLabel}" novalidate data-cmp-hook-newsletter="form">
+
+        <div class="cmp-newsletter-signup__fields">
+            <div class="cmp-newsletter-signup__field cmp-newsletter-signup__field--name">
+                <label class="cmp-newsletter-signup__label" for="${model.id}-name">
+                    ${model.nameLabel}
+                </label>
+
+                <input class="cmp-newsletter-signup__input" id="${model.id}-name" name="name" type="text"
+                       placeholder="${model.namePlaceholder}" autocomplete="name"
+                       data-sly-attribute.required="${model.requireName}"
+                       aria-required="${model.requireName ? 'true' : 'false'}" aria-describedby="${model.id}-name-error"
+                       data-required-message="${model.nameRequiredMessage}" data-cmp-hook-newsletter="name" />
+
+                <p class="cmp-newsletter-signup__field-error" id="${model.id}-name-error" hidden
+                   data-cmp-hook-newsletter="name-error"></p>
+            </div>
+
+            <div class="cmp-newsletter-signup__field cmp-newsletter-signup__field--email">
+                <label class="cmp-newsletter-signup__label" for="${model.id}-email">
+                    ${model.emailLabel}
+                </label>
+
+                <input class="cmp-newsletter-signup__input" id="${model.id}-email" name="email" type="email"
+                       placeholder="${model.emailPlaceholder}" autocomplete="email" inputmode="email"
+                       data-sly-attribute.required="${model.requireEmail}"
+                       aria-required="${model.requireEmail ? 'true' : 'false'}" aria-describedby="${model.id}-email-error"
+                       data-required-message="${model.emailRequiredMessage}"
+                       data-invalid-message="${model.emailInvalidMessage}" data-cmp-hook-newsletter="email" />
+
+                <p class="cmp-newsletter-signup__field-error" id="${model.id}-email-error" hidden
+                   data-cmp-hook-newsletter="email-error"></p>
+            </div>
+        </div>
+
+        <sly data-sly-test="${model.trackingFieldsEnabled}">
+            <input data-sly-test="${model.newsletterId}" type="hidden" name="newsletterId"
+                   value="${model.newsletterId}" />
+
+            <input data-sly-test="${model.placement}" type="hidden" name="placement" value="${model.placement}" />
+
+            <input data-sly-test="${model.campaignSource}" type="hidden" name="campaignSource"
+                   value="${model.campaignSource}" />
+        </sly>
+
+        <div class="cmp-newsletter-signup__actions">
+            <button class="cmp-newsletter-signup__submit" type="submit" data-cmp-hook-newsletter="submit">
+                <span class="cmp-newsletter-signup__submit-text">${model.submitLabel}</span>
+                <span class="cmp-newsletter-signup__spinner" aria-hidden="true"></span>
+            </button>
+        </div>
+
+        <p class="cmp-newsletter-signup__privacy" data-sly-test="${model.privacyText}">
+            ${model.privacyText}
+        </p>
+        <div class="cmp-newsletter-signup__messages" aria-live="polite" aria-atomic="true">
+            <p class="cmp-newsletter-signup__message cmp-newsletter-signup__message--success" hidden
+               data-cmp-hook-newsletter="success">
+                ${model.successMessage}
+            </p>
+
+            <p class="cmp-newsletter-signup__message cmp-newsletter-signup__message--error" hidden
+               data-cmp-hook-newsletter="error">
+                ${model.errorMessage}
+            </p>
+        </div>
+    </form>
+</template>
+
+<div id="${model.id}" class="cmp-newsletter-signup cmp-newsletter-signup--${model.variant}"
+     data-cmp-is="newsletter-signup" data-cmp-endpoint="${model.endpoint}" data-cmp-variant="${model.variant}"
+     data-cmp-auto-open="${model.autoOpenEnabled ? 'true' : 'false'}" data-cmp-auto-open-delay="${model.autoOpenDelay}"
+     data-cmp-frequency-mode="${model.frequencyMode}" data-cmp-frequency-days="${model.frequencyDays}"
+     data-cmp-open-trigger-selector="${model.openTriggerSelector}">
+
+    <sly data-sly-test="${wcmmode.edit && !model.configured}">
+        <div class="cmp-newsletter-signup__author-note">
+            Configure the Endpoint URL in the component dialog to enable newsletter submission.
+        </div>
+    </sly>
+
+    <sly data-sly-test="${isPopup}">
+        <div class="cmp-newsletter-signup__backdrop" hidden data-cmp-hook-newsletter="backdrop"></div>
+
+        <div class="cmp-newsletter-signup__dialog" role="dialog" aria-modal="true" aria-labelledby="${model.id}-title"
+             hidden data-cmp-hook-newsletter="dialog">
+
+            <div class="cmp-newsletter-signup__container">
+                <button class="cmp-newsletter-signup__close" type="button" aria-label="${model.closeAriaLabel}"
+                        data-cmp-hook-newsletter="close">
+                    ${model.closeButtonLabel}
+                </button>
+
+                <div class="cmp-newsletter-signup__content">
+                    <sly data-sly-call="${intro @ model=model}"></sly>
+                    <sly data-sly-call="${sharedForm @ model=model}"></sly>
+                </div>
+            </div>
+        </div>
+    </sly>
+
+    <sly data-sly-test="${!isPopup}">
+        <div class="cmp-newsletter-signup__container">
+            <div class="cmp-newsletter-signup__content">
+                <sly data-sly-call="${intro @ model=model}"></sly>
+                <sly data-sly-call="${sharedForm @ model=model}"></sly>
+            </div>
+        </div>
+    </sly>
+</div>

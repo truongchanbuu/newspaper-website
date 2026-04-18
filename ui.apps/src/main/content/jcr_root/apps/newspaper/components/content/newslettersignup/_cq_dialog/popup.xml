@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root
+        xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+        xmlns:jcr="http://www.jcp.org/jcr/1.0"
+        xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+        xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container"
+        margin="{Boolean}true">
+
+    <items jcr:primaryType="nt:unstructured">
+        <columns
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns"
+                margin="{Boolean}true">
+
+            <items jcr:primaryType="nt:unstructured">
+                <column
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/container">
+
+                    <items jcr:primaryType="nt:unstructured">
+                        <autoOpenEnabled
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                text="Enable Auto Open"
+                                name="./autoOpenEnabled"
+                                value="true"
+                                uncheckedValue="false" />
+
+                        <autoOpenDelay
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                fieldLabel="Auto Open Delay (ms)"
+                                name="./autoOpenDelay"
+                                value="{Long}0"
+                                min="{Long}0"
+                                step="{Long}100" />
+
+                        <frequencyMode
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                fieldLabel="Frequency Mode"
+                                name="./frequencyMode">
+                            <items jcr:primaryType="nt:unstructured">
+                                <session
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Once Per Session"
+                                        value="session"
+                                        selected="{Boolean}true" />
+                                <local
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Once Every N Days"
+                                        value="local" />
+                                <none
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Always"
+                                        value="none" />
+                            </items>
+                        </frequencyMode>
+
+                        <frequencyDays
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                fieldLabel="Frequency Days"
+                                name="./frequencyDays"
+                                value="{Long}7"
+                                min="{Long}1"
+                                step="{Long}1" />
+
+                        <openTriggerSelector
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Open Trigger Selector"
+                                fieldDescription="Optional CSS selector for buttons or links that manually open the popup."
+                                emptyText="open-newsletter"
+                                value=""
+                                name="./openTriggerSelector" />
+
+                        <closeAriaLabel
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Close Button Aria Label"
+                                emptyText="Close newsletter signup dialog"
+                                name="./closeAriaLabel" />
+
+                        <closeButtonLabel
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Close Button Label"
+                                value="Close"
+                                name="./closeButtonLabel" />
+
+                    </items>
+                </column>
+            </items>
+        </columns>
+    </items>
+</jcr:root>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root
+        xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+        xmlns:jcr="http://www.jcp.org/jcr/1.0"
+        xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container"
+        margin="{Boolean}true">
+
+    <items jcr:primaryType="nt:unstructured">
+
+        <ariaConfig
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/form/fieldset"
+                jcr:title="Form Accessibility">
+            <items jcr:primaryType="nt:unstructured">
+
+                <formAriaLabel
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Form aria label"
+                        name="./formAriaLabel"
+                        emptyText="Newsletter signup form" />
+
+                <dialogTitle
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Popup dialog title"
+                        name="./dialogTitle"
+                        emptyText="Newsletter signup" />
+
+                <closeAriaLabel
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Close button aria label"
+                        name="./closeAriaLabel"
+                        emptyText="Close newsletter signup popup" />
+
+            </items>
+        </ariaConfig>
+
+    </items>
+</jcr:root>

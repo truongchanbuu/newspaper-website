@@ -7,13 +7,10 @@
   padding-top: 0;
   padding-bottom: $space-20;
 
-  // ── Hero — full-bleed within container, canvas-secondary bg ─────────────
   &__hero {
-    // Negative margins bleed to container edges so the bg fills wall-to-wall
     margin-left:  -$grid-gutter;
     margin-right: -$grid-gutter;
     padding:       $space-8 $grid-gutter;
-    background-color: $color-canvas-secondary;
     @include divider(bottom);
     margin-bottom: $space-8;
 

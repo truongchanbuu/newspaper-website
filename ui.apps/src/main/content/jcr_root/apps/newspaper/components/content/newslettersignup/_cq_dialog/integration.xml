@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root
+        xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+        xmlns:jcr="http://www.jcp.org/jcr/1.0"
+        xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+        xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container"
+        margin="{Boolean}true">
+
+    <items jcr:primaryType="nt:unstructured">
+
+        <endpointConfig
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/form/fieldset"
+                jcr:title="Destination">
+            <items jcr:primaryType="nt:unstructured">
+
+                <endpoint
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Endpoint URL"
+                        fieldDescription="HTTPS endpoint that receives the newsletter signup payload."
+                        name="./endpoint"
+                        emptyText="https://api.example.com/newsletter/signup"
+                        required="{Boolean}true"
+                        validation="newsletter-endpoint">
+                    <granite:data
+                            jcr:primaryType="nt:unstructured"
+                            allow-http="{Boolean}true"
+                            allow-localhost="{Boolean}true"
+                            invalid-message="Endpoint must be a valid HTTPS URL"
+                            protocol-message="Endpoint must start with https://"
+                            localhost-message="localhost is not allowed"
+                            editor-message="Author/editor URLs are not allowed" />
+                </endpoint>
+
+                <newsletterId
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                        fieldLabel="Newsletter"
+                        fieldDescription="Choose the newsletter destination configured by business or backend."
+                        name="./newsletterId"
+                        granite:class="cq-dialog-dropdown-showhide">
+                    <items jcr:primaryType="nt:unstructured">
+                        <opt1
+                                jcr:primaryType="nt:unstructured"
+                                text="Daily Briefing"
+                                value="daily-briefing" />
+                        <opt2
+                                jcr:primaryType="nt:unstructured"
+                                text="Weekend Digest"
+                                value="weekend-digest" />
+                    </items>
+                </newsletterId>
+                <method
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/hidden"
+                        name="./method"
+                        value="POST" />
+            </items>
+        </endpointConfig>
+        <trackingConfig
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/form/fieldset"
+                jcr:title="Tracking">
+            <items jcr:primaryType="nt:unstructured">
+                <source
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                        fieldLabel="Source"
+                        fieldDescription="Tracking source or placement origin."
+                        name="./source"
+                        granite:class="cq-dialog-dropdown-showhide">
+                    <items jcr:primaryType="nt:unstructured">
+                        <opt1
+                                jcr:primaryType="nt:unstructured"
+                                text="Homepage Footer"
+                                value="homepage-footer" />
+                        <opt2
+                                jcr:primaryType="nt:unstructured"
+                                text="Homepage Popup"
+                                value="homepage-popup" />
+                        <opt3
+                                jcr:primaryType="nt:unstructured"
+                                text="Article Popup"
+                                value="article-popup" />
+                        <opt4
+                                jcr:primaryType="nt:unstructured"
+                                text="Article Popup"
+                                value="article-popup" />
+                    </items>
+                </source>
+
+                <campaign
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                        fieldLabel="Campaign"
+                        fieldDescription="Marketing campaign identifier used for analytics or tracking."
+                        name="./campaign"
+                        granite:class="cq-dialog-dropdown-showhide">
+                    <items jcr:primaryType="nt:unstructured">
+                        <opt1
+                                jcr:primaryType="nt:unstructured"
+                                text="Spring Retention 2026"
+                                value="spring-retention-2026" />
+                        <opt2
+                                jcr:primaryType="nt:unstructured"
+                                text="Homepage Popup"
+                                value="homepage-popup" />
+                    </items>
+                </campaign>
+
+                <placement
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Placement override"
+                        fieldDescription="Optional manual override. Leave blank to derive from variant or implementation logic."
+                        name="./placement"
+                        emptyText="footer or popup" />
+
+            </items>
+        </trackingConfig>
+
+    </items>
+</jcr:root>

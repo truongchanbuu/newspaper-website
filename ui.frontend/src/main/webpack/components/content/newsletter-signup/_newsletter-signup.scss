@@ -1,0 +1,330 @@
+@keyframes newsletter-spin {
+  to { transform: rotate(1turn); }
+}
+
+// Functional colors — no project token equivalents
+$_nl-error:   #b42318;
+$_nl-success: #067647;
+
+.cmp-newsletter-signup {
+  color: $color-heading;
+  position: relative;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  // ── Edit-mode note ────────────────────────────────────────────────────────
+  &__author-note {
+    margin: 0 0 $space-4;
+    padding: $space-3 $space-4;
+    border: $border-width dashed $color-divider;
+    border-radius: $radius-md;
+    background: $color-canvas-secondary;
+    color: $color-meta;
+    font-size: $font-size-sm;
+    line-height: $lh-normal;
+  }
+
+  // ── Layout shell ──────────────────────────────────────────────────────────
+  &__container {
+    position: relative;
+  }
+
+  &__content {
+    display: grid;
+    gap: $space-3;
+  }
+
+  // ── Intro (title + description) ───────────────────────────────────────────
+  &__title {
+    margin: 0;
+    font-size: $font-size-2xl;
+    font-weight: $weight-bold;
+    letter-spacing: $ls-tight;
+    line-height: $lh-tight;
+    color: $color-heading;
+  }
+
+  &__description {
+    margin: 0;
+    color: $color-meta;
+    font-size: $font-size-base;
+    line-height: $lh-normal;
+  }
+
+  // ── Form ──────────────────────────────────────────────────────────────────
+  &__form {
+    display: grid;
+    gap: $space-4;
+    margin-top: $space-2;
+  }
+
+  &__fields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    column-gap: $space-4;
+    row-gap: $space-4;
+  }
+
+  &__field {
+    display: grid;
+    align-content: start;
+    gap: $space-2;
+    min-width: 0;
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    font-weight: $weight-semibold;
+    line-height: $lh-snug;
+    color: $color-heading;
+  }
+
+  &__input {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: $space-12;          // 48px
+    padding: 0 $space-4;
+    border: $border-width solid $color-divider;
+    border-radius: $radius-sm;
+    background: $color-canvas;
+    color: $color-heading;
+    font-size: $font-size-base;
+    line-height: $lh-snug;
+    transition: border-color $duration-base $ease-out,
+                box-shadow $duration-base $ease-out;
+
+    &::placeholder {
+      color: $color-meta;
+    }
+
+    &:hover {
+      border-color: $color-body;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $color-heading;
+      box-shadow: 0 0 0 3px rgba(18, 18, 18, 0.08);
+    }
+
+    &[aria-invalid="true"] {
+      border-color: $_nl-error;
+      box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.1);
+    }
+
+    &:disabled {
+      background: $color-canvas-secondary;
+      cursor: not-allowed;
+      opacity: 0.72;
+    }
+  }
+
+  &__field-error {
+    margin: 0;
+    color: $_nl-error;
+    font-size: $font-size-xs;
+    line-height: $lh-snug;
+  }
+
+  // ── Submit ────────────────────────────────────────────────────────────────
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+  }
+
+  &__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-3;
+    min-height: $space-12;      // 48px
+    padding: 0 $space-6;
+    border: 0;
+    border-radius: $radius-sm;
+    background: $color-cta;
+    color: $color-canvas;
+    cursor: pointer;
+    font-size: $font-size-sm;
+    font-weight: $weight-bold;
+    letter-spacing: $ls-label;
+    text-transform: uppercase;
+    line-height: $lh-none;
+    transition: background-color $duration-fast $ease-out,
+                opacity $duration-fast $ease-out,
+                transform $duration-fast $ease-out;
+
+    &:hover {
+      background: $color-link-hover;
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.72;
+    }
+
+    @include focus-visible-ring;
+  }
+
+  &__submit-text {
+    display: inline-block;
+  }
+
+  &__spinner {
+    display: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba($color-canvas, 0.35);
+    border-top-color: $color-canvas;
+    border-radius: 50%;
+    animation: newsletter-spin 0.8s linear infinite;
+  }
+
+  // ── Footer copy ───────────────────────────────────────────────────────────
+  &__privacy {
+    margin: 0;
+    color: $color-meta;
+    font-size: $font-size-xs;
+    line-height: $lh-normal;
+  }
+
+  &__messages {
+    display: grid;
+    gap: $space-2;
+  }
+
+  &__message {
+    margin: 0;
+    font-size: $font-size-sm;
+    line-height: $lh-snug;
+
+    &--success { color: $_nl-success; }
+    &--error   { color: $_nl-error; }
+  }
+
+  // ── Popup overlay elements ────────────────────────────────────────────────
+  &__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: $z-overlay;
+    background: rgba($color-footer-bg, 0.72);
+    backdrop-filter: blur(2px);
+  }
+
+  &__dialog {
+    position: fixed;
+    inset: 0;
+    z-index: $z-modal;
+    display: grid;
+    place-items: center;
+    padding: $space-4;
+  }
+
+  &__close {
+    position: absolute;
+    top: $space-4;
+    right: $space-4;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: $space-10;       // 40px
+    min-height: $space-10;
+    padding: 0 $space-3;
+    border: $border-width solid $color-divider;
+    border-radius: $radius-sm;
+    background: $color-canvas;
+    color: $color-heading;
+    cursor: pointer;
+    font-size: $font-size-xs;
+    font-weight: $weight-semibold;
+    transition: background-color $duration-fast $ease-out,
+                border-color $duration-fast $ease-out;
+
+    &:hover {
+      background: $color-canvas-secondary;
+      border-color: $color-heading;
+    }
+
+    @include focus-visible-ring;
+  }
+
+  // ── Variants ──────────────────────────────────────────────────────────────
+  &--footer {
+    .cmp-newsletter-signup__container {
+      padding: $space-6;
+      border-radius: $radius-lg;
+      background: $color-canvas-secondary;
+    }
+  }
+
+  &--popup {
+    .cmp-newsletter-signup__container {
+      width: min(100%, 560px);
+      padding: $space-8 $space-6 $space-6;
+      border-radius: $radius-lg;
+      background: $color-canvas;
+      box-shadow: 0 16px 48px rgba($color-footer-bg, 0.18);
+    }
+
+    // Keep AEM [hidden] attribute working
+    .cmp-newsletter-signup__backdrop[hidden],
+    .cmp-newsletter-signup__dialog[hidden] {
+      display: none !important;
+    }
+  }
+
+  // ── State modifiers ───────────────────────────────────────────────────────
+  &.is-loading {
+    .cmp-newsletter-signup__spinner     { display: inline-block; }
+    .cmp-newsletter-signup__submit-text { opacity: 0.85; }
+  }
+
+  &.is-error   .cmp-newsletter-signup__message--error   { display: block; }
+  &.is-success .cmp-newsletter-signup__message--success { display: block; }
+
+  // ── Responsive ────────────────────────────────────────────────────────────
+  @include respond-to('sm') {
+    &--footer {
+      .cmp-newsletter-signup__content {
+        gap: $space-4;
+      }
+
+      .cmp-newsletter-signup__fields {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .cmp-newsletter-signup__actions {
+        justify-content: flex-start;
+      }
+    }
+  }
+
+  @include respond-below('sm') {
+    &--footer .cmp-newsletter-signup__container {
+      padding: $space-5 $space-4;
+      border-radius: $radius-md;
+    }
+
+    &--popup .cmp-newsletter-signup__container {
+      padding: $space-8 $space-4 $space-5;
+    }
+
+    &__actions {
+      display: block;
+    }
+
+    &__submit {
+      width: 100%;
+    }
+  }
+}

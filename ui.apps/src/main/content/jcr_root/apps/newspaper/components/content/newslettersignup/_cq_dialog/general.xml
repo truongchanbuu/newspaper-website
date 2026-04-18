@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root
+        xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+        xmlns:jcr="http://www.jcp.org/jcr/1.0"
+        xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+        xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container"
+        margin="{Boolean}true">
+    <items jcr:primaryType="nt:unstructured">
+        <presentation
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/form/fieldset"
+                jcr:title="Presentation">
+            <items jcr:primaryType="nt:unstructured">
+                <variant
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                        fieldLabel="Variant"
+                        fieldDescription="Choose how the newsletter signup is presented on the page."
+                        name="./variant"
+                        granite:class="cq-dialog-dropdown-showhide">
+                    <items jcr:primaryType="nt:unstructured">
+                        <footer
+                                jcr:primaryType="nt:unstructured"
+                                text="Footer"
+                                value="footer"
+                        />
+                        <popup
+                                jcr:primaryType="nt:unstructured"
+                                text="Popup"
+                                value="popup"
+                                selected="{Boolean}true" />
+                    </items>
+                    <granite:data
+                            jcr:primaryType="nt:unstructured"
+                            cq-dialog-dropdown-showhide-target=".newsletter-signup-popup-target" />
+                </variant>
+
+                <title
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Title"
+                        emptyText="Stay informed"
+                        name="./title" />
+
+                <description
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
+                        fieldLabel="Description"
+                        name="./description"
+                        emptyText="Subscribe to receive latest news and updates"
+                        rows="{Long}4" />
+            </items>
+        </presentation>
+    </items>
+</jcr:root>

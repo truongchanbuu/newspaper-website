@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root
+        xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+        xmlns:jcr="http://www.jcp.org/jcr/1.0"
+        xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container"
+        margin="{Boolean}true">
+
+    <items jcr:primaryType="nt:unstructured">
+
+        <nameField
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/form/fieldset"
+                jcr:title="Name field">
+            <items jcr:primaryType="nt:unstructured">
+
+                <nameLabel
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Label"
+                        name="./nameLabel"
+                        emptyText="Name"/>
+
+                <namePlaceholder
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Placeholder"
+                        name="./namePlaceholder"
+                        emptyText="Enter your name"/>
+
+                <nameRequiredMessage
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Required message"
+                        name="./nameRequiredMessage"
+                        emptyText="Please enter your name"/>
+
+            </items>
+        </nameField>
+
+        <emailField
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/form/fieldset"
+                jcr:title="Email field">
+            <items jcr:primaryType="nt:unstructured">
+
+                <emailLabel
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Label"
+                        name="./emailLabel"
+                        emptyText="Email address"/>
+
+                <emailPlaceholder
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Placeholder"
+                        name="./emailPlaceholder"
+                        emptyText="Enter your email address"/>
+
+                <emailRequiredMessage
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Required message"
+                        name="./emailRequiredMessage"
+                        emptyText="Please enter your email address"/>
+
+                <emailInvalidMessage
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                        fieldLabel="Invalid message"
+                        name="./emailInvalidMessage"
+                        emptyText="Please enter a valid email address"/>
+
+            </items>
+        </emailField>
+
+    </items>
+</jcr:root>
