@@ -4,6 +4,7 @@ import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.fa.core.models.dto.SearchResultItem;
 import com.fa.core.search.ArticleSearchService;
+import com.fa.core.utils.CategoryUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 @Model(adaptables = SlingHttpServletRequest.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class ArticleListingModel {
@@ -62,6 +64,8 @@ public class ArticleListingModel {
         Page langRoot = currentPage.getAbsoluteParent(3);
         if (langRoot == null) return;
 
+        Map<String, String> categoryLabels = CategoryUtils.loadCategories(langRoot, null);
+
         int limit = (maxItems != null && maxItems > 0) ? maxItems : DEFAULT_MAX_ITEMS;
         String tag = StringUtils.trimToNull(primaryTag);
 
@@ -69,7 +73,7 @@ public class ArticleListingModel {
                 searchService.search(langRoot.getPath(), null, tag, null, null, 0, limit);
 
         for (SearchResultItem result : results) {
-            cards.add(new ArticleCardItem(result, langRoot.getPath()));
+            cards.add(new ArticleCardItem(result, langRoot.getPath(), categoryLabels));
         }
     }
 
@@ -90,7 +94,7 @@ public class ArticleListingModel {
         private final String formattedDate;
         private final String isoDate;
 
-        ArticleCardItem(SearchResultItem result, String langRootPath) {
+        ArticleCardItem(SearchResultItem result, String langRootPath, Map<String, String> categoryLabels) {
             title       = result.getArticleTitle();
             link        = result.getPath() + ".html";
             imageSrc    = result.getThumbnail();
@@ -99,7 +103,9 @@ public class ArticleListingModel {
 
             String cat  = result.getCategory();
             sectionSlug  = StringUtils.isNotBlank(cat) ? cat.toLowerCase(Locale.ENGLISH) : null;
-            category     = sectionSlug != null ? StringUtils.capitalize(sectionSlug) : null;
+            category     = sectionSlug != null
+                           ? categoryLabels.getOrDefault(sectionSlug, sectionSlug)
+                           : null;
             categoryLink = sectionSlug != null ? langRootPath + "/" + sectionSlug + ".html" : null;
 
             formattedDate = result.getFormattedPublishDate();
@@ -117,10 +123,6 @@ public class ArticleListingModel {
         public String getFormattedDate() { return formattedDate; }
         public String getIsoDate()       { return isoDate; }
 
-        /**
-         * Derives ISO date (yyyy-MM-dd) from the article path segments
-         * /articles/<yyyy>/<mm>/<dd>/<name> — avoids storing a redundant property.
-         */
         private static String extractIsoDate(String path) {
             if (path == null) return null;
             String[] seg = path.split("/");

@@ -1,7 +1,9 @@
 package com.fa.core.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public final class DateUtils {
@@ -62,5 +64,14 @@ public final class DateUtils {
 
         long years = months / 12;
         return years + (years == 1 ? " year ago" : " years ago");
+    }
+
+    public String formatDate(Date date) {
+        return formatDate(date, DATE_WITH_NAME_PATTERN, Locale.ENGLISH);
+    }
+
+    public String formatDate(Date date, String pattern, Locale locale) {
+        if (date == null) return null;
+        return new SimpleDateFormat(pattern, locale).format(date);
     }
 }

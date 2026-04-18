@@ -1,5 +1,5 @@
 <sly data-sly-use.articleCard="com.fa.core.models.ArticleCardModel"
-    data-sly-use.styles="core/wcm/components/commons/v1/templates/template.html"
+    data-sly-use.styles="core/wcm/components/commons/v1/template.html"
     data-sly-use.cardTemplate="template.html">
 
     <sly data-sly-test="${!articleCard.empty}">
@@ -9,7 +9,6 @@
                 link=articleCard.link,
                 imageSrc=articleCard.imageSrc,
                 imageAlt=articleCard.imageAlt,
-                section=articleCard.section,
                 categoryLabel=articleCard.sectionDisplay,
                 categoryLink=articleCard.sectionLink,
                 description=articleCard.summary,

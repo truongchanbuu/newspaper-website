@@ -1,5 +1,5 @@
 <sly data-sly-use.listing="com.fa.core.models.ArticleListingModel"
-    data-sly-use.styles="core/wcm/components/commons/v1/templates/template.html"
+    data-sly-use.styles="core/wcm/components/commons/v1/template.html"
     data-sly-use.cardTemplate="${'newspaper/components/content/articlecard/template.html'}">
 
     <section class="article-listing ${styles.toString}"
@@ -18,7 +18,6 @@
                         link=article.link,
                         imageSrc=article.imageSrc,
                         imageAlt=article.title,
-                        section=article.sectionSlug,
                         categoryLabel=article.category,
                         categoryLink=article.categoryLink,
                         description=article.description,

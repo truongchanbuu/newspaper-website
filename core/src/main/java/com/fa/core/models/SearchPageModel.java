@@ -3,7 +3,9 @@ package com.fa.core.models;
 import com.day.cq.wcm.api.Page;
 import com.fa.core.models.dto.SearchResultItem;
 import com.fa.core.search.ArticleSearchService;
+import com.fa.core.utils.CategoryUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
@@ -17,9 +19,9 @@ import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,8 +33,7 @@ public class SearchPageModel {
 
     // ── Constants ──────────────────────────────────────────────────────────────
 
-    private static final int    PAGE_SIZE      = 10;
-    private static final String ARTICLES_NODE  = "articles";
+    private static final int PAGE_SIZE = 10;
 
     // ── Injected ───────────────────────────────────────────────────────────────
 
@@ -88,8 +89,7 @@ public class SearchPageModel {
         toDate     = StringUtils.trimToNull(request.getParameter("toDate"));
         datePreset = StringUtils.trimToNull(request.getParameter("datePreset"));
 
-        String pageParam = request.getParameter("page");
-        pageNum = StringUtils.isNumeric(pageParam) ? Math.max(1, Integer.parseInt(pageParam)) : 1;
+        pageNum = NumberUtils.toInt(request.getParameter("page"), 1);
     }
 
     // ── Date helpers ───────────────────────────────────────────────────────────
@@ -114,28 +114,20 @@ public class SearchPageModel {
 
     // ── Category helpers ───────────────────────────────────────────────────────
 
-    /**
-     * Reads sibling nav pages under the language root (excluding {@code articles/}).
-     * Falls back to {@link ArticleSearchService#getCategories} when no nav pages exist yet
-     * (e.g. fresh install without category pages).
-     */
     private List<CategoryItem> buildCategories() {
         if (currentPage == null) return Collections.emptyList();
 
         Page langRoot = currentPage.getAbsoluteParent(3);
         if (langRoot == null) return Collections.emptyList();
 
-        List<CategoryItem> list = new ArrayList<>();
-        String selfPath = currentPage.getPath();
-        Iterator<Page> children = langRoot.listChildren();
-        while (children.hasNext()) {
-            Page child = children.next();
-            if (ARTICLES_NODE.equalsIgnoreCase(child.getName())) continue;
-            if (child.getPath().equals(selfPath)) continue;
-            if (child.getProperties().get("hideInNav", false)) continue;
-            list.add(new CategoryItem(child.getName(), child.getTitle()));
+        Map<String, String> labels = CategoryUtils.loadCategories(langRoot, currentPage.getPath());
+        if (!labels.isEmpty()) {
+            List<CategoryItem> list = new ArrayList<>();
+            for (Map.Entry<String, String> e : labels.entrySet()) {
+                list.add(new CategoryItem(e.getKey(), e.getValue()));
+            }
+            return list;
         }
-        if (!list.isEmpty()) return list;
 
         // Fallback: populate from service when JCR nav pages haven't been created yet
         if (searchService != null) {

@@ -389,6 +389,17 @@
     font-size: $font-size-md;
     margin: 0;
   }
+
+  // ── Inline error banner (replaces window.location fallback) ───────────────
+  &__error {
+    padding: $space-3 $space-4;
+    margin-bottom: $space-4;
+    background-color: #fff5f5;
+    border-left: 3px solid $color-category;
+    color: $color-body;
+    font-size: $font-size-sm;
+    font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
 }
 
 // ── Article Card ──────────────────────────────────────────────────────────────

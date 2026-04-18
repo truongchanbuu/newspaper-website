@@ -41,6 +41,16 @@
 
   let abortCtrl: AbortController | null = null;
 
+  function showErrorBanner(message: string): void {
+    if (!resultsEl) return;
+    resultsEl.querySelector('.search-page__error')?.remove();
+    const banner = document.createElement('p');
+    banner.className = 'search-page__error';
+    banner.setAttribute('role', 'alert');
+    banner.textContent = message;
+    resultsEl.prepend(banner);
+  }
+
   async function loadResults(url: string): Promise<void> {
     if (!resultsEl) return;
 
@@ -48,6 +58,7 @@
     abortCtrl = new AbortController();
 
     resultsEl.classList.add('search-page__results--loading');
+    resultsEl.querySelector('.search-page__error')?.remove();
     try {
       const resp = await fetch(url, {
         headers: { Accept: 'text/html' },
@@ -63,11 +74,14 @@
         resultsEl.parentNode.replaceChild(fresh, resultsEl);
         resultsEl = fresh;
       }
-      history.pushState(null, '', url);
+      try {
+        history.pushState(null, '', url);
+      } catch {
+        // iframe or cross-origin context (e.g. AEM author) — URL update not critical
+      }
     } catch (e) {
       if (e instanceof Error && e.name === 'AbortError') return;
-      // Network failure: fall back to normal navigation
-      window.location.href = url;
+      showErrorBanner('Search failed. Please check your connection and try again.');
     } finally {
       resultsEl?.classList.remove('search-page__results--loading');
     }
