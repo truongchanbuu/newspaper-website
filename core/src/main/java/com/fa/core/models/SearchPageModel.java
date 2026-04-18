@@ -1,8 +1,8 @@
 package com.fa.core.models;
 
 import com.day.cq.wcm.api.Page;
+import com.fa.core.models.dto.SearchResultItem;
 import com.fa.core.search.ArticleSearchService;
-import com.fa.core.search.SearchResultItem;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;

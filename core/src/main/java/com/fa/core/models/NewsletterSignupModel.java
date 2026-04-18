@@ -201,7 +201,9 @@ public class NewsletterSignupModel {
         if (currentResource == null || StringUtils.isBlank(currentResource.getPath())) {
             return "newsletter-signup";
         }
-        return "newsletter-signup-" + Math.abs(currentResource.getPath().hashCode());
+        return "newsletter-signup-" + currentResource.getPath()
+                .replaceAll("^/|/$", "")
+                .replaceAll("[^A-Za-z0-9]+", "-");
     }
 
     public String getId() {

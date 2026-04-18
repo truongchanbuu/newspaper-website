@@ -26,13 +26,53 @@
 
                         <items jcr:primaryType="nt:unstructured">
 
-                            <!-- Category filter: matches the primaryTag property set on article pages -->
+                            <!-- Category filter: matches the primaryTag slug on article pages -->
                             <primaryTag
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                    sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                     fieldLabel="Category (Primary Tag)"
-                                    fieldDescription="Filter by category slug, e.g. 'politics', 'sport', 'culture'. Leave empty to show all categories."
-                                    name="./primaryTag" />
+                                    fieldDescription="Filter articles by category. Leave empty to show all categories."
+                                    name="./primaryTag">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <all
+                                            jcr:primaryType="nt:unstructured"
+                                            text="All categories"
+                                            value=""
+                                            selected="{Boolean}true"/>
+                                    <business
+                                            jcr:primaryType="nt:unstructured"
+                                            text="Business"
+                                            value="business"/>
+                                    <culture
+                                            jcr:primaryType="nt:unstructured"
+                                            text="Culture"
+                                            value="culture"/>
+                                    <environment
+                                            jcr:primaryType="nt:unstructured"
+                                            text="Environment"
+                                            value="environment"/>
+                                    <lifestyle
+                                            jcr:primaryType="nt:unstructured"
+                                            text="Lifestyle"
+                                            value="lifestyle"/>
+                                    <politics
+                                            jcr:primaryType="nt:unstructured"
+                                            text="Politics"
+                                            value="politics"/>
+                                    <sport
+                                            jcr:primaryType="nt:unstructured"
+                                            text="Sport"
+                                            value="sport"/>
+                                    <technology
+                                            jcr:primaryType="nt:unstructured"
+                                            text="Technology"
+                                            value="technology"/>
+                                    <world
+                                            jcr:primaryType="nt:unstructured"
+                                            text="World"
+                                            value="world"/>
+                                </items>
+                            </primaryTag>
 
                             <!-- Optional section heading override -->
                             <sectionTitle

@@ -1,93 +1,81 @@
 package com.fa.core.search.impl;
 
+import com.fa.core.models.dto.SearchResultItem;
 import com.fa.core.search.ArticleSearchService;
-import com.fa.core.search.SearchResultItem;
 import org.apache.commons.lang3.StringUtils;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.propertytypes.ServiceDescription;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
  * Temporary mock — replace with the real JCR/Oak query implementation once available.
- *
- * <p>Simulates querying CQ Pages under
- * {@code /content/newspaper/language-masters/<lang>/articles/<yyyy>/<mm>/<dd>/<name>}.
- *
- * <p>Date filtering uses the path structure directly — {@code yyyy/mm/dd} segments after
- * {@code articles/} — matching the optimization the real service should apply
- * (path segments are always authoritative and indexed by Oak without extra properties).
- *
- * <p>Text search covers {@code jcr:title}, {@code jcr:description}, {@code primaryTag},
- * and all {@code cq:tags} values.
  */
 @Component(service = ArticleSearchService.class)
 @ServiceDescription("Mock Article Search Service")
 public class MockArticleSearchService implements ArticleSearchService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MockArticleSearchService.class);
+
     private static final List<SearchResultItem> MOCK_DATA = Arrays.asList(
-        new SearchResultItem(
-            "/content/newspaper/language-masters/en/articles/2026/04/10/uk-election-results",
+        item("/content/newspaper/language-masters/en/articles/2026/04/10/uk-election-results",
             "UK Election Results: Labour Leads Coalition Talks",
             "After a historic night, Labour emerged with a majority mandate and coalition negotiations have begun.",
-            "politics", "10 Apr 2026", "/content/dam/newspaper/asset.jpg", "Jane Dougherty",
-            Arrays.asList("politics", "labour", "uk-politics", "election")),
-        new SearchResultItem(
-            "/content/newspaper/language-masters/en/articles/2026/04/11/ai-climate-research",
+            "politics", "10 Apr 2026", "Jane Dougherty"),
+        item("/content/newspaper/language-masters/en/articles/2026/04/11/ai-climate-research",
             "AI Tools Accelerate Climate Change Research",
             "A new generation of AI models is helping scientists predict weather patterns with unprecedented accuracy.",
-            "technology", "11 Apr 2026", "/content/dam/newspaper/asset.jpg", "Marcus Elliot",
-            Arrays.asList("technology", "artificial-intelligence", "climate", "science")),
-        new SearchResultItem(
-            "/content/newspaper/language-masters/en/articles/2026/04/12/premier-league-roundup",
+            "technology", "11 Apr 2026", "Marcus Elliot"),
+        item("/content/newspaper/language-masters/en/articles/2026/04/12/premier-league-roundup",
             "Premier League Roundup: Title Race Goes to Final Day",
             "With only one match remaining, three clubs are still mathematically alive in the title race.",
-            "sport", "12 Apr 2026", "/content/dam/newspaper/asset.jpg", "Sarah Bright",
-            Arrays.asList("sport", "football", "premier-league", "manchester")),
-        new SearchResultItem(
-            "/content/newspaper/language-masters/en/articles/2026/04/13/global-trade-summit",
+            "sport", "12 Apr 2026", "Sarah Bright"),
+        item("/content/newspaper/language-masters/en/articles/2026/04/13/global-trade-summit",
             "Global Trade Summit Ends Without Breakthrough",
             "Negotiators failed to agree on new tariff frameworks despite three days of talks in Geneva.",
-            "world", "13 Apr 2026", "/content/dam/newspaper/asset.jpg", "Oliver Strand",
-            Arrays.asList("world", "trade", "tariffs", "geneva", "economics")),
-        new SearchResultItem(
-            "/content/newspaper/language-masters/en/articles/2026/04/14/nhs-funding-plan",
+            "world", "13 Apr 2026", "Oliver Strand"),
+        item("/content/newspaper/language-masters/en/articles/2026/04/14/nhs-funding-plan",
             "NHS to Receive Record £12bn Funding Boost",
             "The Health Secretary announced the largest single investment in NHS infrastructure in decades.",
-            "politics", "14 Apr 2026", "/content/dam/newspaper/asset.jpg", "Emma Coward",
-            Arrays.asList("politics", "health", "nhs", "uk-politics")),
-        new SearchResultItem(
-            "/content/newspaper/language-masters/en/articles/2026/04/15/tech-startup-regulation",
+            "politics", "14 Apr 2026", "Emma Coward"),
+        item("/content/newspaper/language-masters/en/articles/2026/04/15/tech-startup-regulation",
             "Tech Startups Warn Against Heavy-Handed Regulation",
             "Industry leaders say new EU digital market rules could push innovation to other regions.",
-            "technology", "15 Apr 2026", "/content/dam/newspaper/asset.jpg", "Tom Vickers",
-            Arrays.asList("technology", "startups", "regulation", "eu", "policy")),
-        new SearchResultItem(
-            "/content/newspaper/language-masters/en/articles/2026/04/16/culture-award-shortlist",
+            "technology", "15 Apr 2026", "Tom Vickers"),
+        item("/content/newspaper/language-masters/en/articles/2026/04/16/culture-award-shortlist",
             "Turner Prize Shortlist Unveiled at Tate Modern",
             "Four artists have been nominated for this year's prize, with a ceremony scheduled for November.",
-            "culture", "16 Apr 2026", "/content/dam/newspaper/asset.jpg", "Lisa Park",
-            Arrays.asList("culture", "art", "turner-prize", "tate", "london")),
-        new SearchResultItem(
-            "/content/newspaper/language-masters/en/articles/2026/04/17/economic-outlook-q2",
+            "culture", "16 Apr 2026", "Lisa Park"),
+        item("/content/newspaper/language-masters/en/articles/2026/04/17/economic-outlook-q2",
             "Q2 Economic Outlook: Growth Expected to Slow",
             "Analysts forecast a dip in GDP growth as energy prices and interest rates remain elevated.",
-            "business", "17 Apr 2026", "/content/dam/newspaper/asset.jpg", "Henry Walsh",
-            Arrays.asList("business", "economics", "gdp", "interest-rates", "inflation"))
+            "business", "17 Apr 2026", "Henry Walsh")
     );
 
     private static final List<String> CATEGORIES = Arrays.asList(
         "business", "culture", "environment", "lifestyle", "politics", "sport", "technology", "world"
     );
 
+    @Activate
+    protected void activate() {
+        LOG.warn("MockArticleSearchService is active — replace with real JCR/Oak implementation before production deployment");
+    }
+
     @Override
     public List<SearchResultItem> search(String searchRoot, String query, String category,
-                                          String dateFrom, String dateTo,
-                                          int offset, int limit) {
+                                         String dateFrom, String dateTo,
+                                         int offset, int limit) {
         List<SearchResultItem> filtered = applyFilters(query, category, dateFrom, dateTo);
         int from = Math.min(offset, filtered.size());
         int to   = Math.min(from + limit, filtered.size());
@@ -108,7 +96,7 @@ public class MockArticleSearchService implements ArticleSearchService {
     // ── Filtering ─────────────────────────────────────────────────────────────
 
     private List<SearchResultItem> applyFilters(String query, String category,
-                                                 String dateFrom, String dateTo) {
+                                                String dateFrom, String dateTo) {
         LocalDate from = StringUtils.isNotEmpty(dateFrom) ? LocalDate.parse(dateFrom) : null;
         LocalDate to   = StringUtils.isNotEmpty(dateTo)   ? LocalDate.parse(dateTo)   : null;
 
@@ -124,10 +112,6 @@ public class MockArticleSearchService implements ArticleSearchService {
                || category.equalsIgnoreCase(r.getCategory());
     }
 
-    /**
-     * Derives the article date from the path segments {@code /articles/<yyyy>/<mm>/<dd>/}
-     * instead of a stored property — the same optimisation the real service should use.
-     */
     private boolean matchesDate(SearchResultItem r, LocalDate from, LocalDate to) {
         if (from == null && to == null) return true;
         LocalDate articleDate = extractDateFromPath(r.getPath());
@@ -140,18 +124,13 @@ public class MockArticleSearchService implements ArticleSearchService {
     private boolean matchesText(SearchResultItem r, String query) {
         if (StringUtils.isEmpty(query)) return true;
         String q = query.toLowerCase();
-        if (r.getTitle().toLowerCase().contains(q))       return true;
-        if (r.getDescription().toLowerCase().contains(q)) return true;
-        if (r.getCategory().toLowerCase().contains(q))    return true;
-        return r.getTags().stream().anyMatch(tag -> tag.toLowerCase().contains(q));
+        return r.getArticleTitle().toLowerCase().contains(q)
+            || r.getSummary().toLowerCase().contains(q)
+            || r.getCategory().toLowerCase().contains(q);
     }
 
-    /**
-     * Parses {@code yyyy}, {@code mm}, {@code dd} from the path segment that follows
-     * {@code articles/}, e.g.
-     * {@code /content/newspaper/language-masters/en/articles/2026/04/11/article-name}
-     * → {@code 2026-04-11}.
-     */
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
     private static LocalDate extractDateFromPath(String path) {
         String[] segments = path.split("/");
         for (int i = 0; i < segments.length - 3; i++) {
@@ -168,5 +147,17 @@ public class MockArticleSearchService implements ArticleSearchService {
             }
         }
         return null;
+    }
+
+    private static SearchResultItem item(String path, String title, String summary,
+                                         String category, String dateStr, String author) {
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("d MMM yyyy", Locale.ENGLISH).parse(dateStr);
+        } catch (ParseException e) {
+            LOG.error("MockArticleSearchService: failed to parse date '{}'", dateStr, e);
+        }
+        return new SearchResultItem(path, title, null, "/content/dam/newspaper/asset.jpg",
+                                    summary, date, category, author);
     }
 }

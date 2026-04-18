@@ -2,8 +2,8 @@ package com.fa.core.models;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
+import com.fa.core.models.dto.SearchResultItem;
 import com.fa.core.search.ArticleSearchService;
-import com.fa.core.search.SearchResultItem;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
@@ -82,6 +82,7 @@ public class ArticleListingModel {
         private final String title;
         private final String link;
         private final String imageSrc;
+        private final String sectionSlug;
         private final String category;
         private final String categoryLink;
         private final String description;
@@ -90,27 +91,25 @@ public class ArticleListingModel {
         private final String isoDate;
 
         ArticleCardItem(SearchResultItem result, String langRootPath) {
-            title       = result.getTitle();
+            title       = result.getArticleTitle();
             link        = result.getPath() + ".html";
-            imageSrc    = result.getImageUrl();
-            description = result.getDescription();
-            author      = result.getAuthor();
+            imageSrc    = result.getThumbnail();
+            description = result.getSummary();
+            author      = result.getAuthorName();
 
             String cat  = result.getCategory();
-            category    = StringUtils.isNotBlank(cat)
-                          ? StringUtils.capitalize(cat.toLowerCase(Locale.ENGLISH))
-                          : null;
-            categoryLink = StringUtils.isNotBlank(cat)
-                           ? langRootPath + "/" + cat + ".html"
-                           : null;
+            sectionSlug  = StringUtils.isNotBlank(cat) ? cat.toLowerCase(Locale.ENGLISH) : null;
+            category     = sectionSlug != null ? StringUtils.capitalize(sectionSlug) : null;
+            categoryLink = sectionSlug != null ? langRootPath + "/" + sectionSlug + ".html" : null;
 
-            formattedDate = result.getPublishedDate();
+            formattedDate = result.getFormattedPublishDate();
             isoDate       = extractIsoDate(result.getPath());
         }
 
         public String getTitle()         { return title; }
         public String getLink()          { return link; }
         public String getImageSrc()      { return imageSrc; }
+        public String getSectionSlug()   { return sectionSlug; }
         public String getCategory()      { return category; }
         public String getCategoryLink()  { return categoryLink; }
         public String getDescription()   { return description; }

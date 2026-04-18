@@ -4,6 +4,7 @@
         xmlns:cq="http://www.day.com/jcr/cq/1.0"
         xmlns:jcr="http://www.jcp.org/jcr/1.0"
         xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+        xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
         jcr:primaryType="nt:unstructured"
         jcr:title="News Item"
         sling:resourceType="cq/gui/components/authoring/dialog">
@@ -25,33 +26,56 @@
 
                         <items jcr:primaryType="nt:unstructured">
 
+                            <!--
+                                class="cq-dialog-dropdown-showhide" activates the Granite UI
+                                showhide mechanism. The "page" option's granite:data targets
+                                .js-article-card-page-source to show pagePath when selected.
+                            -->
                             <source
                                     jcr:primaryType="nt:unstructured"
                                     sling:resourceType="granite/ui/components/coral/foundation/form/select"
                                     fieldLabel="Content Source"
                                     fieldDescription="Choose where the news item content comes from."
-                                    name="./source">
+                                    name="./source"
+                                    class="cq-dialog-dropdown-showhide">
 
                                 <items jcr:primaryType="nt:unstructured">
                                     <page
                                             jcr:primaryType="nt:unstructured"
                                             text="From Article Page (recommended)"
                                             value="page"
-                                            selected="{Boolean}true" />
+                                            selected="{Boolean}true">
+                                        <granite:data
+                                                jcr:primaryType="nt:unstructured"
+                                                cq-dialog-dropdown-showhide-target=".js-article-card-page-source"/>
+                                    </page>
                                     <manual
                                             jcr:primaryType="nt:unstructured"
                                             text="Manual (External / Promo)"
-                                            value="manual" />
+                                            value="manual"/>
                                 </items>
                             </source>
 
-                            <pagePath
+                            <!--
+                                Wrapper with target class. Shown when source=page, hidden otherwise.
+                                required on pagePath is enforced only while the field is visible.
+                            -->
+                            <pageSourceContainer
                                     jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
-                                    fieldLabel="Article Page"
-                                    fieldDescription="Select an article page to pull title, image, meta, and link."
-                                    name="./pagePath"
-                                    rootPath="/content/newspaper/language-masters" />
+                                    sling:resourceType="granite/ui/components/coral/foundation/container"
+                                    class="js-article-card-page-source">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <pagePath
+                                            jcr:primaryType="nt:unstructured"
+                                            sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                            fieldLabel="Article Page"
+                                            fieldDescription="Select an article page to pull title, image, meta, and link."
+                                            name="./pagePath"
+                                            required="{Boolean}true"
+                                            rootPath="/content/newspaper/language-masters" />
+                                </items>
+                            </pageSourceContainer>
+
                         </items>
                     </sourceTab>
 
@@ -98,7 +122,7 @@
                                     sling:resourceType="granite/ui/components/coral/foundation/form/datepicker"
                                     fieldLabel="Article Date"
                                     name="./articleDate"
-                                    type="datetime" />
+                                    type="date" />
                         </items>
                     </metaTab>
 

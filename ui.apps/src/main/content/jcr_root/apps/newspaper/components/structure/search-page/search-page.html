@@ -150,11 +150,11 @@
                             <li class="article-card">
                                 <a class="article-card__link"
                                    href="${result.path @ context='uri'}.html">
-                                    <sly data-sly-test="${result.imageUrl}">
+                                    <sly data-sly-test="${result.thumbnail}">
                                         <div class="article-card__image-wrap">
                                             <img class="article-card__image"
-                                                 src="${result.imageUrl @ context='uri'}"
-                                                 alt="${result.title @ context='attribute'}"
+                                                 src="${result.thumbnail @ context='uri'}"
+                                                 alt="${result.articleTitle @ context='attribute'}"
                                                  loading="lazy"/>
                                         </div>
                                     </sly>
@@ -163,17 +163,17 @@
                                             ${result.category @ context='text'}
                                         </span>
                                         <h2 class="article-card__title">
-                                            ${result.title @ context='text'}
+                                            ${result.articleTitle @ context='text'}
                                         </h2>
                                         <p class="article-card__desc">
-                                            ${result.description @ context='text'}
+                                            ${result.summary @ context='text'}
                                         </p>
                                         <footer class="article-card__meta">
                                             <span class="article-card__author t-meta">
-                                                ${result.author @ context='text'}
+                                                ${result.authorName @ context='text'}
                                             </span>
                                             <time class="article-card__date t-meta">
-                                                ${result.publishedDate @ context='text'}
+                                                ${result.formattedPublishDate @ context='text'}
                                             </time>
                                         </footer>
                                     </div>

@@ -1,5 +1,7 @@
 package com.fa.core.search;
 
+import com.fa.core.models.dto.SearchResultItem;
+
 import java.util.List;
 
 /**
@@ -9,14 +11,14 @@ import java.util.List;
  * {@code /content/newspaper/language-masters/<lang>/articles/<yyyy>/<mm>/<dd>/<name>}.
  * Each article's data lives in its {@code jcr:content} node:
  * <ul>
- *   <li>{@code jcr:title}       — article headline → {@link SearchResultItem#getTitle()}</li>
- *   <li>{@code jcr:description} — article intro    → {@link SearchResultItem#getDescription()}</li>
- *   <li>{@code primaryTag}      — single category  → {@link SearchResultItem#getCategory()}</li>
- *   <li>{@code cq:tags}         — all tags (included in free-text query match)</li>
- *   <li>path {@code /articles/<yyyy>/<mm>/<dd>/} — date derived from path segments,
- *       not a stored property (always authoritative, indexed by Oak)</li>
- *   <li>{@code image/fileReference} — hero image  → {@link SearchResultItem#getImageUrl()}</li>
- *   <li>{@code articleAuthor}   — byline           → {@link SearchResultItem#getAuthor()}</li>
+ *   <li>{@code jcr:title}          → {@link SearchResultItem#getArticleTitle()}</li>
+ *   <li>{@code jcr:description}    → {@link SearchResultItem#getSummary()}</li>
+ *   <li>{@code primaryTag}         → {@link SearchResultItem#getCategory()}</li>
+ *   <li>{@code cq:tags}            — all tags (included in free-text query match)</li>
+ *   <li>{@code image/fileReference}→ {@link SearchResultItem#getThumbnail()}</li>
+ *   <li>{@code articleAuthor}      → {@link SearchResultItem#getAuthorName()}</li>
+ *   <li>{@code articleDate}        → {@link SearchResultItem#getPublishDate()}</li>
+ *   <li>JCR node path              → {@link SearchResultItem#getPath()} (required for article links)</li>
  * </ul>
  *
  * <p>The production implementation (JCR query / Oak index) is owned by a separate team.
@@ -39,8 +41,8 @@ public interface ArticleSearchService {
      * @param limit       maximum number of results to return
      */
     List<SearchResultItem> search(String searchRoot, String query, String category,
-                                   String dateFrom, String dateTo,
-                                   int offset, int limit);
+                                  String dateFrom, String dateTo,
+                                  int offset, int limit);
 
     long count(String searchRoot, String query, String category,
                String dateFrom, String dateTo);
