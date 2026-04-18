@@ -1,5 +1,6 @@
-<sly data-sly-use.listing="com.fa.core.models.ArticleListingModel">
-    <section class="article-listing article-listing--${listing.layout}"
+<sly data-sly-use.listing="com.fa.core.models.ArticleListingModel"
+    data-sly-use.styles="core/wcm/components/commons/v1/templates/styles.html">
+    <section class="article-listing ${styles.toString}"
              data-sly-test="${wcmmode.edit || listing.hasItems}">
 
         <header class="l-section-header">

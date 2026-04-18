@@ -23,7 +23,6 @@ import java.util.*;
 public class ArticleListingModel {
     private static final Logger LOG = LoggerFactory.getLogger(ArticleListingModel.class);
     private static final int DEFAULT_MAX_ITEMS = 6;
-    private static final String DEFAULT_LAYOUT = "grid";
 
     @Self
     private SlingHttpServletRequest request;
@@ -36,9 +35,6 @@ public class ArticleListingModel {
 
     @ValueMapValue
     private String sectionTitle;
-
-    @ValueMapValue
-    private String layout;
 
     private List<ArticleCardItem> cards = new ArrayList<>();
     private String displayTitle;
@@ -98,7 +94,6 @@ public class ArticleListingModel {
     public boolean hasItems()                        { return !cards.isEmpty(); }
     public List<ArticleCardItem> getCards()          { return Collections.unmodifiableList(cards); }
     public String getDisplayTitle()                  { return displayTitle; }
-    public String getLayout()                        { return StringUtils.defaultIfBlank(layout, DEFAULT_LAYOUT); }
 
     // ── Article card DTO ───────────────────────────────────────────────────────
     public static class ArticleCardItem {

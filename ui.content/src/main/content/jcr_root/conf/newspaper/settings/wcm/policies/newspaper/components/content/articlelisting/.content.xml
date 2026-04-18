@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          jcr:primaryType="nt:unstructured"
+          jcr:title="Article Listing"
+          sling:resourceType="wcm/core/components/policy/policy">
+
+    <cq:styleGroups jcr:primaryType="nt:unstructured">
+
+        <item0 jcr:primaryType="nt:unstructured"
+               cq:styleGroupLabel="Layout">
+            <cq:styles jcr:primaryType="nt:unstructured">
+                <item0 jcr:primaryType="nt:unstructured"
+                       cq:styleLabel="Grid (responsive columns)"
+                       cq:styleClasses="article-listing--grid" />
+                <item1 jcr:primaryType="nt:unstructured"
+                       cq:styleLabel="Vertical list"
+                       cq:styleClasses="article-listing--vertical" />
+                <item2 jcr:primaryType="nt:unstructured"
+                       cq:styleLabel="Horizontal scroll"
+                       cq:styleClasses="article-listing--horizontal" />
+            </cq:styles>
+        </item0>
+
+    </cq:styleGroups>
+
+</jcr:root>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          jcr:primaryType="nt:unstructured"
+          jcr:title="Article Card"
+          sling:resourceType="wcm/core/components/policy/policy">
+
+    <cq:styleGroups jcr:primaryType="nt:unstructured">
+
+        <!-- Thumb position — controls grid-template-areas and column layout -->
+        <item0 jcr:primaryType="nt:unstructured"
+               cq:styleGroupLabel="Thumb position">
+            <cq:styles jcr:primaryType="nt:unstructured">
+                <item0 jcr:primaryType="nt:unstructured"
+                       cq:styleLabel="Top (default)"
+                       cq:styleClasses="" />
+                <item1 jcr:primaryType="nt:unstructured"
+                       cq:styleLabel="Left"
+                       cq:styleClasses="article-card--thumb-left" />
+                <item2 jcr:primaryType="nt:unstructured"
+                       cq:styleLabel="Right"
+                       cq:styleClasses="article-card--thumb-right" />
+                <item3 jcr:primaryType="nt:unstructured"
+                       cq:styleLabel="Bottom"
+                       cq:styleClasses="article-card--thumb-bottom" />
+            </cq:styles>
+        </item0>
+
+        <!-- Editorial emphasis — controls headline size and trail visibility -->
+        <item1 jcr:primaryType="nt:unstructured"
+               cq:styleGroupLabel="Emphasis">
+            <cq:styles jcr:primaryType="nt:unstructured">
+                <item0 jcr:primaryType="nt:unstructured"
+                       cq:styleLabel="Standard (no trail)"
+                       cq:styleClasses="article-card--standard" />
+                <item1 jcr:primaryType="nt:unstructured"
+                       cq:styleLabel="Featured (large headline + trail)"
+                       cq:styleClasses="article-card--featured" />
+            </cq:styles>
+        </item1>
+
+    </cq:styleGroups>
+
+</jcr:root>
