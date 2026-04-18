@@ -2,33 +2,38 @@ package com.fa.core.models;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
+import com.fa.core.search.ArticleSearchService;
+import com.fa.core.search.SearchResultItem;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
-import javax.jcr.query.Query;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 
 @Model(adaptables = SlingHttpServletRequest.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class ArticleListingModel {
+
     private static final Logger LOG = LoggerFactory.getLogger(ArticleListingModel.class);
     private static final int DEFAULT_MAX_ITEMS = 6;
 
     @Self
     private SlingHttpServletRequest request;
 
+    @OSGiService
+    private ArticleSearchService searchService;
+
     @ValueMapValue
-    private String articlesRootPath;
+    private String primaryTag;
 
     @ValueMapValue
     private Integer maxItems;
@@ -41,8 +46,12 @@ public class ArticleListingModel {
 
     @PostConstruct
     protected void init() {
-        ResourceResolver resolver = request.getResourceResolver();
-        PageManager pageManager = resolver.adaptTo(PageManager.class);
+        if (searchService == null) {
+            LOG.warn("ArticleListingModel: ArticleSearchService not available");
+            return;
+        }
+
+        PageManager pageManager = request.getResourceResolver().adaptTo(PageManager.class);
         if (pageManager == null) return;
 
         Page currentPage = pageManager.getContainingPage(request.getResource());
@@ -50,50 +59,23 @@ public class ArticleListingModel {
 
         displayTitle = StringUtils.isNotBlank(sectionTitle) ? sectionTitle : currentPage.getTitle();
 
-        if (StringUtils.isBlank(articlesRootPath)) {
-            LOG.warn("ArticleListingModel: articlesRootPath is empty");
-            return;
-        }
+        Page langRoot = currentPage.getAbsoluteParent(3);
+        if (langRoot == null) return;
 
-        String language = currentPage.getAbsoluteParent(3).getName();
-        String langRootPath = articlesRootPath + "/" + language;
-        String articlesPath = langRootPath + "/articles";
-
-        for (Page page : queryArticlePages(resolver, pageManager, articlesPath)) {
-            cards.add(new ArticleCardItem(page, langRootPath));
-        }
-    }
-
-    private List<Page> queryArticlePages(ResourceResolver resolver, PageManager pageManager, String articlesPath) {
-        List<Page> results = new ArrayList<>();
         int limit = (maxItems != null && maxItems > 0) ? maxItems : DEFAULT_MAX_ITEMS;
+        String tag = StringUtils.trimToNull(primaryTag);
 
-        String sql = "SELECT page.* FROM [cq:Page] AS page " +
-                "WHERE ISDESCENDANTNODE(page, '" + escapeJcrPath(articlesPath) + "') " +
-                "ORDER BY page.[jcr:content/articleDate] DESC";
+        List<SearchResultItem> results =
+                searchService.search(langRoot.getPath(), null, tag, null, null, 0, limit);
 
-        try {
-            Iterator<Resource> resources = resolver.findResources(sql, Query.JCR_SQL2);
-            while (resources.hasNext() && results.size() < limit) {
-                Resource res = resources.next();
-                Page page = pageManager.getPage(res.getPath());
-                if (page != null && page.getContentResource() != null) {
-                    results.add(page);
-                }
-            }
-        } catch (Exception e) {
-            LOG.error("ArticleListingModel: query failed", e);
+        for (SearchResultItem result : results) {
+            cards.add(new ArticleCardItem(result, langRoot.getPath()));
         }
-        return results;
     }
 
-    private static String escapeJcrPath(String path) {
-        return path.replaceAll("['\"]", "");
-    }
-
-    public boolean hasItems()                        { return !cards.isEmpty(); }
-    public List<ArticleCardItem> getCards()          { return Collections.unmodifiableList(cards); }
-    public String getDisplayTitle()                  { return displayTitle; }
+    public boolean hasItems()               { return !cards.isEmpty(); }
+    public List<ArticleCardItem> getCards() { return Collections.unmodifiableList(cards); }
+    public String getDisplayTitle()         { return displayTitle; }
 
     // ── Article card DTO ───────────────────────────────────────────────────────
     public static class ArticleCardItem {
@@ -107,29 +89,23 @@ public class ArticleListingModel {
         private final String formattedDate;
         private final String isoDate;
 
-        ArticleCardItem(Page page, String langRootPath) {
-            ValueMap props = page.getProperties();
+        ArticleCardItem(SearchResultItem result, String langRootPath) {
+            title       = result.getTitle();
+            link        = result.getPath() + ".html";
+            imageSrc    = result.getImageUrl();
+            description = result.getDescription();
+            author      = result.getAuthor();
 
-            title       = StringUtils.defaultString(page.getTitle(), page.getName());
-            link        = page.getPath() + ".html";
-            imageSrc    = props.get("image/fileReference", String.class);
-            description = page.getDescription();
-            author      = props.get("articleAuthor", String.class);
+            String cat  = result.getCategory();
+            category    = StringUtils.isNotBlank(cat)
+                          ? StringUtils.capitalize(cat.toLowerCase(Locale.ENGLISH))
+                          : null;
+            categoryLink = StringUtils.isNotBlank(cat)
+                           ? langRootPath + "/" + cat + ".html"
+                           : null;
 
-            String tag = props.get("primaryTag", String.class);
-            category = StringUtils.isNotBlank(tag)
-                    ? StringUtils.capitalize(tag.toLowerCase(Locale.ENGLISH))
-                    : null;
-            categoryLink = StringUtils.isNotBlank(tag) ? langRootPath + "/" + tag + ".html" : null;
-
-            Calendar articleDate = props.get("articleDate", Calendar.class);
-            if (articleDate != null) {
-                isoDate       = new SimpleDateFormat("yyyy-MM-dd").format(articleDate.getTime());
-                formattedDate = new SimpleDateFormat("d MMM yyyy", Locale.ENGLISH).format(articleDate.getTime());
-            } else {
-                isoDate       = null;
-                formattedDate = null;
-            }
+            formattedDate = result.getPublishedDate();
+            isoDate       = extractIsoDate(result.getPath());
         }
 
         public String getTitle()         { return title; }
@@ -141,5 +117,27 @@ public class ArticleListingModel {
         public String getAuthor()        { return author; }
         public String getFormattedDate() { return formattedDate; }
         public String getIsoDate()       { return isoDate; }
+
+        /**
+         * Derives ISO date (yyyy-MM-dd) from the article path segments
+         * /articles/<yyyy>/<mm>/<dd>/<name> — avoids storing a redundant property.
+         */
+        private static String extractIsoDate(String path) {
+            if (path == null) return null;
+            String[] seg = path.split("/");
+            for (int i = 0; i < seg.length - 3; i++) {
+                if ("articles".equals(seg[i])) {
+                    try {
+                        int y = Integer.parseInt(seg[i + 1]);
+                        int m = Integer.parseInt(seg[i + 2]);
+                        int d = Integer.parseInt(seg[i + 3]);
+                        return String.format("%04d-%02d-%02d", y, m, d);
+                    } catch (NumberFormatException e) {
+                        return null;
+                    }
+                }
+            }
+            return null;
+        }
     }
 }
