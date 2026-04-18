@@ -110,6 +110,16 @@
     }
   });
 
+  // ── Date input change → immediate async update ───────────────────────────
+  // Mirrors category/preset auto-submit; clears any active preset so the
+  // manual date takes precedence (mirrors server-side applyDatePreset logic).
+  dateInputs?.forEach(dateInput => {
+    dateInput.addEventListener('change', () => {
+      if (presetSel) presetSel.value = '';
+      submitAsync();
+    });
+  });
+
   // ── Custom range toggle button ────────────────────────────────────────────
   dateToggle?.addEventListener('click', () => {
     if (isRangeOpen()) {
