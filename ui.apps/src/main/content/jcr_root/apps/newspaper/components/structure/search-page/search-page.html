@@ -12,8 +12,6 @@
 </head>
 <body>
 
-    <sly data-sly-resource="./experiencefragment-header"/>
-
     <main class="search-page" id="main-content" role="main">
         <div class="l-container">
 
@@ -103,14 +101,26 @@
                         <div class="search-page__filter-group search-page__date-range"
                              data-sp-date-range
                              data-sly-attribute.data-sp-collapsed="${!model.customDateMode}">
-                            <label class="search-page__filter-label" for="sp-from">From</label>
-                            <input class="search-page__date-input"
-                                   type="date" id="sp-from" name="fromDate"
-                                   value="${model.fromDate @ context='attribute'}"/>
-                            <label class="search-page__filter-label" for="sp-to">To</label>
-                            <input class="search-page__date-input"
-                                   type="date" id="sp-to" name="toDate"
-                                   value="${model.toDate @ context='attribute'}"/>
+                            <div class="search-page__date-field">
+                                <label class="search-page__filter-label" for="sp-from">From</label>
+                                <input class="search-page__date-input"
+                                       type="date" id="sp-from" name="fromDate"
+                                       lang="${model.languageCode @ context='attribute'}"
+                                       value="${model.fromDate @ context='attribute'}"/>
+                                <span class="search-page__date-hint" aria-hidden="true">
+                                    ${model.dateFormatHint @ context='text'}
+                                </span>
+                            </div>
+                            <div class="search-page__date-field">
+                                <label class="search-page__filter-label" for="sp-to">To</label>
+                                <input class="search-page__date-input"
+                                       type="date" id="sp-to" name="toDate"
+                                       lang="${model.languageCode @ context='attribute'}"
+                                       value="${model.toDate @ context='attribute'}"/>
+                                <span class="search-page__date-hint" aria-hidden="true">
+                                    ${model.dateFormatHint @ context='text'}
+                                </span>
+                            </div>
                         </div>
 
                     </div><!--/* /.search-page__filters */-->
@@ -251,8 +261,6 @@
 
         </div>
     </main>
-
-    <sly data-sly-resource="./experiencefragment-footer"/>
 
     <sly data-sly-use.clientLib="${'/libs/granite/sightly/templates/clientlib.html'}">
         <sly data-sly-call="${clientLib.js @ categories='newspaper.site'}"/>

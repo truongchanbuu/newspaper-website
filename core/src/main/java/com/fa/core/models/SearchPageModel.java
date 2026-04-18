@@ -230,6 +230,22 @@ public class SearchPageModel {
         return "en";
     }
 
+    /**
+     * Returns a human-readable date format pattern matching the language's convention.
+     * Used as a visible hint label next to the custom date inputs.
+     */
+    public String getDateFormatHint() {
+        switch (getLanguageCode()) {
+            case "vi": case "fr": case "de": case "es": case "pt": case "it":
+            case "nl": case "pl": case "ru":
+                return "dd/mm/yyyy";
+            case "ja": case "zh": case "ko":
+                return "yyyy/mm/dd";
+            default:
+                return "yyyy-mm-dd";
+        }
+    }
+
     public String getPrevPageUrl() {
         return pageNum > 1 ? buildPageUrl(pageNum - 1) : null;
     }

@@ -134,6 +134,13 @@
     }
   }
 
+  // ── Date field wrapper (input + hint label stacked) ──────────────────────
+  &__date-field {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+  }
+
   &__date-input {
     padding: $space-1 $space-3;
     border: $border-width solid $color-divider;
@@ -142,7 +149,6 @@
     color: $color-heading;
     background: $color-canvas;
     cursor: pointer;
-    // Prevent overflow on narrow screens
     max-width: 140px;
     transition: border-color $duration-fast $ease-out;
 
@@ -151,6 +157,13 @@
       border-color: $color-heading;
       box-shadow: 0 0 0 3px rgba(18, 18, 18, 0.08);
     }
+  }
+
+  &__date-hint {
+    font-size: $font-size-xs;
+    color: $color-meta;
+    letter-spacing: 0.02em;
+    line-height: 1;
   }
 
   // ── Search bar hero overrides ─────────────────────────────────────────────
