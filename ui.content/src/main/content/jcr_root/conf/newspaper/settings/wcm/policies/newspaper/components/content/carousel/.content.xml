@@ -8,7 +8,7 @@
           sling:resourceType="wcm/core/components/policy/policy"
           components="[/apps/newspaper/components/content/carouselitem]"
           autoplay="{Boolean}false"
-          delay="{Long}5000"
+          delay="{Long}3000"
           autopauseDisabled="{Boolean}false">
 
     <jcr:content jcr:primaryType="nt:unstructured"/>

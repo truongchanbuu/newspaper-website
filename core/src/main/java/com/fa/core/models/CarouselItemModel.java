@@ -2,6 +2,7 @@ package com.fa.core.models;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
+import com.fa.core.utils.CategoryUtils;
 import com.fa.core.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -19,6 +20,8 @@ import java.util.Locale;
 
 @Model(adaptables = SlingHttpServletRequest.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class CarouselItemModel {
+
+    private static final String PLACEHOLDER_IMG = "/content/dam/newspaper/article-placeholder.jpg";
 
     @Self
     private SlingHttpServletRequest request;
@@ -39,6 +42,7 @@ public class CarouselItemModel {
     private String link;
     private String author;
     private String category;
+    private String categoryColor;
     private String isoDate;
     private String formattedDate;
     private String timeAgo;
@@ -64,12 +68,20 @@ public class CarouselItemModel {
         String primaryTag = page.getProperties().get("primaryTag", String.class);
         category = StringUtils.isNotBlank(categoryLabel) ? categoryLabel : primaryTag;
 
+        Page langRoot = page.getAbsoluteParent(3);
+        if (langRoot != null && StringUtils.isNotBlank(primaryTag)) {
+            categoryColor = CategoryUtils.loadCategoryColors(langRoot).get(primaryTag);
+        }
+
         Resource contentResource = page.getContentResource();
         if (contentResource != null) {
             Resource imageRes = contentResource.getChild("image");
             if (imageRes != null) {
                 imageSrc = imageRes.getValueMap().get("fileReference", String.class);
             }
+        }
+        if (StringUtils.isBlank(imageSrc)) {
+            imageSrc = PLACEHOLDER_IMG;
         }
         String rawAlt = page.getProperties().get("imageAlt", String.class);
         imageAlt = StringUtils.defaultIfBlank(rawAlt, title);
@@ -113,14 +125,16 @@ public class CarouselItemModel {
           .append("\"");
     }
 
-    public boolean isConfigured()    { return StringUtils.isNotBlank(link); }
-    public String getTitle()         { return title; }
+    public boolean isConfigured()      { return StringUtils.isNotBlank(link); }
+    public String getTitle()           { return title; }
     public String getDescription()   { return description; }
     public String getImageSrc()      { return imageSrc; }
     public String getImageAlt()      { return StringUtils.defaultIfBlank(imageAlt, title); }
     public String getLink()          { return link; }
     public String getAuthor()        { return author; }
-    public String getCategory()      { return category; }
+    public String getCategory()        { return category; }
+    public String getCategoryColor()   { return categoryColor; }
+    public String getCategoryStyle()   { return categoryColor != null ? "--nc-cat: " + categoryColor : null; }
     public String getIsoDate()       { return isoDate; }
     public String getFormattedDate() { return formattedDate; }
     public String getTimeAgo()       { return timeAgo; }

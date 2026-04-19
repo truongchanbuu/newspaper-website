@@ -20,9 +20,13 @@ $nc-aspect-ratio: 4 / 3;
   .cmp-carousel__item {
     position: absolute;
     inset: 0;
+    opacity: 0;
+    z-index: 0;
+    transition: opacity $duration-slow $ease-out;
 
     &--active {
-      animation: nc-fade-in $duration-base $ease-out both;
+      opacity: 1;
+      z-index: 1;
     }
   }
 
@@ -80,6 +84,9 @@ $nc-aspect-ratio: 4 / 3;
     flex-direction: column;
     padding: $space-6 $space-5 $space-10;
     min-width: 0;
+    // Second scrim layer directly behind text — ensures readability on light/white images
+    // where the article::after gradient alone is insufficient
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.45) 0%, transparent 75%);
   }
 
   .nc-slide__pretitle {
@@ -91,7 +98,7 @@ $nc-aspect-ratio: 4 / 3;
     font-weight: $weight-bold;
     letter-spacing: $ls-label;
     text-transform: uppercase;
-    color: $color-category;
+    color: var(--nc-cat, #{$color-category});
     margin-bottom: $space-2;
 
     &::before {
@@ -99,7 +106,7 @@ $nc-aspect-ratio: 4 / 3;
       display: inline-block;
       width: 8px;
       height: 8px;
-      background: $color-category;
+      background: var(--nc-cat, #{$color-category});
       flex-shrink: 0;
     }
   }
@@ -120,20 +127,21 @@ $nc-aspect-ratio: 4 / 3;
     }
   }
 
+  .nc-slide__cover-link {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+  }
+
   .nc-slide__title-link {
     color: inherit;
     text-decoration: none;
+    position: relative;
+    z-index: 4;
 
     &:hover {
       text-decoration: underline;
       text-decoration-thickness: 2px;
-    }
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 3;
     }
   }
 
@@ -310,16 +318,11 @@ $nc-aspect-ratio: 4 / 3;
   }
 }
 
-@keyframes nc-fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .newspaper-carousel {
-    .cmp-carousel__item--active              { animation: none; }
-    .nc-slide__img                            { transition: none; }
-    .cmp-carousel__indicator                 { transition: none; }
+    .cmp-carousel__item { transition: none; }
+    .nc-slide__img      { transition: none; }
+    .cmp-carousel__indicator { transition: none; }
   }
 }
 

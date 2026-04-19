@@ -29,7 +29,8 @@ public class NewspaperCarouselModel {
     private static final Logger LOG = LoggerFactory.getLogger(NewspaperCarouselModel.class);
     private static final String SOURCE_AUTO = "auto";
     private static final int DEFAULT_MAX_ITEMS = 5;
-    private static final int DEFAULT_DELAY = 5000;
+    private static final int DEFAULT_DELAY = 3000;
+    private static final String PLACEHOLDER_IMG = "/content/dam/newspaper/article-placeholder.jpg";
 
     @Self
     private SlingHttpServletRequest request;
@@ -48,9 +49,6 @@ public class NewspaperCarouselModel {
 
     @ValueMapValue(name = "autoplay")
     private Boolean autoplayEnabled;
-
-    @ValueMapValue
-    private Integer delay;
 
     private List<AutoSlide> slides = Collections.emptyList();
 
@@ -73,6 +71,7 @@ public class NewspaperCarouselModel {
         if (langRoot == null) return;
 
         Map<String, String> labels = CategoryUtils.loadCategories(langRoot, null);
+        Map<String, String> colors = CategoryUtils.loadCategoryColors(langRoot);
         int limit = (maxItems != null && maxItems > 0) ? maxItems : DEFAULT_MAX_ITEMS;
         String tag = StringUtils.trimToNull(primaryTag);
 
@@ -80,7 +79,7 @@ public class NewspaperCarouselModel {
             searchService.search(langRoot.getPath(), null, tag, null, null, 0, limit);
 
         slides = results.stream()
-            .map(r -> new AutoSlide(r, langRoot.getPath(), labels))
+            .map(r -> new AutoSlide(r, langRoot.getPath(), labels, colors))
             .collect(Collectors.toList());
     }
 
@@ -88,8 +87,8 @@ public class NewspaperCarouselModel {
     public boolean isAuto()            { return SOURCE_AUTO.equals(source); }
     public boolean hasSlides()         { return !slides.isEmpty(); }
     public List<AutoSlide> getSlides() { return slides; }
-    public boolean isAutoplay()        { return autoplayEnabled == null || autoplayEnabled; }
-    public int getDelay()              { return delay != null ? delay : DEFAULT_DELAY; }
+    public boolean isAutoplay()        { return autoplayEnabled != null && autoplayEnabled; }
+    public int getDelay()              { return DEFAULT_DELAY; }
 
     // ── Slide DTO (auto mode only) ─────────────────────────────────────────────
     public static class AutoSlide {
@@ -100,20 +99,22 @@ public class NewspaperCarouselModel {
         private final String imageAlt;
         private final String category;
         private final String categoryLink;
+        private final String categoryColor;
         private final String author;
         private final String timeAgo;
         private final String isoDate;
 
-        AutoSlide(SearchResultItem r, String langRootPath, Map<String, String> labels) {
+        AutoSlide(SearchResultItem r, String langRootPath, Map<String, String> labels, Map<String, String> colors) {
             title    = r.getArticleTitle();
             link     = r.getPath() + ".html";
-            imageSrc = r.getThumbnail();
+            imageSrc = StringUtils.defaultIfBlank(r.getThumbnail(), PLACEHOLDER_IMG);
             imageAlt = StringUtils.defaultIfBlank(r.getArticleTitle(), "");
 
             String cat   = r.getCategory();
             String slug  = StringUtils.isNotBlank(cat) ? cat.toLowerCase(Locale.ENGLISH) : null;
-            category     = slug != null ? labels.getOrDefault(slug, slug) : null;
-            categoryLink = slug != null ? langRootPath + "/" + slug + ".html" : null;
+            category      = slug != null ? labels.getOrDefault(slug, slug) : null;
+            categoryLink  = slug != null ? langRootPath + "/" + slug + ".html" : null;
+            categoryColor = slug != null ? colors.get(slug) : null;
 
             author  = r.getAuthorName();
             isoDate = extractIsoDate(r.getPath());
@@ -124,8 +125,10 @@ public class NewspaperCarouselModel {
         public String getLink()         { return link; }
         public String getImageSrc()     { return imageSrc; }
         public String getImageAlt()     { return imageAlt; }
-        public String getCategory()     { return category; }
-        public String getCategoryLink() { return categoryLink; }
+        public String getCategory()      { return category; }
+        public String getCategoryLink()  { return categoryLink; }
+        public String getCategoryColor() { return categoryColor; }
+        public String getCategoryStyle() { return categoryColor != null ? "--nc-cat: " + categoryColor : null; }
         public String getAuthor()       { return author; }
         public String getTimeAgo()      { return timeAgo; }
         public String getIsoDate()      { return isoDate; }

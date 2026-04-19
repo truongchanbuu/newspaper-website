@@ -8,17 +8,18 @@
   padding-bottom: $space-16;
 }
 
-// ── Hero: 2-column featured zone ───────────────────────────────────────────────
+// ── Hero: asymmetric 2-column featured zone ────────────────────────────────────
 .homepage__hero {
-  padding: $space-8 0;
+  padding: $space-16 0;
   border-bottom: $border-width solid $color-divider;
+  background: $gradient-header;
 
-  // AEM responsive grid renders child components as .aem-GridColumn inside .aem-Grid.
-  // Override AEM's float-based layout with CSS grid for the 2-col hero.
+  // Asymmetric editorial split: feature (55%) + secondary list (45%)
   .aem-Grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 55fr 45fr;
     gap: $space-8;
+    align-items: start;
   }
 
   .aem-GridColumn {
@@ -28,6 +29,8 @@
   }
 
   @include respond-below('md') {
+    padding: $space-8 0;
+
     .aem-Grid {
       grid-template-columns: 1fr;
       gap: $space-6;
@@ -37,18 +40,18 @@
 
 // ── Latest News: full-width ────────────────────────────────────────────────────
 .homepage__latest {
-  padding: $space-8 0;
+  padding: $space-16 0;
   border-bottom: $border-width solid $color-divider;
 }
 
 // ── Category Sections: stacked with top-rule separators ───────────────────────
 .homepage__categories {
-  padding: $space-8 0;
+  padding: $space-16 0;
 
   // Divider between consecutive category sections within the zone
   .aem-Grid > .aem-GridColumn + .aem-GridColumn {
-    margin-top: $space-8;
-    padding-top: $space-8;
+    margin-top: $space-16;
+    padding-top: $space-16;
     border-top: $border-width solid $color-divider;
   }
 }
