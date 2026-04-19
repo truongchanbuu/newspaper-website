@@ -59,6 +59,22 @@
   }
 }
 
+// ── Card style variants (applied uniformly to every card in the listing) ─────
+// Mixins defined in abstracts/_mixins.scss — no duplication of card rules here.
+
+.article-listing--cards-thumb-bottom article.article-card { @include ac-thumb-bottom; }
+.article-listing--cards-thumb-left   article.article-card { @include ac-thumb-left; }
+.article-listing--cards-thumb-right  article.article-card { @include ac-thumb-right; }
+.article-listing--cards-standard     article.article-card { @include ac-standard; }
+.article-listing--cards-featured     article.article-card { @include ac-featured; }
+
+@include respond-below('sm') {
+  .article-listing--cards-thumb-left  article.article-card,
+  .article-listing--cards-thumb-right article.article-card {
+    @include ac-thumb-side-mobile-reset;
+  }
+}
+
 // ── Authoring placeholder ──────────────────────────────────────────────────────
 .article-listing__placeholder {
   padding: $space-6;

@@ -1,89 +1,234 @@
-// ── Newspaper Carousel ─────────────────────────────────────────────────────────
-// Wraps Core Components carousel/v1/carousel (.cmp-carousel).
-// All overrides are scoped inside .newspaper-carousel to avoid collision.
+$nc-aspect-ratio: 4 / 3;
 
 .newspaper-carousel {
   position: relative;
   overflow: hidden;
-  border-top: $border-width solid $color-divider;
+  background: $color-canvas-secondary;
+  border-radius: $radius-lg;
 
-  // ── Slide container ────────────────────────────────────────────────────────
-  .cmp-carousel__content {
+  .cmp-carousel {
     position: relative;
-    min-height: 0;
+    width: 100%;
   }
 
-  // ── Individual slide ───────────────────────────────────────────────────────
-  // Core Components hides inactive slides via [hidden]; we add a fade-in on
-  // the active one so there is no jarring hard cut when JS removes [hidden].
+  .cmp-carousel__content {
+    position: relative;
+    aspect-ratio: $nc-aspect-ratio;
+    overflow: hidden;
+  }
+
   .cmp-carousel__item {
-    width: 100%;
+    position: absolute;
+    inset: 0;
 
     &--active {
       animation: nc-fade-in $duration-base $ease-out both;
     }
   }
 
-  // ── Navigation arrows ──────────────────────────────────────────────────────
+  article.nc-slide {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.82) 0%,
+        rgba(0, 0, 0, 0.50) 35%,
+        rgba(0, 0, 0, 0.12) 60%,
+        transparent         100%
+      );
+      z-index: 1;
+      pointer-events: none;
+    }
+  }
+
+  .nc-slide__media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .nc-slide__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform $duration-slow $ease-out;
+  }
+
+  article.nc-slide:hover .nc-slide__img {
+    transform: scale(1.03);
+  }
+
+  .nc-slide__content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    padding: $space-6 $space-5 $space-10;
+    min-width: 0;
+  }
+
+  .nc-slide__pretitle {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: $font-size-xs;
+    font-weight: $weight-bold;
+    letter-spacing: $ls-label;
+    text-transform: uppercase;
+    color: $color-category;
+    margin-bottom: $space-2;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: $color-category;
+      flex-shrink: 0;
+    }
+  }
+
+  .nc-slide__title {
+    margin: 0 0 $space-3;
+    font-family: 'Guardian Text Egyptian', Georgia, 'Times New Roman', serif;
+    font-size: $font-size-xl;
+    font-weight: $weight-black;
+    line-height: $lh-tight;
+    letter-spacing: $ls-tight;
+    word-break: break-word;
+    color: $color-canvas;
+    @include line-clamp(2);
+
+    @include respond-to('lg') {
+      font-size: $font-size-2xl;
+    }
+  }
+
+  .nc-slide__title-link {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+    }
+  }
+
+  .nc-slide__meta {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    margin: $space-1 0 0;
+    color: rgba(255, 255, 255, 0.72);
+    font-family: 'Guardian Text Sans Web', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: $font-size-xs;
+    line-height: 1;
+  }
+
+  .nc-slide__author {
+    font-weight: $weight-medium;
+  }
+
+  .nc-slide__time {
+    &::before {
+      content: '·';
+      margin-right: $space-1;
+    }
+  }
+
   .cmp-carousel__actions {
     position: absolute;
     inset: 0;
-    pointer-events: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 $space-3;
-    z-index: $z-card;
+    pointer-events: none;
+    z-index: 4;
+    padding: 0;
   }
 
   .cmp-carousel__action {
     pointer-events: all;
+    width: 40px;
+    height: 64px;
+    background: rgba(0, 0, 0, 0.32);
+    border: none;
+    color: $color-canvas;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border: $border-width solid $color-divider;
-    border-radius: 50%;
-    background: $color-canvas;
-    color: $color-heading;
     cursor: pointer;
-    transition: background $duration-fast $ease-out,
-                border-color $duration-fast $ease-out,
-                color $duration-fast $ease-out;
+    transition: background $duration-fast $ease-out;
+    flex-shrink: 0;
 
     &:hover,
     &:focus-visible {
-      background: $color-heading;
-      border-color: $color-heading;
-      color: $color-canvas;
+      background: rgba(0, 0, 0, 0.60);
       outline: none;
     }
 
     &:focus-visible {
-      box-shadow: 0 0 0 3px $color-focus;
+      box-shadow: inset 0 0 0 2px $color-focus;
     }
   }
 
-  // Guardian-style chevron via CSS borders — no icon font needed
+  .cmp-carousel__action--pause,
+  .cmp-carousel__action--play {
+    display: none !important;
+    width: 0;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+  }
+
+  .cmp-carousel__action--previous {
+    border-radius: 0 $radius-sm $radius-sm 0;
+  }
+
+  .cmp-carousel__action--next {
+    border-radius: $radius-sm 0 0 $radius-sm;
+  }
+
   .cmp-carousel__action-icon {
     display: block;
-    width: 8px;
-    height: 8px;
-    border-top: 2px solid currentColor;
-    border-right: 2px solid currentColor;
+    width: 10px;
+    height: 10px;
+    border-right: 2.5px solid $color-canvas;
+    border-top: 2.5px solid $color-canvas;
     flex-shrink: 0;
   }
 
   .cmp-carousel__action--previous .cmp-carousel__action-icon {
-    transform: rotate(-135deg) translateX(-1px);
+    transform: translateX(3px) rotate(-135deg);
   }
 
   .cmp-carousel__action--next .cmp-carousel__action-icon {
-    transform: rotate(45deg) translateX(-1px);
+    transform: translateX(-3px) rotate(45deg);
   }
 
-  // Visually hide the text label (keep for screen readers)
   .cmp-carousel__action-text {
     position: absolute;
     width: 1px;
@@ -93,63 +238,104 @@
     white-space: nowrap;
   }
 
-  // ── Indicators (dots) ──────────────────────────────────────────────────────
   .cmp-carousel__indicators {
+    position: absolute;
+    bottom: $space-3;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     justify-content: center;
     align-items: center;
     gap: $space-2;
     list-style: none;
     margin: 0;
-    padding: $space-3 0 $space-4;
+    padding: $space-2 $space-3;
+    background: rgba(0, 0, 0, 0.20);
+    border-radius: $radius-lg;
+    z-index: 4;
+    pointer-events: none;
+    white-space: nowrap;
   }
 
+  // The <li> itself is role="tab" — no nested button in Core Carousel v1
   .cmp-carousel__indicator {
-    display: flex;
-  }
-
-  // The indicator is a <button> inside the <li>
-  .cmp-carousel__indicator button,
-  .cmp-carousel__indicator [role="tab"] {
     display: block;
+    pointer-events: all;
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: $color-divider;
+    background: rgba(255, 255, 255, 0.38);
     border: none;
     padding: 0;
     cursor: pointer;
-    transition: background $duration-fast $ease-out,
-                transform $duration-fast $ease-out;
+    // Hide the text content (<li> contains item.title)
     font-size: 0;
     line-height: 0;
+    color: transparent;
+    overflow: hidden;
+    transition: width $duration-base $ease-out,
+                border-radius $duration-base $ease-out,
+                background $duration-fast $ease-out;
 
-    &[aria-selected="true"],
-    &.cmp-carousel__indicator--active {
-      background: $color-category;
-      transform: scale(1.35);
+    // Active: elongated white pill; top/bottom borders define the rectangle's edges
+    &--active,
+    &[aria-selected="true"] {
+      width: 28px;
+      border-radius: 3px;
+      background: #ffffff;
+      border-top: 1.5px solid rgba(255, 255, 255, 0.85);
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.85);
     }
 
-    &:hover {
-      background: $color-meta;
-    }
+    &:hover { background: rgba(255, 255, 255, 0.60); }
 
     &:focus-visible {
       outline: 2px solid $color-focus;
       outline-offset: 2px;
     }
   }
+
+  .nc-slide__placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $space-4;
+    background: $color-canvas-secondary;
+    color: $color-meta;
+    font-family: sans-serif;
+    font-size: $font-size-sm;
+    text-align: center;
+  }
 }
 
-// ── Fade-in keyframe for active slide ──────────────────────────────────────────
 @keyframes nc-fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
-// ── Reduced-motion: disable animation ─────────────────────────────────────────
 @media (prefers-reduced-motion: reduce) {
-  .newspaper-carousel .cmp-carousel__item--active {
-    animation: none;
+  .newspaper-carousel {
+    .cmp-carousel__item--active              { animation: none; }
+    .nc-slide__img                            { transition: none; }
+    .cmp-carousel__indicator                 { transition: none; }
   }
+}
+
+@include respond-below('sm') {
+  .newspaper-carousel {
+    border-radius: 0;
+
+    .nc-slide__content { padding: $space-4 $space-4 $space-10; }
+    .nc-slide__title   { font-size: $font-size-lg; }
+    .cmp-carousel__action { width: 32px; height: 52px; }
+  }
+}
+
+article.nc-slide:not(.newspaper-carousel article.nc-slide) {
+  position: relative;
+  width: 100%;
+  height: auto;
+  aspect-ratio: $nc-aspect-ratio;
 }

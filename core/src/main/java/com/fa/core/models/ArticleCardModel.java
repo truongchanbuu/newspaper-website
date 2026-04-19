@@ -53,8 +53,8 @@ public class ArticleCardModel {
     @ValueMapValue
     private String author;
 
-    @ValueMapValue
-    private Calendar publishedDate;
+    @ValueMapValue(name = "articleDate")
+    private Calendar articleDate;
 
     private Page articlePage;
 
@@ -68,6 +68,7 @@ public class ArticleCardModel {
     private String resolvedImageSrc;
     private String resolvedImageAlt;
     private String resolvedAuthor;
+    private Calendar resolvedDate;
 
     private String formattedDate;
     private String isoDate;
@@ -100,7 +101,7 @@ public class ArticleCardModel {
         resolvedLink = articlePage.getPath() + ".html";
 
         resolvedAuthor = articlePage.getProperties().get("articleAuthor", String.class);
-        publishedDate = articlePage.getProperties().get("articleDate", Calendar.class);
+        resolvedDate = articlePage.getProperties().get("articleDate", Calendar.class);
 
         // image/fileReference is stored as a property on the child 'image' node
         Resource contentResource = articlePage.getContentResource();
@@ -147,6 +148,7 @@ public class ArticleCardModel {
         resolvedImageSrc = imageSrc;
         resolvedImageAlt = imageAlt;
         resolvedAuthor = author;
+        resolvedDate = articleDate;
     }
 
     private void resolveSectionFromTags(Page page) {
@@ -172,7 +174,7 @@ public class ArticleCardModel {
     }
 
     private String buildSectionLink(Page articlePage, String slug) {
-        Page langRoot = articlePage.getAbsoluteParent(4);
+        Page langRoot = articlePage.getAbsoluteParent(3);
         if (langRoot == null) {
             return null;
         }
@@ -180,17 +182,37 @@ public class ArticleCardModel {
     }
 
     private void resolveDates() {
-        if (publishedDate == null) {
+        if (resolvedDate != null) {
+            // Calendar type — stored by programmatic authoring or typed JCR DATE node
+            formattedDate = new SimpleDateFormat(
+                    DateUtils.DATE_WITH_NAME_PATTERN, Locale.ENGLISH).format(resolvedDate.getTime());
+            isoDate = new SimpleDateFormat(
+                    DateUtils.ISO_DATE_PATTERN, Locale.ENGLISH).format(resolvedDate.getTime());
+            timeAgo = DateUtils.computeTimeAgo(resolvedDate);
             return;
         }
 
-        formattedDate = new SimpleDateFormat(
-                DateUtils.DATE_WITH_NAME_PATTERN, Locale.ENGLISH).format(publishedDate.getTime());
+        // Fallback: Granite datepicker stores a bare ISO string ("yyyy-MM-dd").
+        // ValueMap cannot coerce that to Calendar, so read it as String directly.
+        String rawDate = request.getResource().getValueMap().get("articleDate", String.class);
+        if (StringUtils.isBlank(rawDate) && articlePage != null) {
+            rawDate = articlePage.getProperties().get("articleDate", String.class);
+        }
+        if (StringUtils.isBlank(rawDate)) {
+            return;
+        }
 
-        isoDate = new SimpleDateFormat(
-                DateUtils.ISO_DATE_PATTERN, Locale.ENGLISH).format(publishedDate.getTime());
+        isoDate = rawDate.length() > 10 ? rawDate.substring(0, 10) : rawDate;
+        timeAgo = DateUtils.computeTimeAgo(isoDate);
 
-        timeAgo = DateUtils.computeTimeAgo(publishedDate);
+        try {
+            java.util.Date parsed = new SimpleDateFormat(
+                    DateUtils.ISO_DATE_PATTERN, Locale.ENGLISH).parse(isoDate);
+            formattedDate = new SimpleDateFormat(
+                    DateUtils.DATE_WITH_NAME_PATTERN, Locale.ENGLISH).format(parsed);
+        } catch (java.text.ParseException ignored) {
+            formattedDate = isoDate;
+        }
     }
 
     private static String normalizeLink(String link) {

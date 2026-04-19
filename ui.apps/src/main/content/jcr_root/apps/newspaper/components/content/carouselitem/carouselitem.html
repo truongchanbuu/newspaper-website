@@ -1,0 +1,55 @@
+<sly data-sly-use.model="com.fa.core.models.CarouselItemModel">
+
+    <!--/* NewsArticle structured data — consumed by Google Discover, Google News, and search */-->
+    <script data-sly-test="${model.jsonLd}"
+            type="application/ld+json">${model.jsonLd @ context='unsafe'}</script>
+
+    <article class="nc-slide"
+             data-sly-test="${model.configured || wcmmode.edit}">
+
+        <!--/* Background image — fills the full slide area */-->
+        <div class="nc-slide__media" data-sly-test="${model.imageSrc}">
+            <img class="nc-slide__img"
+                 src="${model.imageSrc @ context='uri'}"
+                 alt="${model.imageAlt @ context='attribute'}"
+                 decoding="async"/>
+        </div>
+
+        <!--/* Gradient overlay content — category, headline, byline */-->
+        <div class="nc-slide__content">
+
+            <span class="nc-slide__pretitle"
+                  data-sly-test="${model.category}">
+                ${model.category @ context='text'}
+            </span>
+
+            <!--/* h2 — appropriate heading level for a featured article within a landmark */-->
+            <!--/* The ::after pseudo-element on .nc-slide__title-link covers the full card */-->
+            <h2 class="nc-slide__title" data-sly-test="${model.title}">
+                <a class="nc-slide__title-link"
+                   href="${model.link @ context='uri'}"
+                   aria-label="${model.title @ context='attribute'}">
+                    ${model.title @ context='text'}
+                </a>
+            </h2>
+
+            <p class="nc-slide__meta"
+               data-sly-test="${model.author || model.timeAgo}">
+                <span class="nc-slide__author"
+                      data-sly-test="${model.author}">${model.author @ context='text'}</span>
+                <time class="nc-slide__time"
+                      datetime="${model.isoDate @ context='attribute'}"
+                      data-sly-test="${model.timeAgo}">${model.timeAgo @ context='text'}</time>
+            </p>
+
+        </div>
+
+        <!--/* Editor placeholder — only visible in WCM edit mode */-->
+        <div class="nc-slide__placeholder"
+             data-sly-test="${wcmmode.edit && !model.configured}">
+            Select an article page in the dialog to configure this slide.
+        </div>
+
+    </article>
+
+</sly>

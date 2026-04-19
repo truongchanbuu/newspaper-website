@@ -24,6 +24,36 @@
             </cq:styles>
         </item0>
 
+        <item1 jcr:primaryType="nt:unstructured"
+               cq:styleGroupLabel="Card style">
+            <cq:styles jcr:primaryType="nt:unstructured">
+                <item0 jcr:primaryType="nt:unstructured"
+                       cq:styleLabel="Thumb top (default)"
+                       cq:styleClasses="" />
+                <item1 jcr:primaryType="nt:unstructured"
+                       cq:styleLabel="Thumb left"
+                       cq:styleClasses="article-listing--cards-thumb-left" />
+                <item2 jcr:primaryType="nt:unstructured"
+                       cq:styleLabel="Thumb right"
+                       cq:styleClasses="article-listing--cards-thumb-right" />
+                <item3 jcr:primaryType="nt:unstructured"
+                       cq:styleLabel="Thumb bottom"
+                       cq:styleClasses="article-listing--cards-thumb-bottom" />
+            </cq:styles>
+        </item1>
+
+        <item2 jcr:primaryType="nt:unstructured"
+               cq:styleGroupLabel="Card emphasis">
+            <cq:styles jcr:primaryType="nt:unstructured">
+                <item0 jcr:primaryType="nt:unstructured"
+                       cq:styleLabel="Standard (no trail)"
+                       cq:styleClasses="article-listing--cards-standard" />
+                <item1 jcr:primaryType="nt:unstructured"
+                       cq:styleLabel="Featured (large headline + trail)"
+                       cq:styleClasses="article-listing--cards-featured" />
+            </cq:styles>
+        </item2>
+
     </cq:styleGroups>
 
 </jcr:root>

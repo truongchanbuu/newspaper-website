@@ -237,7 +237,7 @@ class NewsletterSignup {
             this.showFieldError(this.emailInput, this.emailError,
                 this.emailInput.dataset.requiredMessage || "Please enter your email address");
             isValid = false;
-        } else if (this.emailInput && email && !this.isValidEmail(email)) {
+        } else if (this.emailInput && email && !this.emailInput.checkValidity()) {
             this.showFieldError(this.emailInput, this.emailError,
                 this.emailInput.dataset.invalidMessage || "Please enter a valid email address");
             isValid = false;
@@ -246,10 +246,6 @@ class NewsletterSignup {
         }
 
         return isValid;
-    }
-
-    private isValidEmail(value: string): boolean {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     }
 
     // ── Payload ───────────────────────────────────────────────────────────────
@@ -282,8 +278,7 @@ class NewsletterSignup {
         if (this.isPopup) this.rememberPopupDismissal();
     }
 
-    private handleError(error: unknown): void {
-        console.error("[newsletter-signup] submit error", error);
+    private handleError(_error: unknown): void {
         this.showGlobalError();
     }
 
@@ -343,8 +338,8 @@ class NewsletterSignup {
                 const expiresAt = Number(raw);
                 return Number.isFinite(expiresAt) && Date.now() < expiresAt;
             }
-        } catch (error) {
-            console.warn("[newsletter-signup] storage unavailable", error);
+        } catch {
+            // storage unavailable (private browsing or permissions) — treat as not suppressed
         }
         return false;
     }
@@ -360,8 +355,8 @@ class NewsletterSignup {
                 const expiresAt = Date.now() + this.frequencyDays * 24 * 60 * 60 * 1000;
                 window.localStorage.setItem(key, String(expiresAt));
             }
-        } catch (error) {
-            console.warn("[newsletter-signup] storage unavailable", error);
+        } catch {
+            // storage unavailable — dismissal not persisted, popup may reappear
         }
     }
 

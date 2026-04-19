@@ -55,6 +55,16 @@
                                 cq:policy="newspaper/components/download/policy_1575032193319"
                                 jcr:primaryType="nt:unstructured"
                                 sling:resourceType="wcm/core/components/policies/mapping"/>
+                            <content jcr:primaryType="nt:unstructured">
+                                <articlecard
+                                    cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/content/articlecard"
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="wcm/core/components/policies/mapping"/>
+                                <articlelisting
+                                    cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/content/articlelisting"
+                                    jcr:primaryType="nt:unstructured"
+                                    sling:resourceType="wcm/core/components/policies/mapping"/>
+                            </content>
                         </components>
                     </newspaper>
                 </container>

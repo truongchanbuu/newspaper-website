@@ -6,9 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="robots" content="noindex, follow"/>
     <title>${currentPage.title @ context='text'} — Search | Newspaper</title>
-    <sly data-sly-use.clientLib="${'/libs/granite/sightly/templates/clientlib.html'}">
-        <sly data-sly-call="${clientLib.css @ categories='newspaper.site'}"/>
-    </sly>
 </head>
 <body>
 
@@ -68,12 +65,12 @@
                                     id="sp-date-preset"
                                     name="datePreset"
                                     data-sp-preset-select>
-                                <option value=""       data-sly-attribute.selected="${!model.datePreset}">Any time</option>
-                                <option value="today"  data-sly-attribute.selected="${model.datePreset == 'today'}">Today</option>
-                                <option value="1"      data-sly-attribute.selected="${model.datePreset == '1'}">Yesterday</option>
-                                <option value="7"      data-sly-attribute.selected="${model.datePreset == '7'}">Last 7 days</option>
-                                <option value="14"     data-sly-attribute.selected="${model.datePreset == '14'}">Last 14 days</option>
-                                <option value="30"     data-sly-attribute.selected="${model.datePreset == '30'}">Last 30 days</option>
+                                <sly data-sly-list.preset="${model.datePresets}">
+                                    <option value="${preset.value @ context='attribute'}"
+                                            data-sly-attribute.selected="${model.selectedDatePreset == preset.value}">
+                                        ${preset.label @ context='text'}
+                                    </option>
+                                </sly>
                             </select>
 
                             <!--/* Toggle button — reveals the from/to date inputs */-->

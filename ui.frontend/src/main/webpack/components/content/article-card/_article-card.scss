@@ -1,5 +1,4 @@
-// Responsive thumb width for left/right variants
-$ac-thumb-size: clamp(120px, 22vw, 180px) !default;
+// $ac-thumb-size is defined in abstracts/_mixins.scss alongside the ac-thumb-* mixins
 
 // ── Utility ────────────────────────────────────────────────────────────────────
 // Consumed by HTL via class="… line-clamp" and @extend inside this file only
@@ -115,10 +114,7 @@ article.article-card:hover .article-card__image {
   }
 }
 
-.article-card--featured article.article-card .article-card__headline {
-  font-size: $font-size-xl;
-  line-height: $lh-tight;
-}
+.article-card--featured article.article-card { @include ac-featured; }
 
 // ── Trail / summary ────────────────────────────────────────────────────────────
 .article-card__trail {
@@ -130,13 +126,7 @@ article.article-card:hover .article-card__image {
   flex: 1;
 }
 
-.article-card--standard article.article-card .article-card__trail {
-  display: none;
-}
-
-.article-card--featured article.article-card .article-card__trail {
-  font-size: $font-size-base;
-}
+.article-card--standard article.article-card { @include ac-standard; }
 
 // ── Meta ───────────────────────────────────────────────────────────────────────
 .article-card__meta {
@@ -151,49 +141,15 @@ article.article-card:hover .article-card__image {
 }
 
 // ── Layout variants ────────────────────────────────────────────────────────────
-.article-card--thumb-bottom article.article-card {
-  grid-template-areas: "body" "media";
-}
-
-.article-card--thumb-left article.article-card {
-  grid-template-columns: $ac-thumb-size 1fr;
-  grid-template-areas: "media body";
-  align-items: flex-start;
-
-  .article-card__media {
-    aspect-ratio: 1 / 1;
-    border-radius: $radius-sm;
-  }
-
-  .article-card__body     { padding-top: $space-1; }
-  .article-card__headline { font-size: $font-size-base; line-height: $lh-snug; }
-}
-
-.article-card--thumb-right article.article-card {
-  grid-template-columns: 1fr $ac-thumb-size;
-  grid-template-areas: "body media";
-  align-items: flex-start;
-
-  .article-card__media {
-    aspect-ratio: 1 / 1;
-    border-radius: $radius-sm;
-  }
-
-  .article-card__body     { padding-top: $space-1; }
-  .article-card__headline { font-size: $font-size-base; line-height: $lh-snug; }
-}
+.article-card--thumb-bottom article.article-card { @include ac-thumb-bottom; }
+.article-card--thumb-left   article.article-card { @include ac-thumb-left; }
+.article-card--thumb-right  article.article-card { @include ac-thumb-right; }
 
 // ── Responsive ─────────────────────────────────────────────────────────────────
 @include respond-below('sm') {
-  .article-card--thumb-left article.article-card,
+  .article-card--thumb-left  article.article-card,
   .article-card--thumb-right article.article-card {
-    grid-template-columns: 1fr;
-    grid-template-areas: "media" "body";
-
-    .article-card__media {
-      aspect-ratio: 4 / 3;
-      border-radius: 0;
-    }
+    @include ac-thumb-side-mobile-reset;
   }
 
   .article-card--featured article.article-card .article-card__headline {

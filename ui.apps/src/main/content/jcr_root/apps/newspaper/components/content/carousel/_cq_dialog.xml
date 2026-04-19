@@ -8,29 +8,133 @@
           sling:resourceType="cq/gui/components/authoring/dialog">
     <content
         jcr:primaryType="nt:unstructured"
-        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+        sling:resourceType="granite/ui/components/coral/foundation/container">
         <items jcr:primaryType="nt:unstructured">
-            <column
+            <tabs
                 jcr:primaryType="nt:unstructured"
-                sling:resourceType="granite/ui/components/coral/foundation/container">
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true">
                 <items jcr:primaryType="nt:unstructured">
-                    <autoplay
+
+                    <!--/* ── Tab 1: Source ──────────────────────────────────── */-->
+                    <tabSource
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                        fieldLabel="Enable autoplay"
-                        name="./autoplay"
-                        value="{Boolean}true"
-                        checked="{Boolean}true"/>
-                    <delay
+                        jcr:title="Source"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+
+                            <source
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                fieldLabel="Content source"
+                                fieldDescription="Manual: author adds and edits each slide individually via the component toolbar. Automatic: articles are pulled from search based on the settings below."
+                                name="./source">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <manual
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Manual (authored slides)"
+                                        value="manual"
+                                        selected="{Boolean}true"/>
+                                    <auto
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Automatic (from search)"
+                                        value="auto"/>
+                                </items>
+                            </source>
+
+                            <primaryTag
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                fieldLabel="Category"
+                                fieldDescription="Automatic mode only. Selects which category of articles to display. Choose 'Latest' to show the most recent articles across all categories."
+                                name="./primaryTag">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <latest
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Latest (all categories)"
+                                        value=""
+                                        selected="{Boolean}true"/>
+                                    <politics
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Politics"
+                                        value="politics"/>
+                                    <sport
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Sport"
+                                        value="sport"/>
+                                    <culture
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Culture"
+                                        value="culture"/>
+                                    <technology
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Technology"
+                                        value="technology"/>
+                                    <world
+                                        jcr:primaryType="nt:unstructured"
+                                        text="World"
+                                        value="world"/>
+                                    <business
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Business"
+                                        value="business"/>
+                                    <environment
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Environment"
+                                        value="environment"/>
+                                    <lifestyle
+                                        jcr:primaryType="nt:unstructured"
+                                        text="Lifestyle"
+                                        value="lifestyle"/>
+                                </items>
+                            </primaryTag>
+
+                            <maxItems
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                fieldLabel="Max slides"
+                                fieldDescription="Automatic mode only. Number of articles to display (1–10). Default: 5."
+                                name="./maxItems"
+                                value="5"
+                                min="1"
+                                max="10"/>
+
+                        </items>
+                    </tabSource>
+
+                    <!--/* ── Tab 2: Playback ────────────────────────────────── */-->
+                    <tabPlayback
                         jcr:primaryType="nt:unstructured"
-                        sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                        fieldLabel="Autoplay delay (ms)"
-                        name="./delay"
-                        value="5000"
-                        min="1000"
-                        max="30000"/>
+                        jcr:title="Playback"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+
+                            <autoplay
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                fieldLabel="Enable autoplay"
+                                fieldDescription="Slides advance automatically. Pauses on hover and keyboard focus."
+                                name="./autoplay"
+                                value="{Boolean}true"
+                                checked="{Boolean}true"/>
+
+                            <delay
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                fieldLabel="Autoplay delay (ms)"
+                                fieldDescription="Time each slide is shown before advancing (1000–30000 ms). Default: 5000."
+                                name="./delay"
+                                value="5000"
+                                min="1000"
+                                max="30000"/>
+
+                        </items>
+                    </tabPlayback>
+
                 </items>
-            </column>
+            </tabs>
         </items>
     </content>
 </jcr:root>

@@ -3,6 +3,6 @@
           xmlns:cq="http://www.day.com/jcr/cq/1.0"
           xmlns:jcr="http://www.jcp.org/jcr/1.0"
           jcr:primaryType="cq:Component"
-          jcr:title="Article Page"
-          sling:resourceSuperType="newspaper/components/page"
+          jcr:title="Newspaper Base Page"
+          sling:resourceSuperType="core/wcm/components/page/v3/page"
           componentGroup=".hidden"/>

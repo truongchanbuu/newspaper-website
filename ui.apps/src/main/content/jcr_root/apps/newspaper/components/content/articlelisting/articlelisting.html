@@ -1,5 +1,5 @@
 <sly data-sly-use.listing="com.fa.core.models.ArticleListingModel"
-    data-sly-use.styles="core/wcm/components/commons/v1/template.html"
+    data-sly-use.styles="core/wcm/components/commons/v1/templates.html"
     data-sly-use.cardTemplate="${'newspaper/components/content/articlecard/template.html'}">
 
     <section class="article-listing ${styles.toString}"
@@ -23,7 +23,8 @@
                         description=article.description,
                         author=article.author,
                         formattedDate=article.formattedDate,
-                        isoDate=article.isoDate}"/>
+                        isoDate=article.isoDate,
+                        timeAgo=article.timeAgo}"/>
                 </li>
             </sly>
         </ul>

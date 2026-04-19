@@ -1,3 +1,114 @@
-<div class="newspaper-carousel">
-    <sly data-sly-resource="${resource @ resourceType='core/wcm/components/carousel/v1/carousel'}"></sly>
+<sly data-sly-use.model="com.fa.core.models.NewspaperCarouselModel"
+     data-sly-use.styles="core/wcm/components/commons/v1/templates.html"/>
+
+<div class="newspaper-carousel ${styles.toString}">
+
+    <!--/* ── Manual mode: delegate entirely to Core Carousel v1 ───────────── */-->
+    <sly data-sly-test="${model.manual}"
+         data-sly-resource="${resource @ resourceType='core/wcm/components/carousel/v1/carousel'}"/>
+
+    <!--/* ── Auto mode: render slides fetched from ArticleSearchService ────── */-->
+    <sly data-sly-test="${model.auto}">
+
+        <div class="cmp-carousel"
+             data-cmp-is="carousel"
+             data-cmp-autoplay="${model.autoplay ? 'true' : 'false'}"
+             data-cmp-delay="${model.delay}"
+             role="group"
+             aria-roledescription="carousel"
+             aria-label="Top Stories"
+             data-sly-test="${model.hasSlides}">
+
+            <!--/* Slide panels */-->
+            <div class="cmp-carousel__content" aria-live="off" aria-atomic="false">
+                <sly data-sly-list.slide="${model.slides}">
+                    <div class="cmp-carousel__item${slideList.first ? ' cmp-carousel__item--active' : ''}"
+                         role="tabpanel"
+                         data-cmp-hook-carousel="item"
+                         aria-label="${slide.title @ context='text'}">
+
+                        <article class="nc-slide">
+
+                            <div class="nc-slide__media">
+                                <img class="nc-slide__img"
+                                     src="${slide.imageSrc @ context='uri'}"
+                                     alt="${slide.imageAlt @ context='text'}"
+                                     loading="${slideList.first ? 'eager' : 'lazy'}"
+                                     data-sly-test="${slide.imageSrc}"/>
+                                <div class="nc-slide__placeholder"
+                                     data-sly-test="${!slide.imageSrc}">No image available</div>
+                            </div>
+
+                            <div class="nc-slide__content">
+                                <a class="nc-slide__pretitle"
+                                   href="${slide.categoryLink @ context='uri'}"
+                                   data-sly-test="${slide.category}">${slide.category @ context='text'}</a>
+
+                                <h2 class="nc-slide__title">
+                                    <a class="nc-slide__title-link"
+                                       href="${slide.link @ context='uri'}">${slide.title @ context='text'}</a>
+                                </h2>
+
+                                <div class="nc-slide__meta">
+                                    <span class="nc-slide__author"
+                                          data-sly-test="${slide.author}">${slide.author @ context='text'}</span>
+                                    <time class="nc-slide__time"
+                                          datetime="${slide.isoDate @ context='attribute'}"
+                                          data-sly-test="${slide.timeAgo}">${slide.timeAgo @ context='text'}</time>
+                                </div>
+                            </div>
+
+                        </article>
+
+                    </div>
+                </sly>
+            </div>
+
+            <!--/* Dot indicators */-->
+            <ol class="cmp-carousel__indicators"
+                role="tablist"
+                aria-label="Choose a slide to show">
+                <sly data-sly-list.slide="${model.slides}">
+                    <li class="cmp-carousel__indicator${slideList.first ? ' cmp-carousel__indicator--active' : ''}"
+                        role="tab"
+                        data-cmp-hook-carousel="indicator"
+                        aria-selected="${slideList.first ? 'true' : 'false'}"
+                        tabindex="${slideList.first ? '0' : '-1'}"
+                        aria-label="${slide.title @ context='text'}">${slide.title @ context='text'}</li>
+                </sly>
+            </ol>
+
+            <!--/* Prev / Next / Pause controls (same DOM as Core Carousel v1) */-->
+            <div class="cmp-carousel__actions">
+                <button class="cmp-carousel__action cmp-carousel__action--previous"
+                        type="button"
+                        aria-label="Previous">
+                    <span class="cmp-carousel__action-icon"></span>
+                    <span class="cmp-carousel__action-text">Previous</span>
+                </button>
+                <button class="cmp-carousel__action cmp-carousel__action--next"
+                        type="button"
+                        aria-label="Next">
+                    <span class="cmp-carousel__action-icon"></span>
+                    <span class="cmp-carousel__action-text">Next</span>
+                </button>
+                <!--/* Pause button is visually hidden (CSS) but needed by carousel.ts hover-pause logic */-->
+                <button class="cmp-carousel__action cmp-carousel__action--pause"
+                        type="button"
+                        aria-label="Pause">
+                    <span class="cmp-carousel__action-text">Pause</span>
+                </button>
+            </div>
+
+        </div>
+
+        <!--/* Edit-mode placeholder when auto mode yields no results */-->
+        <div class="cq-placeholder"
+             data-sly-test="${wcmmode.edit && !model.hasSlides}">
+            <p>Carousel (auto): no articles found for the selected category. Check that articles
+               exist under this language and the correct primaryTag is set.</p>
+        </div>
+
+    </sly>
+
 </div>

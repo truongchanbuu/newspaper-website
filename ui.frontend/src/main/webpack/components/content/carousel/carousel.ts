@@ -1,24 +1,22 @@
-// Newspaper Carousel — behavioural enhancements on top of Core Components carousel/v1.
-// Core Components already handles: autoplay, slide switching, keyboard left/right arrows,
-// indicators, and ARIA. This file adds: touch swipe + hover/focus pause.
-
 class NewspaperCarousel {
-    private static readonly SWIPE_THRESHOLD = 50;  // px horizontal before a swipe fires
+    private static readonly SWIPE_THRESHOLD = 48;
 
     private readonly root: HTMLElement;
     private readonly cmpRoot: HTMLElement | null;
     private readonly prevBtn: HTMLButtonElement | null;
     private readonly nextBtn: HTMLButtonElement | null;
+    private readonly pauseBtn: HTMLButtonElement | null;
 
-    private touchStartX = 0;
-    private touchStartY = 0;
-    private isSwiping   = false;
+    private touchStartX  = 0;
+    private touchStartY  = 0;
+    private swipeBlocked = false;
 
     constructor(root: HTMLElement) {
-        this.root    = root;
-        this.cmpRoot = root.querySelector<HTMLElement>('[data-cmp-is="carousel"]');
-        this.prevBtn = root.querySelector<HTMLButtonElement>('.cmp-carousel__action--previous');
-        this.nextBtn = root.querySelector<HTMLButtonElement>('.cmp-carousel__action--next');
+        this.root       = root;
+        this.cmpRoot    = root.querySelector<HTMLElement>('[data-cmp-is="carousel"]');
+        this.prevBtn    = root.querySelector<HTMLButtonElement>('.cmp-carousel__action--previous');
+        this.nextBtn    = root.querySelector<HTMLButtonElement>('.cmp-carousel__action--next');
+        this.pauseBtn   = root.querySelector<HTMLButtonElement>('.cmp-carousel__action--pause');
     }
 
     public init(): void {
@@ -26,8 +24,6 @@ class NewspaperCarousel {
         this.bindSwipe();
         this.bindHoverPause();
     }
-
-    // ── Touch swipe ───────────────────────────────────────────────────────────
 
     private bindSwipe(): void {
         this.cmpRoot!.addEventListener('touchstart', this.onTouchStart, { passive: true });
@@ -37,59 +33,49 @@ class NewspaperCarousel {
 
     private readonly onTouchStart = (e: TouchEvent): void => {
         const t = e.touches[0];
-        this.touchStartX = t.clientX;
-        this.touchStartY = t.clientY;
-        this.isSwiping   = true;
+        this.touchStartX  = t.clientX;
+        this.touchStartY  = t.clientY;
+        this.swipeBlocked = false;
     };
 
     private readonly onTouchMove = (e: TouchEvent): void => {
-        if (!this.isSwiping) return;
-        // Cancel swipe if vertical scroll is dominant
+        if (this.swipeBlocked) return;
         const dx = e.touches[0].clientX - this.touchStartX;
         const dy = e.touches[0].clientY - this.touchStartY;
-        if (Math.abs(dy) > Math.abs(dx)) this.isSwiping = false;
+        if (Math.abs(dy) > Math.abs(dx) * 1.2) this.swipeBlocked = true;
     };
 
     private readonly onTouchEnd = (e: TouchEvent): void => {
-        if (!this.isSwiping) return;
-        this.isSwiping = false;
+        if (this.swipeBlocked) return;
         const dx = e.changedTouches[0].clientX - this.touchStartX;
         if (Math.abs(dx) < NewspaperCarousel.SWIPE_THRESHOLD) return;
         dx < 0 ? this.nextBtn?.click() : this.prevBtn?.click();
     };
 
-    // ── Hover / focus pause ───────────────────────────────────────────────────
-    // Core Components carousel v1 exposes a 'cmp-carousel-autoplay-paused' state
-    // by toggling a data attribute; we mirror this with a CSS class so the pause
-    // indicator can be styled without touching Core Components internals.
-
     private bindHoverPause(): void {
-        // Only wire up if the carousel has autoplay enabled
-        const hasAutoplay = this.cmpRoot?.dataset.cmpCarouselAutoplay === 'true'
-            || this.root.dataset.autoplay === 'true';
-        if (!hasAutoplay) return;
+        if (!this.pauseBtn) return;
 
         this.cmpRoot!.addEventListener('mouseenter', this.pause);
-        this.cmpRoot!.addEventListener('mouseleave', this.resume);
+        this.cmpRoot!.addEventListener('mouseleave', this.tryResume);
         this.cmpRoot!.addEventListener('focusin',    this.pause);
-        this.cmpRoot!.addEventListener('focusout',   this.resume);
+        this.cmpRoot!.addEventListener('focusout',   this.tryResume);
     }
 
     private readonly pause = (): void => {
-        this.root.classList.add('newspaper-carousel--paused');
-        // Signal Core Components to pause via its documented custom event
-        this.cmpRoot?.dispatchEvent(new CustomEvent('cmp-carousel-autoplay-pause', { bubbles: true }));
+        if (this.root.dataset.ncHoverPaused) return;
+        this.root.dataset.ncHoverPaused = 'true';
+        this.pauseBtn?.click();
     };
 
-    private readonly resume = (): void => {
-        // Only resume if focus is fully outside the carousel
-        if (this.cmpRoot?.contains(document.activeElement)) return;
-        this.root.classList.remove('newspaper-carousel--paused');
-        this.cmpRoot?.dispatchEvent(new CustomEvent('cmp-carousel-autoplay-play', { bubbles: true }));
+    private readonly tryResume = (): void => {
+        requestAnimationFrame(() => {
+            if (this.root.contains(document.activeElement)) return;
+            if (!this.root.dataset.ncHoverPaused) return;
+            delete this.root.dataset.ncHoverPaused;
+            this.pauseBtn?.click();
+        });
     };
 }
-
-// ── Bootstrap ─────────────────────────────────────────────────────────────────
 
 function initCarousels(): void {
     document.querySelectorAll<HTMLElement>('.newspaper-carousel').forEach(el => {

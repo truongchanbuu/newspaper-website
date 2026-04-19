@@ -3,6 +3,6 @@
           xmlns:cq="http://www.day.com/jcr/cq/1.0"
           xmlns:jcr="http://www.jcp.org/jcr/1.0"
           jcr:primaryType="cq:Component"
-          jcr:title="Article Page"
-          sling:resourceSuperType="newspaper/components/page"
-          componentGroup=".hidden"/>
+          jcr:title="Carousel Item"
+          jcr:description="A single carousel slide. Pick an article page — headline, image, date, and author are resolved automatically."
+          componentGroup="Newspaper Website - Content"/>

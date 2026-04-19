@@ -5,6 +5,7 @@ import com.day.cq.wcm.api.PageManager;
 import com.fa.core.models.dto.SearchResultItem;
 import com.fa.core.search.ArticleSearchService;
 import com.fa.core.utils.CategoryUtils;
+import com.fa.core.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
@@ -93,6 +94,7 @@ public class ArticleListingModel {
         private final String author;
         private final String formattedDate;
         private final String isoDate;
+        private final String timeAgo;
 
         ArticleCardItem(SearchResultItem result, String langRootPath, Map<String, String> categoryLabels) {
             title       = result.getArticleTitle();
@@ -110,6 +112,7 @@ public class ArticleListingModel {
 
             formattedDate = result.getFormattedPublishDate();
             isoDate       = extractIsoDate(result.getPath());
+            timeAgo       = DateUtils.computeTimeAgo(isoDate);
         }
 
         public String getTitle()         { return title; }
@@ -122,6 +125,7 @@ public class ArticleListingModel {
         public String getAuthor()        { return author; }
         public String getFormattedDate() { return formattedDate; }
         public String getIsoDate()       { return isoDate; }
+        public String getTimeAgo()       { return timeAgo; }
 
         private static String extractIsoDate(String path) {
             if (path == null) return null;

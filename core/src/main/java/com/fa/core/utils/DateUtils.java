@@ -21,6 +21,16 @@ public final class DateUtils {
         return computeTimeAgo(publishedDate.getTime());
     }
 
+    public static String computeTimeAgo(String isoDate) {
+        if (isoDate == null || isoDate.isEmpty()) return "";
+        try {
+            Date date = new SimpleDateFormat(ISO_DATE_PATTERN, Locale.ENGLISH).parse(isoDate);
+            return computeTimeAgo(date);
+        } catch (java.text.ParseException e) {
+            return "";
+        }
+    }
+
     public static String computeTimeAgo(Date publishedDate) {
         if (publishedDate == null) {
             return "";
@@ -66,11 +76,11 @@ public final class DateUtils {
         return years + (years == 1 ? " year ago" : " years ago");
     }
 
-    public String formatDate(Date date) {
+    public static String formatDate(Date date) {
         return formatDate(date, DATE_WITH_NAME_PATTERN, Locale.ENGLISH);
     }
 
-    public String formatDate(Date date, String pattern, Locale locale) {
+    public static String formatDate(Date date, String pattern, Locale locale) {
         if (date == null) return null;
         return new SimpleDateFormat(pattern, locale).format(date);
     }

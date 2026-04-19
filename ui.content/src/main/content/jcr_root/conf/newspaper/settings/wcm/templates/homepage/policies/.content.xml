@@ -29,6 +29,10 @@
             <carousel-right
                 jcr:primaryType="nt:unstructured"
                 cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/content/carousel"/>
+            <articlecard
+                jcr:primaryType="nt:unstructured"
+                cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/content/articlecard"
+                sling:resourceType="wcm/core/components/policies/mapping"/>
         </hero>
 
         <!-- Latest News zone -->
@@ -56,6 +60,10 @@
             <technology
                 jcr:primaryType="nt:unstructured"
                 cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/content/articlelisting"/>
+            <articlecard
+                jcr:primaryType="nt:unstructured"
+                cq:policy="/conf/newspaper/settings/wcm/policies/newspaper/components/content/articlecard"
+                sling:resourceType="wcm/core/components/policies/mapping"/>
         </categories>
 
         <!-- XF Footer zone -->

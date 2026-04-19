@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          jcr:primaryType="nt:unstructured"
+          jcr:title="Carousel Item"
+          sling:resourceType="cq/gui/components/authoring/dialog">
+
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true">
+                <items jcr:primaryType="nt:unstructured">
+
+                    <article
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="Article"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        margin="{Boolean}true">
+                        <items jcr:primaryType="nt:unstructured">
+
+                            <!--
+                                Primary picker: CQ pages only under language-masters.
+                                filter="page" restricts the browser to CQ pages (excludes DAM assets).
+                                rootPath starts authors inside the content tree, one level from articles.
+                            -->
+                            <articlePath
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/pathfield"
+                                fieldLabel="Article Page"
+                                fieldDescription="Select the article page. Headline, image, author, and date are resolved automatically."
+                                name="./articlePath"
+                                rootPath="/content/newspaper/language-masters"
+                                filter="page"
+                                required="{Boolean}true"/>
+
+                            <!--
+                                Stored as jcr:title so the AEM carousel panel editor (inline slide list)
+                                shows a meaningful label instead of the raw node name (item0, item1 …).
+                                cq:panelTitle takes precedence over jcr:title in PanelContainerItemImpl;
+                                we write to jcr:title because it is the standard fallback and requires
+                                no extra JS. Authors set this to a short label like "Politics – Lead".
+                            -->
+                            <panelLabel
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Slide Label"
+                                fieldDescription="Short label shown in the AEM carousel editor panel list (e.g. 'Politics – Lead'). Does not appear on the published page."
+                                name="./jcr:title"/>
+
+                            <categoryLabel
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Category Badge Override"
+                                fieldDescription="Override the category badge shown above the headline (e.g. 'Breaking News'). Leave blank to use the article's primary tag."
+                                name="./categoryLabel"/>
+
+                            <titleOverride
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                fieldLabel="Headline Override"
+                                fieldDescription="Override the slide headline. Leave blank to use the article page title."
+                                name="./titleOverride"/>
+
+                        </items>
+                    </article>
+
+                </items>
+            </tabs>
+        </items>
+    </content>
+
+</jcr:root>

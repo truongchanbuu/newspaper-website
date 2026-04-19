@@ -4,9 +4,6 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>${currentPage.title @ context='text'} | Newspaper</title>
-    <sly data-sly-use.clientLib="${'/libs/granite/sightly/templates/clientlib.html'}">
-        <sly data-sly-call="${clientLib.css @ categories='newspaper.site'}"/>
-    </sly>
 </head>
 <body class="homepage">
 
@@ -41,9 +38,6 @@
     <!--/* ── XF Footer (locked in template structure) ────────────────────── */-->
     <sly data-sly-resource="experiencefragment-footer"/>
 
-    <sly data-sly-use.clientLib="${'/libs/granite/sightly/templates/clientlib.html'}">
-        <sly data-sly-call="${clientLib.js @ categories='newspaper.site'}"/>
-    </sly>
 
 </body>
 </html>

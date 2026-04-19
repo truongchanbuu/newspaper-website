@@ -4,7 +4,9 @@
       "WebFetch(domain:experienceleague.adobe.com)",
       "WebFetch(domain:sling.apache.org)",
       "Bash(grep -E '^\\\\s*\\\\.[a-z-]+\\(\\\\s|,|{|&\\)' /c/Users/truon/source/newspaper/ui.frontend/src/main/webpack/components/content/search/_searchpage.scss)",
-      "Bash(git -C C:/Users/truon/source/newspaper log --oneline -8)"
+      "Bash(git -C C:/Users/truon/source/newspaper log --oneline -8)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ]
   }
 }

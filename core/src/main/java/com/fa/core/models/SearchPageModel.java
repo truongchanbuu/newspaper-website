@@ -35,6 +35,18 @@ public class SearchPageModel {
 
     private static final int PAGE_SIZE = 10;
 
+    private static final List<DatePresetItem> DATE_PRESETS;
+    static {
+        List<DatePresetItem> list = new ArrayList<>();
+        list.add(new DatePresetItem("",     "Any time"));
+        list.add(new DatePresetItem("today","Today"));
+        list.add(new DatePresetItem("1",    "Yesterday"));
+        list.add(new DatePresetItem("7",    "Last 7 days"));
+        list.add(new DatePresetItem("14",   "Last 14 days"));
+        list.add(new DatePresetItem("30",   "Last 30 days"));
+        DATE_PRESETS = Collections.unmodifiableList(list);
+    }
+
     // ── Injected ───────────────────────────────────────────────────────────────
 
     @Self
@@ -259,6 +271,9 @@ public class SearchPageModel {
     public List<SearchResultItem>  getResults()        { return results; }
     public List<CategoryItem>      getCategories()     { return categories; }
     public List<PageNumberItem>    getPageNumbers()    { return pageNumbers; }
+    public List<DatePresetItem>    getDatePresets()    { return DATE_PRESETS; }
+    /** Returns the active preset value, or "" when none is selected (matches the "Any time" option). */
+    public String                  getSelectedDatePreset() { return datePreset != null ? datePreset : ""; }
 
     public boolean isHasResults()     { return !results.isEmpty(); }
     public boolean isHasPrevPage()    { return pageNum > 1; }
@@ -280,6 +295,19 @@ public class SearchPageModel {
 
         public String getName()  { return name; }
         public String getTitle() { return StringUtils.isNotEmpty(title) ? title : name; }
+    }
+
+    public static final class DatePresetItem {
+        private final String value;
+        private final String label;
+
+        public DatePresetItem(String value, String label) {
+            this.value = value;
+            this.label = label;
+        }
+
+        public String getValue() { return value; }
+        public String getLabel() { return label; }
     }
 
     public static final class PageNumberItem {

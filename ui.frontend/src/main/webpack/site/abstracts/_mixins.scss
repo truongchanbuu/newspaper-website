@@ -107,3 +107,67 @@
     clear: both;
   }
 }
+
+// ── Article card layout variants ───────────────────────────────────────────────
+// Shared by _article-card.scss (standalone) and _article-listing.scss (listing).
+// Apply inside a selector that targets article.article-card.
+
+$ac-thumb-size: clamp(120px, 22vw, 180px) !default;
+
+@mixin ac-thumb-left {
+  grid-template-columns: $ac-thumb-size 1fr;
+  grid-template-areas: "media body";
+  align-items: flex-start;
+
+  .article-card__media {
+    aspect-ratio: 1 / 1;
+    border-radius: $radius-sm;
+  }
+
+  .article-card__body     { padding-top: $space-1; }
+  .article-card__headline { font-size: $font-size-base; line-height: $lh-snug; }
+}
+
+@mixin ac-thumb-right {
+  grid-template-columns: 1fr $ac-thumb-size;
+  grid-template-areas: "body media";
+  align-items: flex-start;
+
+  .article-card__media {
+    aspect-ratio: 1 / 1;
+    border-radius: $radius-sm;
+  }
+
+  .article-card__body     { padding-top: $space-1; }
+  .article-card__headline { font-size: $font-size-base; line-height: $lh-snug; }
+}
+
+@mixin ac-thumb-bottom {
+  grid-template-areas: "body" "media";
+}
+
+@mixin ac-featured {
+  .article-card__headline {
+    font-size: $font-size-xl;
+    line-height: $lh-tight;
+  }
+
+  .article-card__trail {
+    font-size: $font-size-base;
+  }
+}
+
+@mixin ac-standard {
+  .article-card__trail { display: none; }
+}
+
+// Collapse thumb-left/right to stacked layout on mobile
+@mixin ac-thumb-side-mobile-reset {
+  grid-template-columns: 1fr;
+  grid-template-areas: "media" "body";
+
+  .article-card__media {
+    aspect-ratio: 4 / 3;
+    border-radius: 0;
+  }
+}
